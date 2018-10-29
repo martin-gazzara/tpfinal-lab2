@@ -1061,3 +1061,15 @@ void mostrarFormularioPeliculas(){
     gotoxy(0,0);
     hidecursor(1);
 }
+
+
+///    *** NUEVO ***
+
+int mostrarModificarPelicula(stPelicula pelicula){
+
+    char opciones[][21]={"       Nombre       ","      Director      ","        Anio        ","       Genero       ","      Lenguaje      ","        Pais        ","         PM         ","     Subtitulado    ","     Valoracion     ","      Sinopsis      ","        Salir       "};
+    int numOpc=11,eleccion;
+    eleccion=elegirOpcionV("borde",opciones,numOpc);
+    return eleccion;
+
+}
