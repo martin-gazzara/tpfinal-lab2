@@ -46,3 +46,7 @@
  * @brief Muestra intro del programa.
 */
 void intro();
+
+
+///                                                            *** NUEVO ***
+int mostrarModificarPelicula(stPelicula pelicula);

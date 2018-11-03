@@ -22,13 +22,13 @@ void inorder(nodoArbol* arbol);
 void postorder(nodoArbol* arbol);
 
 ///--------------------------------------------------------------------------------------------------------------------------------Buscar nodo
-nodoArbol* buscar(nodoArbol* arbol, int dato);
+nodoArbol* buscar(nodoArbol* arbol, int id);
 
 ///-------------------------------------------------------------------------------------------------------------------------------Mostrar nodo
 void mostrarNodo(nodoArbol* nodo);
 
 ///--------------------------------------------------------------------------------------------------------------------------------Borrar nodo
-nodoArbol* borrarNodo(nodoArbol* arbol, int dato);
+nodoArbol* borrarNodo(nodoArbol* arbol, int id);
 
 ///---------------------------------------------------------------------------------------------------------------------------Nodo mas derecho
 nodoArbol* nmd(nodoArbol* arbol);
