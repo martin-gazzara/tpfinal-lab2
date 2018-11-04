@@ -685,6 +685,15 @@ int mostrarDarAltaUsuarios(){
     return eleccion;
 }
 
+int mostrarModificarUsuario(){
+
+    char opciones[][21] = {"       Nombre       ","      Password      ","        Anio        ","        Pais        ","       Genero       ","       Admin        ","      Eliminado     ","       SALIR        "};
+    int eleccion,numOpc = 8;
+    printf("Modificar usuario");
+    eleccion=elegirOpcionV("borde",opciones,numOpc);
+    return eleccion;
+}
+
 void cerrarPrograma(){
     system("cls");
     hidecursor(0);
