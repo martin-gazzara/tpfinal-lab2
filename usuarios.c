@@ -262,3 +262,33 @@ void modificarUsuario(stUsuario* user,char[] DB_usuarios){
         }
     }while(opcion!=7);
 }
+
+
+///********************************************** LISTADO DE USUARIOS ********************************************************************
+
+// PASA EL ARREGLO DE LISTAS
+void listarUsuarios(stCelda listado[],int cant){
+    system("cls");
+
+    do{
+        mostrarUsuarios(listado,cant);
+        gotoxy(0,3);
+        opcion=mostrarMenuListadoU();
+        system("cls");
+        switch(opcion){
+            case 0:
+                modificarUsuario(archivo,usuarios,cant);
+                system("cls");
+                break;
+            case 1:
+                peliculasVistas(listado,cant);
+                break;
+            case 2:
+                proximamente();
+                presionarContinuar();
+                siguiente();
+                break;
+        }
+    }while((opcion<3)&&(cant!=-1));
+
+}

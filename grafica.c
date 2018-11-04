@@ -1082,3 +1082,75 @@ int mostrarModificarPelicula(stPelicula pelicula){
     return eleccion;
 
 }
+
+///************************** LISTADO DE USUARIOS****************************************************************************************
+
+void mostrarItemListado(nodoListaPelicula* listaPelis){
+
+    stPelicula peli = listaPelis->p;
+
+    if(listaPelis != NULL){
+        printf("%i    %s    %s    %i\n",peli.id,peli.nombre,peli.genero,peli.anio);
+        mostrarItemListado(listaPelis->sig);
+    }
+
+}
+
+void peliculasVistas(stCelda listado[],int cant){
+
+    int id,i;
+
+    mostrarIngresarID();
+    scanf("%i",&id);
+    system("cls");
+    while(i<cant)&&(listado[i].usuario.id != id){
+        i++;
+    }
+    if(listado[i].usuario.id == id){
+        printf("ID    NOMBRE     GENERO    ANIO\n");
+        mostrarItemListado(listado[i].listaPelis);
+    }else{
+        printf("Usuario no encontrado");
+    }
+
+}
+
+int mostrarMenuListadoU(){
+
+    gotoxy(0,0);
+    printf("MENU");
+    char opciones[][21]={" Modificar usuario  ","  Peliculas vistas  ","       Filtrar      ","        Salir       "};
+    int numOpc=4,eleccion;
+    eleccion=elegirOpcionH("arriba",opciones,numOpc);
+    return eleccion;
+}
+
+void mostrarItemListadoU(stUsuario user){
+
+    gotoxy(0,whereY());printf("%i",user.id);
+    gotoxy(5,whereY());printf("%s",user.nombre);
+    gotoxy(45,whereY());printf("%i",user.anioNacimiento);
+    gotoxy(55,whereY());printf("%c",user.genero);
+    gotoxy(66,whereY());printf("%s",user.pais);
+    gotoxy(87,whereY());printf("%i",user.eliminado);
+    printf("\n");
+
+}
+
+void mostrarUsuarios(stCelda listado[],int val){
+    int i=0;
+    system("cls");
+    gotoxy(1,4);printf("ID");
+    gotoxy(17,4);printf("NOMBRE");
+    gotoxy(45,4);printf("ANIO");
+    gotoxy(54,4);printf("GENERO");
+    gotoxy(67,4);printf("PAIS");
+    gotoxy(80,4);printf("ELIMINADO");
+    printf("\n");
+
+    while(i<val){
+        mostrarItemListadoU(listado[i].usuario);
+        i++;
+    }
+
+}
