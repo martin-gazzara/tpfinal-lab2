@@ -58,20 +58,23 @@ int calcularId(FILE* arch){
     return id;
 }
 
-//Funcion que carga un arbol de forma recursiva
+//Rearmar arbol
+void rearmararbol(nodoArbol** arbol) {
+    *arbol = inicArbol(); // ?????????????
+    //recorrer el archivo de forma recursiva y cargar el arbol
 
-//Carga una Pelicula al Arbol/Lista
-void cargarPelisArbol(){
-    inicArbol();
-    // llamar funcion recursiva para cargar el arbol en base al archivo
+    // completar logica/////////////////////////////////////////////////////////
 }
 
-//Carga una Película a un Archivo.
-void cargarPelisArchivo(char archivo[],char nombre[],int anio){
-    FILE * arch;
+//Carga una Pelicula al Arbol/Lista
+void cargarPelisArbol(nodoArbol** arbol, stPelicula peli){
+    nodoArbol* nuevo = crearNodo(peli);
+    *arbol = insertar(*arbol, nuevo);
+}
+
+//Pedir datos de pelicula
+stPelicula pedirInfo(char nombre[], int anio){
     stPelicula peli;
-    arch = fopen(archivo, "ab");
-    int val;
 
     peli.eliminado = 0;
     peli.id = calcularId(arch);
@@ -95,7 +98,6 @@ void cargarPelisArchivo(char archivo[],char nombre[],int anio){
     scanf("%d", &peli.pm);
     verificacionPM(&peli.pm);
 
-
     gotoxy(17,16);
     scanf("%d", &peli.valoracion);
     verificacionVal(&peli.valoracion);
@@ -111,6 +113,16 @@ void cargarPelisArchivo(char archivo[],char nombre[],int anio){
     gotoxy(15,20);
     escribirSinopsis(peli.sinopsis);
 
+    return peli;
+}
+
+
+//Carga una Película a un Archivo.
+void cargarPelisArchivo(char archivo[], stPelicula peli){
+    FILE * arch;
+    stPelicula peli;
+    arch = fopen(archivo, "ab");
+    int val;
     val = fwrite(&peli, sizeof(stPelicula), 1, arch);
     fclose(arch);
     system("cls");
@@ -130,26 +142,34 @@ void verificarNuevaCarga(char* control){
 }
 
 //Ingresa una Película.
-void ingresarPeliculas(char DB_peliculas[]){
+void ingresarPeliculas(char DB_peliculas[], nodoArbol** arbol){
     char nombre[nombre_max];
     int anio;
-        system("cls");
-        mostrarFormularioPeliculas();
-        gotoxy(13,4);
-        fflush(stdin);
-        gets(nombre);
-        gotoxy(71,4);
-        scanf("%d", &anio);
-        if (verificacionPelicula(DB_peliculas, nombre, anio) == 0) {
-            cargarPelisArchivo(DB_peliculas,nombre,anio);
-            cargarPelisArbol();/// carga arbol y archivo------- cargar archivo y rearmar el arbol?
-        //COMPLETAR
+    int cantAltasSeguidas = 0;
+    stPelicula p;
+    system("cls");
+    mostrarFormularioPeliculas();
+    gotoxy(13,4);
+    fflush(stdin);
+    gets(nombre);
+    gotoxy(71,4);
+    scanf("%d", &anio);
+    if (verificacionPelicula(DB_peliculas, nombre, anio) == 0) {
+        p = pedirInfo(nombre, anio);
+        cargarPelisArchivo(DB_peliculas, p);
+        cargarPelisArbol(arbol, p);
+        if(cantAltasSeguidas != 3) {
+            cantAltasSeguidas++;
         } else {
-            system("cls");
-            gotoxy(38,6);
-            printf("Error, pelicula ya cargada\n");
+            rearmararbol();
+            cantAltasSeguidas = 0;
         }
-        hidecursor(0);
-        presionarContinuar();
-        siguiente();
+    } else {
+        system("cls");
+        gotoxy(38,6);
+        printf("Error, pelicula ya cargada\n");
+    }
+    hidecursor(0);
+    presionarContinuar();
+    siguiente();
 }
