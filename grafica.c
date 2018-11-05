@@ -685,6 +685,15 @@ int mostrarDarAltaUsuarios(){
     return eleccion;
 }
 
+int mostrarModificarUsuario(){
+
+    char opciones[][21] = {"       Nombre       ","      Password      ","        Anio        ","        Pais        ","       Genero       ","       Admin        ","      Eliminado     ","       SALIR        "};
+    int eleccion,numOpc = 8;
+    printf("Modificar usuario");
+    eleccion=elegirOpcionV("borde",opciones,numOpc);
+    return eleccion;
+}
+
 void cerrarPrograma(){
     system("cls");
     hidecursor(0);
@@ -1060,4 +1069,16 @@ void mostrarFormularioPeliculas(){
 /// fin
     gotoxy(0,0);
     hidecursor(1);
+}
+
+
+///    *** NUEVO ***
+
+int mostrarModificarPelicula(stPelicula pelicula){
+
+    char opciones[][21]={"       Nombre       ","      Director      ","        Anio        ","       Genero       ","      Lenguaje      ","        Pais        ","         PM         ","     Subtitulado    ","     Valoracion     ","      Sinopsis      ","        Salir       "};
+    int numOpc=11,eleccion;
+    eleccion=elegirOpcionV("borde",opciones,numOpc);
+    return eleccion;
+
 }

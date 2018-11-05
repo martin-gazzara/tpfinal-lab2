@@ -9,7 +9,7 @@ int cantidadRegistros(FILE* arch, size_t tamanioDeTipo) {
     return aux;
 }
 
-//Verifica si una Película ya fue cargada.
+//Verifica si una PelÃ­cula ya fue cargada.
 int verificacionPelicula(char archivo[], char nombre[], int anio) {
     FILE* arch;
     arch = fopen(archivo, "rb");
@@ -23,7 +23,7 @@ int verificacionPelicula(char archivo[], char nombre[], int anio) {
     fclose(arch);
     return flag;
 }
-//Verifica si el campo subtítulo es correcto.
+//Verifica si el campo subtÃ­tulo es correcto.
 void verificacionSub(int* valor) {
     while ((*valor > 1) || (*valor < 0)) {
         printf("Valor ingresado incorrecto. Ingrese 0 o 1\n");
@@ -47,7 +47,7 @@ void verificacionVal(int* valoracion) {
     }
 }
 
-//Calcula el ID de una Película.
+//Calcula el ID de una PelÃ­cula.
 int calcularId(FILE* arch){
     int id;
     if(!feof(arch)){
@@ -117,7 +117,7 @@ stPelicula pedirInfo(char nombre[], int anio){
 }
 
 
-//Carga una Película a un Archivo.
+//Carga una PelÃ­cula a un Archivo.
 void cargarPelisArchivo(char archivo[], stPelicula peli){
     FILE * arch;
     stPelicula peli;
@@ -134,14 +134,14 @@ void cargarPelisArchivo(char archivo[], stPelicula peli){
     }
 }
 
-//Verifica si el usuario desea cargar otra Película.
+//Verifica si el usuario desea cargar otra PelÃ­cula.
 void verificarNuevaCarga(char* control){
     printf("Desea cargar otra pelicula? s/n\n");
     fflush(stdin);
     scanf("%c", control);
 }
 
-//Ingresa una Película.
+//Ingresa una PelÃ­cula.
 void ingresarPeliculas(char DB_peliculas[], nodoArbol** arbol){
     char nombre[nombre_max];
     int anio;
@@ -172,4 +172,92 @@ void ingresarPeliculas(char DB_peliculas[], nodoArbol** arbol){
     hidecursor(0);
     presionarContinuar();
     siguiente();
+}
+
+//Modifica una pelÃ­cula.
+void modificarPelicula(char archivo[],nodoArbol* arbolPeliculas){
+
+    int id, opcion = 0;
+    FILE* arch = NULL;
+    stPelicula pelicula;
+    nodoArbol* nodoPelicula;
+
+    system("cls");
+    presionarNum();
+    mostrarIngresarID();
+    scanf("%i",&id);
+    nodoPelicula = buscar(arbolPeliculas,id);
+    if (nodoPelicula){
+        pelicula = nodoPelicula->p;
+        while (opcion!=10){
+            system("cls");
+            opcion = mostrarModificarPelicula(pelicula);
+            system("cls")
+            gotoxy(0,7);
+            switch (opcion){
+                case 0:
+                    printf("Nombre actual: %s\n",pelicula.nombre);
+                    printf("Ingrese nuevo nombre: ");
+                    fflush(stdin);
+                    gets(&pelicula.nombre);
+                    break;
+                case 1:
+                    printf("Director actual: %s\n",pelicula.director);
+                    printf("Ingrese nuevo director: ");
+                    fflush(stdin);
+                    gets(&pelicula.director);
+                    break;
+                case 2:
+                    printf("Anio actual: %i\n",pelicula.anio);
+                    printf("Ingrese anio nuevo: ");
+                    scanf("%i",&pelicula.anio);
+                    break;
+                case 3:
+                    printf("Genero actual: %s\n",pelicula.genero);
+                    printf("Ingrese nuevo genero: ");
+                    fflush(stdin);
+                    gets(&pelicula.genero);
+                    break;
+                case 4:
+                    printf("Lenguaje actual: %s\n",pelicula.lenguaje);
+                    printf("Ingrese nuevo lenguaje: ");
+                    fflush(stdin);
+                    gets(&pelicula.lenguaje);
+                    break;
+                case 5:
+                    printf("Pais actual: %s\n",pelicula.pais);
+                    printf("Ingrese nuevo pais: ");
+                    fflush(stdin);
+                    gets(&pelicula.pais);
+                    break;
+                case 6:
+                    printf("PM actual: %i\n",pelicula.pm);
+                    printf("Ingrese PM nuevo: ");
+                    scanf("%i",&pelicula.pm);
+                    break;
+                case 7:
+                    printf("Subtitulo actual (1-Si 0-No): %i\n",pelicula.subtitulo);
+                    printf("Ingrese subtitulo nuevo: ");
+                    do{
+                        scanf("%i",&pelicula.pm);
+                    }while((pelicula.pm != 0) && (pelicula.pm != 1));
+                    break;
+                case 8:
+                    printf("Valoracion actual: %i\n",pelicula.valoracion);
+                    printf("Ingrese valoracion nueva: ");
+                    do{
+                        scanf("%i",&pelicula.pm);
+                    }while((pelicula.pm < 1) && (pelicula.pm > 10));
+                    break;
+                case 9:
+                    printf("Ingrese nueva sinopsis: \n");
+                    fflush(stdin);
+                    gets(&pelicula.sinopsis);
+                    break;
+            }
+        }
+    }else{
+        printf("No se encuentra la pelicula");
+        siguiente();
+    }
 }
