@@ -264,7 +264,7 @@ int calcularIdU(FILE* arch){
 }
 
 // Graba un usuario al archivo.
-void grabarUser(char archivo[], char username[], char pass[]){
+void grabarUser(stCelda adl[], char archivo[], char username[], char pass[]){
     FILE* arch = fopen(archivo, "a+b");
     stUsuario user;
     if (arch!=NULL){
@@ -281,6 +281,7 @@ void grabarUser(char archivo[], char username[], char pass[]){
             user.tipo = 1;
         }
         fwrite(&user, sizeof(stUsuario), 1, arch);
+        agregarUser(user, adl);
     }
     fclose(arch);
 }
