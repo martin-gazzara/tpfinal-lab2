@@ -264,7 +264,7 @@ int calcularIdU(FILE* arch){
 }
 
 // Graba un usuario al archivo.
-void grabarUser(stCelda adl[], char archivo[], char username[], char pass[]){
+void grabarUser(stCelda adl[], int val, char archivo[], char username[], char pass[]){
     FILE* arch = fopen(archivo, "a+b");
     stUsuario user;
     if (arch!=NULL){
@@ -281,7 +281,7 @@ void grabarUser(stCelda adl[], char archivo[], char username[], char pass[]){
             user.tipo = 1;
         }
         fwrite(&user, sizeof(stUsuario), 1, arch);
-        agregarUser(user, adl);
+        agregarUser(adl, val, user);
     }
     fclose(arch);
 }
@@ -319,7 +319,7 @@ void iniciarSesion(char DB_usuarios[],char DB_peliculas[]){
 }
 
 //Crea un usuario nuevo
-void crearUsuario(char archivo[]){
+void crearUsuario(char archivo[], stCelda adl[], int val){
     char temp1[max_pass+1];
     char temp2[max_pass+1];
     char tempUser[string_max];
@@ -342,7 +342,7 @@ void crearUsuario(char archivo[]){
         if(esc!=27){
             ok = verificarCrearUser(tempUser, temp1, temp2, archivo);
             if(ok == 0){
-                grabarUser(archivo, tempUser, temp1);
+                grabarUser(adl, val, archivo, tempUser, temp1);
                 system("cls");
                 gotoxy(37,8);printf("Cuenta creada exitosamente!");
                 gotoxy(37,10);printf("Inicia sesion para comenzar");
@@ -362,6 +362,10 @@ void crearUsuario(char archivo[]){
 void bienvenida(){
     char nombreDBUsuarios[]={"usuarios.bin"};
     char nombreDBPeliculas[]={"peliculas.bin"};
+    char nombreDBPeliculasVistas[]={"peliculasVistas.bin"}
+    nodoArbol* arbol = ;//crear arbol
+    int acctivos = //calcular activos
+    stCelda adl = pasarDeArchivoPelisVistasToADL(nombreDBUsuarios, nombreDBPeliculasVistas, activos, arbol);
     mostrarBienvenida();
     int opcion=0;
     while(opcion!=2){
@@ -371,7 +375,7 @@ void bienvenida(){
             iniciarSesion(nombreDBUsuarios,nombreDBPeliculas);
             break;
         case 1:
-            crearUsuario(nombreDBUsuarios);
+            crearUsuario(adl, val, nombreDBUsuarios);
             break;
         }
     }
