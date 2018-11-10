@@ -363,16 +363,16 @@ void bienvenida(){
     char nombreDBUsuarios[]={"usuarios.bin"};
     char nombreDBPeliculas[]={"peliculas.bin"};
     char nombreDBPeliculasVistas[]={"peliculasVistas.bin"}
-    nodoArbol* arbol = ;//crear arbol
-    int acctivos = //calcular activos
-    stCelda adl = pasarDeArchivoPelisVistasToADL(nombreDBUsuarios, nombreDBPeliculasVistas, activos, arbol);
+    nodoArbol* arbol = ;//crear arbol///////////////////////////////////////////////////////////////////////////////////////
+    int val = usuariosActivos(DB_usuarios);
+    stCelda* adl = pasarDeArchivoPelisVistasToADL(nombreDBUsuarios, nombreDBPeliculasVistas, val, arbol);
     mostrarBienvenida();
     int opcion=0;
     while(opcion!=2){
         opcion=menuPrincipal();
         switch(opcion) {
         case 0:
-            iniciarSesion(nombreDBUsuarios,nombreDBPeliculas);
+            iniciarSesion(nombreDBUsuarios,nombreDBPeliculas);////////////modificarlo para que use el adl
             break;
         case 1:
             crearUsuario(adl, val, nombreDBUsuarios);
