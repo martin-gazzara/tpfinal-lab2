@@ -20,7 +20,6 @@ typedef struct {
 
 
 // stPelicula
-
 typedef struct {
 
     char director[string_max];
@@ -40,9 +39,28 @@ typedef struct {
 }stPelicula;
 
 // NodoArbol
-
 typedef struct{
     stPelicula p;
     struct nodoArbol* izq;
     struct nodoArbol* der;
 }nodoArbol;
+
+
+// NodoListaPelicula
+typedef struct{
+    stPelicula p;
+    struct nodoListaPelicula * sig;
+} nodoListaPelicula;
+
+// stCelda
+typedef struct{
+    stUsuario usr;
+    nodoListaPelicula * listaPelis;
+} stCelda;
+
+// stPelisVistas
+typedef struct{
+    int idAutoincremental;
+    int idUsuario;
+    int idPelicula;
+} stPelisVistas;
