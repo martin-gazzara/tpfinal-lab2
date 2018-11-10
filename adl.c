@@ -1,4 +1,5 @@
 #include "adl.h"
+
 //Retorna la cantidad de usuarios activos que tiene el archivo
 int usuariosActivos(char DB_usuarios[]) {
     FILE* arch = fopen(DB_usuarios, "rb");
@@ -25,60 +26,34 @@ void cargarArregloUsuarios(char DB_usuarios, stCelda adl[]){
             index += 1;
         }
     }
-}
-
-//hacer funcion que en base a un id te retorne una pelicula
-
-//ARBOLLLLLLLLLLLL
-/*stPelicula peliculaVista(char DB_peliculas[], int id){
-    FILE* arch = fopen(DB_peliculas, "rb");
-    stPelicula temp;
-    stPelicula p;
-    int flag = 0;
-    while(fread(&temp, sizeof(stPelicula), 1, arch)>0 && !flag){
-        if(temp.id == id){
-            flag = 1;
-            p = temp;
-        }
-    }
-    return p;
-}*/
-
-/*
-//Carga la lista de peliculas vistas a cada usuario del arreglo
-void cargarArregloPelisVistas(char DB_peliculasVistas[], stCelda adl[], int cantActivos){
-    FILE* arch = fopen(DB_peliculasVistas, "rb");
-    stPelisVistas p;
-    int index = 0;
-    while(index<cantActivos){
-        rewind(arch);
-        nodoListaPelicula* list = inicLista();
-        while((fread(&p, sizeof(stPelisVistas), 1, arch)>0) && (p.idUsuario == adl[index].usr.id){
-            adl[index].listaPelis = agregarAlFinal( list, crearNodoLista(peliculaVista(p.idPelicula)));
-        }
-        i+=1;
-    }
     fclose(arch);
 }
-*/
+
+//Agrega las peliculas vista al adl
+void agregarPeliVista(int id, stPelicula p, int val, stCelda adl[]){
+    int index = 0;
+    while((index < val) && (id != adl[index].usr.id)){
+        index+=1;
+    }
+    if(id == adl[index].usr.id){
+        adl[index].listaPelis = agregarAlFinal(adl[index].listaPelis, crearNodo(p));
+    }
+}
 
 //Carga el arreglo con las peliculas vistas de cada usuario
-void cargarArregloPelisVistas(char DB_peliculasVistas[], arbol, adl, int cantActivos){
+void cargarArregloPelisVistas(char DB_peliculasVistas[], nodoArbol* arbol, stCelda adl[], int cantActivos){
     FILE* arch = fopen(DB_peliculasVistas, "rb");
     stPelisVistas p;
+    nodoListaPelicula* peli;
     int index = 0;
-    while(index<cantActivos){
-        rewind(arch);
-        nodoListaPelicula* list = inicLista();
-        while((fread(&p, sizeof(stPelisVistas), 1, arch)>0) && (p.idUsuario == adl[index].usr.id){
-            adl[index].listaPelis = agregarAlFinal( list, crearNodoLista(peliculaVista(p.idPelicula)));
-        }
-        i+=1;
+    while(fread(&p, sizeof(stPelisVistas), 1, arch)>0){
+        peli= buscar(arbol, p.idPelicula);
+        agregarPeliVista(p.idUsuario, peli.p, cantActivos, adl);
     }
     fclose(arch);
 }
 
-//Agregar usuario a la lista
+//Agregar usuario al adl
 int agregarUsuario(stCelda adl[], int val, stUsuario user){
     stCelda* adl = (stCelda*)realloc(adl, sizeof(stCelda) * (val+1));
     adl[val].usr = user;
@@ -87,28 +62,62 @@ int agregarUsuario(stCelda adl[], int val, stUsuario user){
 }
 
 //Crea el arreglo de listas
- stCelda* crearArreglo(char DB_usuarios[], DB_peliculasVistas[], int cantActivos){
+ stCelda* pasarDeArchivoPelisVistasToADL(char DB_usuarios[], DB_peliculasVistas[], int cantActivos, nodoArbol* arbol){
     stCelda* adl = (stCelda*)malloc(sizeof(stCelda) * cantActivos);
     cargarArregloUsuarios(DB_usuarios, adl);
-    cargarArregloPelisVistas(DB_peliculasVistas, adl);
+    cargarArregloPelisVistas(DB_peliculasVistas, arbol, adl, cantActivos);
     return adl;
  }
 
- //borrar elemento del adl en base al id
- int borrarUsuario(stCelda adl[] ,int id){
-
-    while(index<val){
-
+ //Borrar logicamente el elemento del adl en base al id
+ void borrarUsuarioADL(stCelda adl[] ,int id){
+    int index;
+    while(index<val && adl[index].usr.id != id){
+        index++;
+    }
+    if(adl[index].usr.id == id){
+        adl[index].usr.eliminado = 1;
     }
  }
 
-//
-void pasarDeArchivoPelisVistasToADL() {
-
+//Persiste los datos de las peliculas vistas
+void actualizarPeliculasVistas(stCelda adl[], int val, char DB_peliculasVistas[]) {
+    FILE* arch = fopen(DB_peliculasVistas, 'ab');
+    int index = 0;
+    stPelisVistas pv;
+    while(index<val){
+        while(!adl[index].listaPelis){
+            pv.idAutoincremental = ;
+            pv.idUsuario = adl[index].usr.id;
+            pv.idPelicula = adl[index].listaPelis.p.id; ///ver si es con . o con ->/////////////////////////////////////////////
+            fwrite(&, sizeof(stPelisVistas), 1, arch);
+            adl[index].listaPelis = adl[index].listaPelis.sig;
+        }
+            index += 1;
+    }
+    fclose(arch);
 }
 
-//Persiste los datos de las peliculas vistas
-void actualizarPeliculasVistas() {
-    //agregar nodo a lista
-    //agregar elemento a archivo peliculas vistas
+//Borrar peli de historial
+void borrarPeliVistaADL(stCelda adl[], int val, int idPeli, int idUsuario){
+    int index = 0;
+    while((index<val) && (adl[index].usr.id != idUsuario)){
+        index += 1;
+    }
+    if(adl[index].usr.id == idUsuario){
+        adl[index].listaPelis = borrarNodoPorIdPelicula(adl[index].listaPelis, idPeli);
+    }
+}
+
+//Persiste los datos de los usuarios
+void actualizarUsuarios(stCelda adl[], int val, char DB_usuarios[]){
+    FILE* arch = fopen(DB_usuarios, "ab");
+    int index = 0;
+    stUsuario user;
+    while(index<val){
+        user = adl[index].usr;
+        fwrite(&user, sizeof(stUsuario), 1, arch);
+        index += 1;
+    }
+    fclose(arch);
 }
