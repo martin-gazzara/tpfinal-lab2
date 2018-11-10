@@ -62,8 +62,7 @@ int agregarUsuario(stCelda adl[], int val, stUsuario user){
 }
 
 //Crea el arreglo de listas
- stCelda* pasarDeArchivoPelisVistasToADL(char DB_usuarios[], DB_peliculasVistas[], nodoArbol* arbol){
-    int cantActivos = usuariosActivos(DB_usuarios);
+ stCelda* pasarDeArchivoPelisVistasToADL(char DB_usuarios[], DB_peliculasVistas[], int cantActivos, nodoArbol* arbol){
     stCelda* adl = (stCelda*)malloc(sizeof(stCelda) * cantActivos);
     cargarArregloUsuarios(DB_usuarios, adl);
     cargarArregloPelisVistas(DB_peliculasVistas, arbol, adl, cantActivos);
