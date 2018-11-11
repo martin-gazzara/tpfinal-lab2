@@ -286,10 +286,43 @@ void grabarUser(stCelda adl[], int val, char archivo[], char username[], char pa
     fclose(arch);
 }
 
+
+///****************************************************************************************************************************************
+///                                               INICIO DE PROGRAMA
+///****************************************************************************************************************************************
+//Funcion de bienvenida
+void bienvenida(){
+    char nombreDBUsuarios[]={"usuarios.bin"};
+    char nombreDBPeliculas[]={"peliculas.bin"};
+    char nombreDBPeliculasVistas[]={"peliculasVistas.bin"}
+    nodoArbol* arbol = generarArbol(nombreDBPeliculas);
+    int val = usuariosActivos(DB_usuarios);
+    stCelda* adl = pasarDeArchivoPelisVistasToADL(nombreDBUsuarios, nombreDBPeliculasVistas, val, arbol);
+    mostrarBienvenida();
+    int opcion=0;
+    while(opcion!=2){
+        opcion=menuPrincipal();
+        switch(opcion) {
+        case 0:
+            iniciarSesion(nombreDBUsuarios,nombreDBPeliculas);////////////modificarlo para que use el adl
+            break;
+        case 1:
+            crearUsuario(adl, val, nombreDBUsuarios);
+            break;
+        }
+    }
+    cerrarPrograma();
+}
+
+///****************************************************************************************************************************************
+///                                                INICIO DE SESION
+///****************************************************************************************************************************************
 // Inicio de sesion
 void iniciarSesion(char DB_usuarios[],char DB_peliculas[]){
+    // Variables que adquirirán los datos ingresados
     char nombreUsuario[string_max];
     char password[max_pass+1]={0};
+    // Variable que adquiere el usuario en caso de haberse encontrado. Caso contrario adquiere un id=0
     stUsuario usuario;
     int esc;
     mostrarIniciarSesion();    //   Grafica
@@ -317,7 +350,252 @@ void iniciarSesion(char DB_usuarios[],char DB_peliculas[]){
     }
     return;
 }
+///****************************************************************************************************************************************
+///                                                 MENU USUARIO
+///****************************************************************************************************************************************
 
+
+
+///    **  A MODIFICAR
+
+
+void menuUsuario(int index, stCelda usuarios[], nodoArbol arbol){
+
+    int i=0;
+    stPelicula pelicula;
+    int resp,edad;
+    stPelicula recomendadas[3];;
+    while (i!=4){
+        recomendadas[0]=recomendarPelisGenero(usuario);
+        recomendadas[1]=recomendarPelisNueva(DB_peliculas);
+        recomendadas[2]=recomendarPelisValoracion(DB_peliculas);      ///  MODIFICAR
+        i=mostrarMenuUsuario(usuarios[index].usr.nombre,recomendadas);
+        switch (i){
+        //Ver una pelicula
+        case 0:
+            do{
+                pelicula=buscarPelicula(DB_peliculas);              /// stPelicula = buscarPelicula(nodoArbol arbol)   MODIFICAR
+                if (pelicula.id==0){
+                     system("cls");
+                        printf("La pelicula no esta disponible o no existe.");
+                        presionarContinuar();
+                        siguiente();
+                }else if(pelicula.id>0){
+                    system("cls");
+                        mostrarPelicula(pelicula);
+                        resp=mostrarVerPelicula();
+                        if(resp==0){
+                            edad=calcularEdad(usuarios[index].usr);
+                            if(edad>=pelicula.pm){
+                                verPelicula(usuarios[index],pelicula);          ///   verPelicula()  .. Puede ser una nueva funcion que irá solo en grafica
+                                system("cls");
+                                printf("Pelicula vista!!");
+                                presionarContinuar();
+                                siguiente();
+                            }else{
+                                system("cls");
+                                printf("La pelicula que deseas ver no es apta para tu edad.");
+                                presionarContinuar();
+                                siguiente();
+                            }
+                        }
+                }
+            }while(pelicula.id!=-1);
+            break;
+        //Lista todas las peliculas disponibles
+        case 1:
+            listarPeliculasDisponibles(DB_peliculas);                   /// MODIFICAR     void listarPeliculasDisponibles(nodoArbol arbol)
+            break;
+        //Ver historial
+        case 2:
+            system("cls");
+            mostrarHistorial(usuarios[index]);
+            break;
+        //Editar perfil
+        case 3:
+            usuarios[index].usr = editarPerfil(usuarios[index].usr);
+            break;
+        //Cerrar sesion
+        case 4:
+            system("cls");
+            break;
+        }
+    }
+    return;
+}
+
+///***************************************************************************************************************************************
+///                                                FUNCIONES DEL MENU USUARIO
+///***************************************************************************************************************************************
+
+///---------------------------------------------------------------------------------------------------------------------------------------
+///                                                   Reproducir una pelicula
+// Cuando un usuario elige ver una pelicula. La misma se "reproduce" y se incorpora a la lista de pelis vistas por el usuario.
+
+void verPelicula(stCelda usuario, stPelicula pelicula){
+
+    system("cls");
+    printf("REPRODUCIENDO PELICULA...");
+    //  Funcion para agregar una pelicula a la lista
+    return;
+}
+
+///---------------------------------------------------------------------------------------------------------------------------------------
+///                                                         Ver historial
+// Muestra cada pelicula existente en el historial, de forma recursiva
+
+void generarHistorial(nodoListaPelicula* historial){
+
+    if (historial){
+        printf("%i  %s %i %s  %s \n", historial->p.id, historial->p.nombre, historial->p.anio, historial->p.genero, historial->p.director);
+        generarHistorial(historial->sig);
+    }
+}
+
+// Mostrar el historial
+
+void mostrarHistorial(stCelda usuario){
+
+    int i;
+
+    if (!usuario.listaPelis){
+        system("cls");
+            printf("No hay historial disponible. Presione una tecla para continuar...\n");
+            siguiente();
+    }else{
+        gotoxy()                ///   Mover a una posicion adecuada, para empezar a imprimir cada pelicula
+        generarHistorial(usuario.listaPelis);
+        i=mostrarMenuHistorial();
+        if (i==0){
+            borrar Historial               /// Debería retornar NULL ??
+        }
+    }
+
+///---------------------------------------------------------------------------------------------------------------------------------------
+///                                                      Editar perfil
+
+stUsuario editarPerfil(stUsuario user){
+
+    int campo;
+    char pass[max_pass+1];
+    do{
+        system("cls");
+        desecriptarPass(user.vectorKey,user.pass,pass);
+        gotoxy(0,7);
+        printf("      Password      : %s\n",pass);
+        printf("        Anio        : %i\n",user.anioNacimiento);
+        printf("       Genero       : %c\n",user.genero);
+        printf("        Pais        : %s\n",user.pais);
+        campo=mostrarEditarPerfil(user.nombre,user.id);
+        switch (campo)
+        {
+        case 0:
+            editarPass(&user,pass);
+            break;
+        case 1:
+            editarAnio(&user);
+            break;
+        case 2:
+            editarGenero(&user);
+            break;
+        case 3:
+            editarPais(&user);
+            break;
+        }
+    }while(campo!=4);
+
+    return user;
+}
+
+// Editar pass
+
+void editarPass(stUsuario* user,char passActual[]){
+
+
+    int passNueva1[max_pass+1],passNueva2[max_pass+1];
+    int esc,ok=-1;
+    do{
+    system("cls");
+    presionarEsc();
+    gotoxy(0,2);
+    printf("Valor actual: %s\n",passActual);
+    printf("Valor nuevo: ");
+    esc=escribirPass(passNueva1);
+    if (esc!=27){
+        printf("\nRepita password: ");
+        esc=escribirPass(passNueva2);
+        if(esc!=27){
+            ok=verificarPass(passNueva1,passNueva2);
+            if (ok==1){
+            system("cls");
+            gotoxy(38,6);
+            printf("\nLas passwords no coinciden.");
+            presionarContinuar();
+            siguiente();
+            }
+        }
+    }
+    }while((ok==1)&&(esc!=27));
+    if(ok==0){
+        encriptarPass(passNueva2,user->vectorKey,user->pass);
+    }
+}
+
+// Editar año
+
+void editarAnio(stUsuario* user){
+
+    int aux;
+    system("cls");
+    presionarNum();
+    gotoxy(0,2);
+    printf("Valor actual: %i\n", user->anioNacimiento);
+    printf("Valor nuevo: ");
+    scanf("%i",&aux);
+    if(aux!=-1){
+        user->anioNacimiento=aux;
+    }
+}
+
+//Editar genero
+
+void editarGenero(stUsuario* user){
+
+    char aux;
+
+    system("cls");
+    presionarEsc();
+    gotoxy(0,2);
+    printf("Valor actual: %c\n",user->genero);
+    printf("Valor nuevo: ");
+    do{
+        fflush(stdin);
+        aux=getch();
+    }while((aux!='m')&&(aux!='f')&&(aux!=27));
+    if (aux!=27){
+        user->genero=aux;
+    }
+}
+
+// Editar Pais
+
+void editarPais(stUsuario* user){
+
+    int esc;
+    char aux[string_max];
+    system("cls");
+    presionarEsc();
+    gotoxy(0,2);
+    printf("Valor actual: %s\n",user->pais);
+    printf("Valor nuevo: ");
+    esc=escribirString(aux);
+    if (esc!=27){
+        strcpy(user->pais,aux);
+    }
+}
+///****************************************************************************************************************************************
+///                                                      CREAR UN USUARIO
+///****************************************************************************************************************************************
 //Crea un usuario nuevo
 void crearUsuario(char archivo[], stCelda adl[], int val){
     char temp1[max_pass+1];
@@ -358,29 +636,6 @@ void crearUsuario(char archivo[], stCelda adl[], int val){
     }while((ok!=0)&&(esc!=27));
 }
 
-//Funcion de bienvenida
-void bienvenida(){
-    char nombreDBUsuarios[]={"usuarios.bin"};
-    char nombreDBPeliculas[]={"peliculas.bin"};
-    char nombreDBPeliculasVistas[]={"peliculasVistas.bin"}
-    nodoArbol* arbol = ;//crear arbol///////////////////////////////////////////////////////////////////////////////////////
-    int val = usuariosActivos(DB_usuarios);
-    stCelda* adl = pasarDeArchivoPelisVistasToADL(nombreDBUsuarios, nombreDBPeliculasVistas, val, arbol);
-    mostrarBienvenida();
-    int opcion=0;
-    while(opcion!=2){
-        opcion=menuPrincipal();
-        switch(opcion) {
-        case 0:
-            iniciarSesion(nombreDBUsuarios,nombreDBPeliculas);////////////modificarlo para que use el adl
-            break;
-        case 1:
-            crearUsuario(adl, val, nombreDBUsuarios);
-            break;
-        }
-    }
-    cerrarPrograma();
-}
 
 void editarNombre(stUsuario* user, char[] DB_usuarios){
 
