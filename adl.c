@@ -82,16 +82,18 @@ int agregarUsuario(stCelda adl[], int val, stUsuario user){
 
 //Persiste los datos de las peliculas vistas
 void actualizarPeliculasVistas(stCelda adl[], int val, char DB_peliculasVistas[]) {
-    FILE* arch = fopen(DB_peliculasVistas, 'ab');
+    FILE* arch = fopen(DB_peliculasVistas, 'wb');
     int index = 0;
+    int id = 0;
     stPelisVistas pv;
     while(index<val){
         while(!adl[index].listaPelis){
-            pv.idAutoincremental = ;
+            pv.idAutoincremental = id;
             pv.idUsuario = adl[index].usr.id;
             pv.idPelicula = adl[index].listaPelis.p.id; ///ver si es con . o con ->/////////////////////////////////////////////
             fwrite(&, sizeof(stPelisVistas), 1, arch);
             adl[index].listaPelis = adl[index].listaPelis.sig;
+            id += 1;
         }
             index += 1;
     }
@@ -111,7 +113,7 @@ void borrarPeliVistaADL(stCelda adl[], int val, int idPeli, int idUsuario){
 
 //Persiste los datos de los usuarios
 void actualizarUsuarios(stCelda adl[], int val, char DB_usuarios[]){
-    FILE* arch = fopen(DB_usuarios, "ab");
+    FILE* arch = fopen(DB_usuarios, "wb");
     int index = 0;
     stUsuario user;
     while(index<val){
