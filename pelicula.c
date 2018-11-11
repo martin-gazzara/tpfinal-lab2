@@ -261,3 +261,46 @@ void modificarPelicula(char archivo[],nodoArbol* arbolPeliculas){
         siguiente();
     }
 }
+
+///  Generar Arbol
+// Lee el registro del medio de un intervalo de registros del archivo de películas
+nodoArbol* leerMitad(nodoArbol* arbol, FILE* arch,int desde, int hasta){
+
+    int index;
+    stPelicula pelicula;
+
+    // Se intenta buscar la mitad del segmento que existe entre <desde> y <hasta>
+    if ((hasta-desde) > 0){
+        // El index, o la pelicula que vamos a leer, dependerá si el segmento es par o impar.
+        if ((hasta-desde) % 2 == 0){
+            index = (hasta-desde)/2 ;
+        }else{
+            index = (hasta-desde)/2 + 1;
+        }
+        // Sumar el valor de <desde> permite hacer las lecturas del segmento de la derecha
+        // Index resulta al final, un valor de referencia de cuanto vamos a movernos con el fseek
+        index += desde;
+        // Como veniamos haciendo, la realidad es que debemos movernos un valor menos al index, para poder hacer la lectura
+        // de la pelicula
+        fseek(arch,(index-1)*sizeof(stPelicula),SEEK_SET);
+        if((fread(&pelicula,sizeof(stPelicula),1,arch)!=NULL)){
+            arbol->p = pelicula;
+            arbol->izq = leerMitad(arbol->izq,arch,desde,index-1);
+            arbol->der = leerMitad(arbol->der,arch,index,hasta);
+        }
+    }
+    return arbol;
+}
+
+// Funcion que retorna un arbol de peliculas.
+nodoArbol* generarArbol(char DB_peliculas[]){
+
+    FILE* arch = NULL;
+    nodoArbol* arbol = inicArbol();
+
+    arch = fopen(DB_peliculas,"rb");
+    int cantPeliculas = cantidadRegistros(arch,sizeof(stPelicula)) /// OBTENER CANTIDAD DE PELICULAS EN EL REGISTRO
+    arbol = leerMitad(arbol,arch,0,cantPeliculas);
+
+    return arbol;
+}

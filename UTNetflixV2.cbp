@@ -31,29 +31,12 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="encriptacion.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="encriptacion.h" />
-		<Unit filename="gotoxy.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="gotoxy.h" />
 		<Unit filename="grafica.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="grafica.h" />
-		<Unit filename="libarbol.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="libarbol.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="matrices_int.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="matrices_int.h" />
 		<Unit filename="pelicula.c">
 			<Option compilerVar="CC" />
 		</Unit>
