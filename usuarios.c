@@ -111,14 +111,9 @@ stPelicula recomendarPelisValoracion(stCelda user){
 }
 
 // Recomienda la ultima peli cargada
-stPelicula recomendarPelisNueva(char archivoPeli[]){
-    FILE* arch;
-    arch = fopen(archivoPeli, "rb");
-    stPelicula temp;
-    int cant = cantidadRegistros(arch, sizeof(stPelicula));
-    fseek(arch, (cant-1)*sizeof(stPelicula), SEEK_SET);
-    fread(&temp, sizeof(stPelicula), 1, arch);
-    fclose(arch);
+stPelicula recomendarPelisNueva(nodoArbol* arbol){
+    nodoArbol* ultimaPeli = nmi(arbol);
+    stPelicula temp = ultimaPeli.p;
     return temp;
 }
 
