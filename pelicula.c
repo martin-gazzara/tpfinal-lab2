@@ -9,6 +9,91 @@ int cantidadRegistros(FILE* arch, size_t tamanioDeTipo) {
     return aux;
 }
 
+///***************************************************************************************************************************************
+///****************************                           HABILITAR PELICULA                                 *****************************
+///***************************************************************************************************************************************
+
+//Habilita nuevamente una Película eliminada.
+void habilitarPelicula(char DB_peliculas[]){
+    FILE* arch;
+    stPelicula temp;
+    int id;
+    nodoArbol* nodoNuevo;
+    system("cls");
+    presionarNum();
+    mostrarIngresarID();
+    scanf("%i",&id);
+    hidecursor(0);
+    if(id!=-1){
+        if ((arch = fopen(DB_peliculas,"r+b"))!=NULL){
+            fseek(arch, (id-1)*sizeof(stPelicula), SEEK_SET);
+            fread(&temp, sizeof(stPelicula), 1, arch);
+            if(temp.eliminado==1){
+                temp.eliminado = 0;
+                fseek(arch, (-1)*sizeof(stPelicula), SEEK_CUR);
+                fwrite(&temp, sizeof(stPelicula), 1,arch);
+                fclose(arch);
+                nodoNuevo = crearNodo(temp);
+                arbol = insertar(arbol, nodoNuevo);
+                mostrarAltaPelicula(temp.nombre);
+            }else{
+                system("cls");
+                    gotoxy(46,7);
+                    printf("La pelicula");
+                    gotoxy(47,9);
+                    printf("%s",temp.nombre);
+                    gotoxy(41,11);
+                    printf("no ha sido dada de baja.");
+                    presionarContinuar();
+                    siguiente();
+            }
+        }
+    }
+}
+
+///***************************************************************************************************************************************
+///****************************                              BAJA PELICULA                                   *****************************
+///***************************************************************************************************************************************
+
+//Da de baja una película
+void bajaPelicula(char DB_peliculas[], nodoArbol* arbol){
+
+    stPelicula pelicula;
+    FILE *arch;
+    int id;
+    arch=fopen(DB_peliculas,"r+b");
+
+    system("cls");
+    presionarNum();
+    mostrarIngresarID();
+    scanf("%i",&id);
+    hidecursor(0);
+    if (id!=-1){
+        if(!NULL){
+            while((fread(&pelicula,sizeof(stPelicula),1,arch)>0)&&(pelicula.id!=id));
+            if(!feof(arch)){
+                fseek(arch,(-1)*sizeof(stPelicula),SEEK_CUR);
+                pelicula.eliminado=1;
+                fwrite(&pelicula,sizeof(stPelicula),1,arch);
+                arbol = borrarNodo(arbol, id);
+                mostrarBajaPelicula(pelicula.nombre);
+            }else{
+                system("cls");
+                gotoxy(40,10);
+                printf("La pelicula no existe.");
+                presionarContinuar();
+                siguiente();
+            }
+        }
+    }
+    fclose(arch);
+    return;
+}
+
+///***************************************************************************************************************************************
+///****************************                              ALTA PELICULA                                   *****************************
+///***************************************************************************************************************************************
+
 //Verifica si una Película ya fue cargada.
 int verificacionPelicula(char archivo[], char nombre[], int anio) {
     FILE* arch;
@@ -56,14 +141,6 @@ int calcularId(FILE* arch){
         id=1;
     }
     return id;
-}
-
-//Rearmar arbol
-void rearmararbol(nodoArbol** arbol) {
-    *arbol = inicArbol(); // ?????????????
-    //recorrer el archivo de forma recursiva y cargar el arbol
-
-    // completar logica/////////////////////////////////////////////////////////
 }
 
 //Carga una Pelicula al Arbol/Lista
@@ -158,10 +235,10 @@ void ingresarPeliculas(char DB_peliculas[], nodoArbol** arbol){
         p = pedirInfo(nombre, anio);
         cargarPelisArchivo(DB_peliculas, p);
         cargarPelisArbol(arbol, p);
-        if(cantAltasSeguidas != 3) {
+        if(cantAltasSeguidas < 10) {
             cantAltasSeguidas++;
         } else {
-            rearmararbol();
+            generarArbol(DB_peliculas);
             cantAltasSeguidas = 0;
         }
     } else {
@@ -173,6 +250,10 @@ void ingresarPeliculas(char DB_peliculas[], nodoArbol** arbol){
     presionarContinuar();
     siguiente();
 }
+
+///***************************************************************************************************************************************
+/// ****************************                          MODIFICACION PELICULA                               ****************************
+///***************************************************************************************************************************************
 
 //Modifica una película.
 void modificarPelicula(char archivo[],nodoArbol* arbolPeliculas){
@@ -262,7 +343,10 @@ void modificarPelicula(char archivo[],nodoArbol* arbolPeliculas){
     }
 }
 
-///  Generar Arbol
+///***************************************************************************************************************************************
+/// ****************************                             GENERAR ARBOL                                    ****************************
+///***************************************************************************************************************************************
+
 // Lee el registro del medio de un intervalo de registros del archivo de películas
 nodoArbol* leerMitad(nodoArbol* arbol, FILE* arch,int desde, int hasta){
 
