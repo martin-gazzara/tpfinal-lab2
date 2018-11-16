@@ -733,6 +733,128 @@ void gestionUsuarios(stCelda adl[], int val, char DB_usuarios[]){
 
 }
 
+///-----------------------------------------------------------------------------------------------------------------------------
+///                                                 Menu alta de usuarios
+///-----------------------------------------------------------------------------------------------------------------------------
+
+void menuAltaUsuarios(stCelda adl[], int val, char DB_usuarios[]){
+
+    int opcion_elegida;
+    do{
+        opcion_elegida=mostrarDarAltaUsuarios();
+        switch(opcion_elegida){
+            case 0:
+                crearUsuario(adl, val, DB_usuarios);
+                break;
+            case 1:
+                habilitarUsuario(adl, val, DB_usuarios);
+                break;
+        }
+    }while(opcion_elegida!=2);
+    return;
+}
+
+//----------------------------------------------------------------------------------------------------------------------------------------
+//                                                      Crear usuario
+//----------------------------------------------------------------------------------------------------------------------------------------
+
+void crearUsuario(stCelda adl[], int val, char archivo[]){
+
+    char temp1[max_pass+1];
+    char temp2[max_pass+1];
+    char tempUser[string_max];
+    int ok=0,esc;
+    do{
+        system("cls");
+        mostrarCrearUsuario();
+        hidecursor(1);
+        gotoxy(47,9);
+        esc=escribirString(tempUser);
+        if(esc!=27){
+            gotoxy(53,13);
+            esc=escribirPass(temp1);
+            if(esc!=27){
+                gotoxy(56,17);
+                esc=escribirPass(temp2);
+            }
+        }
+        hidecursor(0);
+        if(esc!=27){
+            ok = verificarCrearUser(tempUser, temp1, temp2, archivo);
+            if(ok == 0){
+                grabarUser(adl, val, archivo, tempUser, temp1);
+                system("cls");
+                gotoxy(37,8);printf("Cuenta creada exitosamente!");
+                gotoxy(37,10);printf("Inicia sesion para comenzar");
+                Sleep(1500);
+            }else if(ok==1){
+                gotoxy(38,19);printf("Las passwords no coinciden");
+                siguiente();
+            }else{
+                gotoxy(36,11);printf("El nombre de usuario ya existe");
+                siguiente();
+            }
+        }
+    }while((ok!=0)&&(esc!=27));
+}
+
+//--------------------------------------------------------------------------------------------------------------------------------
+//                                                 Habilitar usuario
+//--------------------------------------------------------------------------------------------------------------------------------
+
+void habilitarUsuarioAdl(stCelda adl[],int val,int id){
+
+    int i=0;
+
+    while (( i < val ) && ( adl[i].usr.id != id )){
+        i++;
+    }
+    if ( adl[i].usr.id == id ){
+        adl[i].usr.eliminado = 0;
+    }
+
+}
+
+
+void habilitarUsuario(stCelda adl[], int val, char DB_usuario[]){
+
+    FILE* arch;
+    stUsuario temp;
+    int id;
+
+    system("cls");
+    presionarNum();
+    mostrarIngresarID();
+    scanf(" %i",&id);
+    hidecursor(0);
+    if(id!=-1){
+        if ((arch = fopen(DB_usuario,"r+b"))!=NULL){
+            fseek(arch, (id-1)*sizeof(stUsuario), SEEK_SET);
+            fread(&temp, sizeof(stUsuario), 1, arch);
+            if (temp.eliminado==1){
+            temp.eliminado = 0;
+            fseek(arch, (-1)*sizeof(stUsuario), SEEK_CUR);
+            fwrite(&temp, sizeof(stUsuario), 1,arch);
+            fclose(arch);
+            habilitarUsuarioAdl(adl,val,id)
+            mostrarAltaUsuario(temp.nombre);
+            }else{
+                system("cls");
+                gotoxy(46,7);
+                printf("El usuario");
+                gotoxy(47,9);
+                printf("%s",temp.nombre);
+                gotoxy(41,11);
+                printf("no esta dado de baja.");
+                presionarContinuar();
+                siguiente();
+            }
+        }else{
+            printf("Error en la apertura del archivo\n");
+        }
+    }
+}
+
 ///************************************************************************************************************************************************************
 ///                                                Gestion de peliculas
 ///************************************************************************************************************************************************************
