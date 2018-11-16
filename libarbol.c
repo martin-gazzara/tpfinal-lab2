@@ -37,42 +37,74 @@ nodoArbol* insertar(nodoArbol* arbol, nodoArbol* nuevo_nodo){
     return arbol;
 }
 
+///-----------------------------------------------------------------------------------------------------------------------Mostrar Pelicula
+
+void mostrarPeliDisp(stPelicula peli){
+    gotoxy(0,whereY());printf("%i",peli.id);
+    gotoxy(5,whereY());printf("%s",peli.nombre);
+    gotoxy(45,whereY());printf("%i",peli.anio);
+    gotoxy(50,whereY());printf("%s",peli.genero);
+    gotoxy(66,whereY());printf("%s",peli.director);
+    gotoxy(87,whereY());printf("%s",peli.lenguaje);
+    printf("\n");
+}
+
+void mostrarPeliAdmin(stPelicula peli){
+    gotoxy(0,whereY());printf("%i",peli.id);
+    gotoxy(5,whereY());printf("%s",peli.nombre);
+    gotoxy(45,whereY());printf("%i",peli.anio);
+    gotoxy(50,whereY());printf("%s",peli.genero);
+    gotoxy(66,whereY());printf("%s",peli.director);
+    gotoxy(87,whereY());printf("%s",peli.lenguaje);
+    gotoxy(98,whereY());printf("%i",peli.eliminado);
+    printf("\n");
+}
 
 ///--------------------------------------------------------------------------------------------------------------------------Mostrar pre-order
 
-void preorder(nodoArbol* arbol){
+void preorder(nodoArbol* arbol, stUsuario user){
 
     if (arbol){
-        // Mostrar pelicula
+        if(user.admin == 1){
+            mostrarPeliAdmin(arbol.p);
+        }else{
+            mostrarPeli(arbol.p);
+        }
+        mostrarPeliDisp(arbol.p);
         preorder(arbol->izq);
         preorder(arbol->der);
     }
 }
 
-
 ///---------------------------------------------------------------------------------------------------------------------------Mostrar in-order
 
-void inorder(nodoArbol* arbol){
+void inorder(nodoArbol* arbol, stUsuario user){
 
     if (arbol){
         inorder(arbol->izq);
-        // Mostrar pelicula
+        if(user.admin == 1){
+            mostrarPeliAdmin(arbol.p);
+        }else{
+            mostrarPeli(arbol.p);
+        }
         inorder(arbol->der);
     }
 }
 
-
 ///-------------------------------------------------------------------------------------------------------------------------Mostrar post-order
 
-void postorder(nodoArbol* arbol){
+void postorder(nodoArbol* arbol, stUsuario user){
 
     if (arbol){
         postorder(arbol->izq);
         postorder(arbol->der);
-        // Mostrar pelicula
+        if(user.admin == 1){
+            mostrarPeliAdmin(arbol.p);
+        }else{
+            mostrarPeli(arbol.p);
+        }
     }
 }
-
 
 ///--------------------------------------------------------------------------------------------------------------------------------Buscar nodo
 
@@ -94,12 +126,47 @@ nodoArbol* buscar(nodoArbol* arbol, int id){
     return aux;
 }
 
+///------------------------------------------------------------------------------------------------------------------------------Buscar por nombre
+nodoArbol * buscarEnpreorderNombre(nodoArbol * arbol, char nombre[]){
+    nodoArbol * rta = NULL;
+    if(arbol!=NULL){
+        if(strcmp(arbol->p.nombre,nombre)){
+            rta=arbol;
+        } else {
+            rta=buscarEnpreorder(arbol->izq, nombre);
+            if(!rta){
+                rta=buscarEnpreorder(arbol->der, nombre);
+            }
+        }
+    }
+    return rta;
+}
+
+///------------------------------------------------------------------------------------------------------------------------------Buscar por genero
+nodoArbol * buscarEnpreorderNombre(nodoArbol * arbol, char genero[]){
+    nodoArbol * rta = NULL;
+    if(arbol!=NULL){
+        if(strcmp(arbol->p.genero,genero)){
+            rta=arbol;
+        } else {
+            rta=buscarEnpreorder(arbol->izq, genero);
+            if(!rta){
+                rta=buscarEnpreorder(arbol->der, genero);
+            }
+        }
+    }
+    return rta;
+}
+
 
 ///-------------------------------------------------------------------------------------------------------------------------------Mostrar nodo
 
-void mostrarNodo(nodoArbol* nodo){
-
-    //Mostrar pelicula
+void mostrarNodo(nodoArbol* nodo, stUsuario user){
+    if(user.admin == 1){
+        mostrarPeliAdmin(nodo->p);
+    }else{
+        mostrarPeli(nodo->p);
+    }
     printf("Rama izquierda: %p\n",nodo->izq);
     printf("Rama derecha: %p\n",nodo->der);
 }

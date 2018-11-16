@@ -8,7 +8,7 @@
 typedef struct {
         int id;
         char nombre[string_max];
-        int admin;
+        int admin;  //1 admin 0 user
         int pass[f_pass][c_pass];
         int anioNacimiento;
         char genero;
@@ -21,7 +21,6 @@ typedef struct {
 
 // stPelicula
 typedef struct {
-
     char director[string_max];
     char genero[string_max];
     char lenguaje[string_max];
