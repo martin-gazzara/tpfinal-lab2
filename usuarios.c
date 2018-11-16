@@ -799,8 +799,10 @@ void crearUsuario(stCelda adl[], int val, char archivo[]){
 }
 
 //--------------------------------------------------------------------------------------------------------------------------------
-//                                                 Habilitar usuario
+//                                                    Habilitar usuario
 //--------------------------------------------------------------------------------------------------------------------------------
+
+// Habilitar usuario en adl.
 
 void habilitarUsuarioAdl(stCelda adl[],int val,int id){
 
@@ -815,6 +817,7 @@ void habilitarUsuarioAdl(stCelda adl[],int val,int id){
 
 }
 
+// Habilitar usuario en archivo.
 
 void habilitarUsuario(stCelda adl[], int val, char DB_usuario[]){
 
@@ -854,6 +857,47 @@ void habilitarUsuario(stCelda adl[], int val, char DB_usuario[]){
         }
     }
 }
+
+///--------------------------------------------------------------------------------------------------------------------------------
+///                                             Menu baja de usuario
+///--------------------------------------------------------------------------------------------------------------------------------
+
+void bajaUsuario(stCelda adl[], int val){
+
+    int id, i;
+
+    system("cls");
+    presionarNum();
+    mostrarIngresarID();
+    scanf("%i",&id);
+    hidecursor(0);
+    if (id!=-1){
+        while (( i < val) && ( adl[i].usr.id != id )){
+            i++;
+        }
+        system("cls");
+        gotoxy(32,9);
+        if (( adl[i].usr.id != id )){
+            if (temp.tipo!=1){
+                temp.eliminado = 1;
+                mostrarBajaUsuario(temp.nombre);
+            }else{
+                printf("Imposible dar de baja a un Administrador.");
+
+            }
+        }else{
+            printf("No se ha encontrado el usuario.");
+        }
+    }
+    presionarContinuar();
+    siguiente();
+}
+
+///----------------------------------------------------------------------------------------------------------------------------------
+///                                              Menu listar usuarios
+///----------------------------------------------------------------------------------------------------------------------------------
+
+
 
 ///************************************************************************************************************************************************************
 ///                                                Gestion de peliculas
