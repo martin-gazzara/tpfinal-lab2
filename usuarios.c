@@ -291,13 +291,13 @@ void bienvenida(){
     char nombreDBPeliculas[]={"peliculas.bin"};
     char nombreDBPeliculasVistas[]={"peliculasVistas.bin"}
     nodoArbol* arbol = generarArbol(nombreDBPeliculas);
-    int val = usuariosActivos(DB_usuarios);
+    int val = usuariosActivos(nombreDBUsuarios);
     stCelda* adl = pasarDeArchivoPelisVistasToADL(nombreDBUsuarios, nombreDBPeliculasVistas, val, arbol);
     mostrarBienvenida();
     int opcion=0;
     while(opcion!=2){
         opcion=menuPrincipal();
-        switch(opcion) {
+        switch(opcion) {                        /// Iniciar debe llevar nombreDBPeliculas para tareas de Admin
         case 0:
             iniciarSesion(nombreDBUsuarios,nombreDBPeliculas);////////////modificarlo para que use el adl
             break;
@@ -348,12 +348,7 @@ void iniciarSesion(char DB_usuarios[],char DB_peliculas[]){
 ///****************************************************************************************************************************************
 ///                                                 MENU USUARIO
 ///****************************************************************************************************************************************
-
-
-
 ///    **  A MODIFICAR
-
-
 void menuUsuario(int index, stCelda usuarios[], nodoArbol arbol){
 
     int i=0;
@@ -465,6 +460,7 @@ void mostrarHistorial(stCelda usuario){
             borrar Historial               /// Debería retornar NULL ??
         }
     }
+}
 
 ///---------------------------------------------------------------------------------------------------------------------------------------
 ///                                                      Editar perfil
@@ -588,6 +584,7 @@ void editarPais(stUsuario* user){
         strcpy(user->pais,aux);
     }
 }
+
 ///****************************************************************************************************************************************
 ///                                                      CREAR UN USUARIO
 ///****************************************************************************************************************************************
@@ -631,6 +628,300 @@ void crearUsuario(char archivo[], stCelda adl[], int val){
     }while((ok!=0)&&(esc!=27));
 }
 
+
+
+///000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+///000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+///000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+
+
+
+///************************************************************************************************************************************************
+///                                                      MENU ADMIN
+///************************************************************************************************************************************************
+
+void menuAdmin(nodoArbol* arbol, stCelda adl[],int val, char DB_usuarios[], char DB_peliculas[]){
+
+    int opcion_elegida;
+
+    do{
+        opcion_elegida=mostrarMenuAdmin();   // Grafica
+        switch (opcion_elegida){
+            case 0:
+                gestionUsuarios(adl, val, DB_usuarios);
+                break;
+            case 1:
+                gestionPeliculas(arbol, DB_peliculas);
+                break;
+        }
+    }while (opcion_elegida!=2);
+    return;
+
+}
+
+
+///**************************************************************************************************************************************************
+///                                                  Gestion de usuarios
+///**************************************************************************************************************************************************
+
+void gestionUsuarios(stCelda adl[], int val, char DB_usuarios[]){
+
+    int opcion_elegida;
+    do{
+        opcion_elegida=mostrarGestionUsuarios();
+        switch(opcion_elegida){
+            case 0:
+                menuAltaUsuarios(adl, val, DB_usuarios);
+                break;
+            case 1:
+                bajaUsuario(adl,val);
+                break;
+            case 2:
+                listarUsuarios(adl, val, DB_usuarios);
+                break;
+            case 3:
+                system("cls");
+                menuBackUpU(DB_usuarios);
+                break;
+
+        }
+    }while(opcion_elegida!=4);
+
+}
+
+///-----------------------------------------------------------------------------------------------------------------------------
+///                                                 Menu alta de usuarios
+///-----------------------------------------------------------------------------------------------------------------------------
+
+void menuAltaUsuarios(stCelda adl[], int val, char DB_usuarios[]){
+
+    int opcion_elegida;
+    do{
+        opcion_elegida=mostrarDarAltaUsuarios();
+        switch(opcion_elegida){
+            case 0:
+                crearUsuario(adl, val, DB_usuarios);
+                break;
+            case 1:
+                habilitarUsuario(adl, val, DB_usuarios);
+                break;
+        }
+    }while(opcion_elegida!=2);
+    return;
+}
+
+//----------------------------------------------------------------------------------------------------------------------------------------
+//                                                      Crear usuario
+//----------------------------------------------------------------------------------------------------------------------------------------
+
+void crearUsuario(stCelda adl[], int val, char archivo[]){
+
+    char temp1[max_pass+1];
+    char temp2[max_pass+1];
+    char tempUser[string_max];
+    int ok=0,esc;
+    do{
+        system("cls");
+        mostrarCrearUsuario();
+        hidecursor(1);
+        gotoxy(47,9);
+        esc=escribirString(tempUser);
+        if(esc!=27){
+            gotoxy(53,13);
+            esc=escribirPass(temp1);
+            if(esc!=27){
+                gotoxy(56,17);
+                esc=escribirPass(temp2);
+            }
+        }
+        hidecursor(0);
+        if(esc!=27){
+            ok = verificarCrearUser(tempUser, temp1, temp2, archivo);
+            if(ok == 0){
+                grabarUser(adl, val, archivo, tempUser, temp1);
+                system("cls");
+                gotoxy(37,8);printf("Cuenta creada exitosamente!");
+                gotoxy(37,10);printf("Inicia sesion para comenzar");
+                Sleep(1500);
+            }else if(ok==1){
+                gotoxy(38,19);printf("Las passwords no coinciden");
+                siguiente();
+            }else{
+                gotoxy(36,11);printf("El nombre de usuario ya existe");
+                siguiente();
+            }
+        }
+    }while((ok!=0)&&(esc!=27));
+}
+
+//--------------------------------------------------------------------------------------------------------------------------------
+//                                                    Habilitar usuario
+//--------------------------------------------------------------------------------------------------------------------------------
+
+// Habilitar usuario en adl.
+
+void habilitarUsuarioAdl(stCelda adl[],int val,int id){
+
+    int i=0;
+
+    while (( i < val ) && ( adl[i].usr.id != id )){
+        i++;
+    }
+    if ( adl[i].usr.id == id ){
+        adl[i].usr.eliminado = 0;
+    }
+
+}
+
+// Habilitar usuario en archivo.
+
+void habilitarUsuario(stCelda adl[], int val, char DB_usuario[]){
+
+    FILE* arch;
+    stUsuario temp;
+    int id;
+
+    system("cls");
+    presionarNum();
+    mostrarIngresarID();
+    scanf(" %i",&id);
+    hidecursor(0);
+    if(id!=-1){
+        if ((arch = fopen(DB_usuario,"r+b"))!=NULL){
+            fseek(arch, (id-1)*sizeof(stUsuario), SEEK_SET);
+            fread(&temp, sizeof(stUsuario), 1, arch);
+            if (temp.eliminado==1){
+            temp.eliminado = 0;
+            fseek(arch, (-1)*sizeof(stUsuario), SEEK_CUR);
+            fwrite(&temp, sizeof(stUsuario), 1,arch);
+            fclose(arch);
+            habilitarUsuarioAdl(adl,val,id)
+            mostrarAltaUsuario(temp.nombre);
+            }else{
+                system("cls");
+                gotoxy(46,7);
+                printf("El usuario");
+                gotoxy(47,9);
+                printf("%s",temp.nombre);
+                gotoxy(41,11);
+                printf("no esta dado de baja.");
+                presionarContinuar();
+                siguiente();
+            }
+        }else{
+            printf("Error en la apertura del archivo\n");
+        }
+    }
+}
+
+///--------------------------------------------------------------------------------------------------------------------------------
+///                                                 Menu baja de usuario
+///--------------------------------------------------------------------------------------------------------------------------------
+
+void bajaUsuario(stCelda adl[], int val){
+
+    int id, i;
+
+    system("cls");
+    presionarNum();
+    mostrarIngresarID();
+    scanf("%i",&id);
+    hidecursor(0);
+    if (id!=-1){
+        while (( i < val) && ( adl[i].usr.id != id )){
+            i++;
+        }
+        system("cls");
+        gotoxy(32,9);
+        if (( adl[i].usr.id != id )){
+            if (temp.tipo!=1){
+                temp.eliminado = 1;
+                mostrarBajaUsuario(temp.nombre);
+            }else{
+                printf("Imposible dar de baja a un Administrador.");
+
+            }
+        }else{
+            printf("No se ha encontrado el usuario.");
+        }
+    }
+    presionarContinuar();
+    siguiente();
+}
+
+///----------------------------------------------------------------------------------------------------------------------------------
+///                                                 Menu listar usuarios
+///----------------------------------------------------------------------------------------------------------------------------------
+
+void listarUsuarios(stCelda adl[], int val, char archivo[]){
+    system("cls");
+    int opcion;
+    do{
+        mostrarUsuarios(archivo);
+        gotoxy(0,3);
+        opcion=mostrarMenuListadoU();
+        system("cls");
+        switch(opcion){
+            case 0:
+                modificarUsuario(adl, val, archivo);
+                system("cls");
+                break;
+            case 1:
+                proximamente();
+                presionarContinuar();
+                siguiente();
+                break;
+        }
+    }while((opcion<2)&&(cant!=-1));
+}
+
+//------------------------------------------------------------------------------------------------------------------------------------
+//                                                    Modificar usuario
+//------------------------------------------------------------------------------------------------------------------------------------
+
+void modificarUsuario(stUsuario* user,char[] DB_usuarios){
+
+    char pass[max_pass+1];
+    int opcion;
+
+    desencriptar(user->vectorKey,user->pass,pass);
+    system("cls");
+    do{
+        gotoxy(0,7);
+        printf("       Nombre       : %s",user->nombre);
+        printf("      Password      : %s",pass);
+        printf("        Anio        : %i",user->anioNacimiento);
+        printf("        Pais        : %s",user->pais);
+        printf("       Genero       : %s",user->genero);
+        printf("       Admin        : %i (1-Si/0-No)",user->admin);
+        printf("      Eliminado     : %i (1-Si/0-No)",user->eliminado);
+        printf("       SALIR        ");
+        opcion = mostrarModificarUsuario();
+        switch (opcion){
+            case 0:
+                editarNombre(user,DB_usuarios);
+                break;
+            case 1:
+                editarPass(user,pass);
+                break;
+            case 2:
+                editarAnio(user);
+                break;
+            case 3:
+                editarPais(user);
+                break;
+            case 4:
+                editarGenero(user);
+                break;
+            case 5:
+                editarAdmin(user);
+                break;
+            case 6:
+                editarEliminado(user);
+                break;
+        }
+    }while(opcion!=7);
+}
 
 void editarNombre(stUsuario* user, char[] DB_usuarios){
 
@@ -681,46 +972,86 @@ void editarAdmin(stUsuario* user){
     user->admin = aux;
 }
 
-void modificarUsuario(stUsuario* user,char[] DB_usuarios){
+//-----------------------------------------------------------------------------------------------------------------------------------------
+//                                                      Filtrar usuarios
+//-----------------------------------------------------------------------------------------------------------------------------------------
 
-    char pass[max_pass+1];
-    int opcion;
 
-    desencriptar(user->vectorKey,user->pass,pass);
-    system("cls");
+///------------------------------------------------------------------------------------------------------------------------------
+///                                                     Generar Back up
+///------------------------------------------------------------------------------------------------------------------------------
+
+void menuBackUpU(char DB_usuarios[]){
+
+    int opc=mostrarBackUp();
+    switch (opc){
+    case 0:
+        generarBackUpU(DB_usuarios);
+        system("cls");
+        printf("Back up generado correctamente en carpeta backUp.");
+        presionarContinuar();
+        siguiente();
+        break;
+    case 1:
+        recuperarDatosUsuarios(DB_usuarios);
+        system("cls");
+        printf("Se han restaurado los datos desde la base de datos.");
+        presionarContinuar();
+        siguiente();
+        break;
+
+    }
+    return;
+}
+
+
+///************************************************************************************************************************************************************
+///                                                  Gestion de peliculas
+///************************************************************************************************************************************************************
+
+void gestionPeliculas(nodoArbol* arbol, char DB_peliculas[]){
+
+    int opcion_elegida;
+
     do{
-        gotoxy(0,7);
-        printf("       Nombre       : %s",user->nombre);
-        printf("      Password      : %s",pass);
-        printf("        Anio        : %i",user->anioNacimiento);
-        printf("        Pais        : %s",user->pais);
-        printf("       Genero       : %s",user->genero);
-        printf("       Admin        : %i (1-Si/0-No)",user->admin);
-        printf("      Eliminado     : %i (1-Si/0-No)",user->eliminado);
-        printf("       SALIR        ");
-        opcion = mostrarModificarUsuario();
-        switch (opcion){
+        opcion_elegida=mostrarGestionPeliculas();
+        switch(opcion_elegida){
             case 0:
-                editarNombre(user,DB_usuarios);
+                menuAltaPeliculas(arbol, DB_peliculas);
                 break;
             case 1:
-                editarPass(user,pass);
+                bajaPelicula(arbol);
                 break;
             case 2:
-                editarAnio(user);
+                listarPeliculas(arbol, DB_peliculas);
                 break;
             case 3:
-                editarPais(user);
-                break;
-            case 4:
-                editarGenero(user);
-                break;
-            case 5:
-                editarAdmin(user);
-                break;
-            case 6:
-                editarEliminado(user);
+                system("cls");
+                menuBackUpP(DB_peliculas);
                 break;
         }
-    }while(opcion!=7);
+    }while(opcion_elegida!=4);
+
+}
+
+///---------------------------------------------------------------------------------------------------------------------------------------
+///                                               Menu alta peliculas
+///---------------------------------------------------------------------------------------------------------------------------------------
+
+void menuAltaPeliculas(nodoArbol* arbol, char DB_peliculas[]){
+
+    int opcion_elegida;
+    do{
+        opcion_elegida=mostrarDarAltaPeliculas();
+        switch(opcion_elegida){
+            case 0:
+                ingresarPeliculas(DB_peliculas, arbol);
+                break;
+            case 1:
+                habilitarPelicula(DB_peliculas);
+                break;
+        }
+    }while(opcion_elegida!=2);
+    return;
+
 }

@@ -581,12 +581,12 @@ int mostrarEditarPerfil(char nombreUser[],int id){
     return eleccion;
 }
 
-int mostrarMenuAdmin(char nombreAdmin[]){
+int mostrarMenuAdmin(){
     system("cls");
     char opciones[][21]={"  Gestion Usuarios  ","  Gestion Peliculas ","   Cerrar sesion   "};
     int numOpc=3;
     gotoxy(1,1);
-    printf("Admin: %s",nombreAdmin);
+    printf("Bienvenido!");
     gotoxy(39,5);
     printf("TAREAS DE ADMINISTRADOR");
     int eleccion=elegirOpcionV("centrado",opciones,numOpc);
@@ -1072,8 +1072,6 @@ void mostrarFormularioPeliculas(){
 }
 
 
-///    *** NUEVO ***
-
 int mostrarModificarPelicula(stPelicula pelicula){
 
     char opciones[][21]={"       Nombre       ","      Director      ","        Anio        ","       Genero       ","      Lenguaje      ","        Pais        ","         PM         ","     Subtitulado    ","     Valoracion     ","      Sinopsis      ","        Salir       "};
@@ -1082,3 +1080,29 @@ int mostrarModificarPelicula(stPelicula pelicula){
     return eleccion;
 
 }
+
+///    *** NUEVO ***
+
+void mostrarUsuarios(char archivo[]){
+
+    FILE* arch = fopen(archivo,"rb");
+    stUsuario temp;
+
+
+    system("cls");
+    gotoxy(1,4);printf("ID");
+    gotoxy(17,4);printf("NOMBRE");
+    gotoxy(45,4);printf("ANIO");
+    gotoxy(54,4);printf("GENERO");
+    gotoxy(67,4);printf("PAIS");
+    gotoxy(96,4);printf("ELIM");
+    printf("\n");
+
+    while( (fread(&temp,sizeof(stUsuario),1,arch)) > 0 ){
+        printf("%i %s %i %s %s %i\n", temp.id, temp.nombre, temp.anioNacimiento, temp.genero, temp.pais, temp.eliminado);
+    }
+
+    fclose(arch);
+
+}
+
