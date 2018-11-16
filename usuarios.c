@@ -291,13 +291,13 @@ void bienvenida(){
     char nombreDBPeliculas[]={"peliculas.bin"};
     char nombreDBPeliculasVistas[]={"peliculasVistas.bin"}
     nodoArbol* arbol = generarArbol(nombreDBPeliculas);
-    int val = usuariosActivos(DB_usuarios);
+    int val = usuariosActivos(nombreDBUsuarios);
     stCelda* adl = pasarDeArchivoPelisVistasToADL(nombreDBUsuarios, nombreDBPeliculasVistas, val, arbol);
     mostrarBienvenida();
     int opcion=0;
     while(opcion!=2){
         opcion=menuPrincipal();
-        switch(opcion) {
+        switch(opcion) {                        /// Iniciar debe llevar nombreDBPeliculas para tareas de Admin
         case 0:
             iniciarSesion(nombreDBUsuarios,nombreDBPeliculas);////////////modificarlo para que use el adl
             break;
@@ -680,7 +680,32 @@ void editarAdmin(stUsuario* user){
     }while((aux!=1) || (aux!=0));
     user->admin = aux;
 }
+///************************************************************************************************************************************************
+///                                                        MENU ADMIN
+///************************************************************************************************************************************************
 
+void menuAdmin(nodoArbol* arbol, stCelda adl[],int val, char DB_usuarios[], char DB_peliculas[]){
+
+    int opcion_elegida;
+
+    do{
+        opcion_elegida=mostrarMenuAdmin();   // Grafica
+        switch (opcion_elegida){
+            case 0:
+                gestionUsuarios(adl, val, DB_usuarios);
+                break;
+            case 1:
+                gestionPeliculas(arbol, DB_peliculas);
+                break;
+        }
+    }while (opcion_elegida!=2);
+    return;
+
+}
+
+///----------------------------------------------------------------------------------------------------------------------------------
+///                                                     Modificar usuario
+///----------------------------------------------------------------------------------------------------------------------------------
 void modificarUsuario(stUsuario* user,char[] DB_usuarios){
 
     char pass[max_pass+1];

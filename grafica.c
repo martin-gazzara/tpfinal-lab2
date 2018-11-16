@@ -581,12 +581,12 @@ int mostrarEditarPerfil(char nombreUser[],int id){
     return eleccion;
 }
 
-int mostrarMenuAdmin(char nombreAdmin[]){
+int mostrarMenuAdmin(){
     system("cls");
     char opciones[][21]={"  Gestion Usuarios  ","  Gestion Peliculas ","   Cerrar sesion   "};
     int numOpc=3;
     gotoxy(1,1);
-    printf("Admin: %s",nombreAdmin);
+    printf("Bienvenido!");
     gotoxy(39,5);
     printf("TAREAS DE ADMINISTRADOR");
     int eleccion=elegirOpcionV("centrado",opciones,numOpc);
