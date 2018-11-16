@@ -1034,4 +1034,24 @@ void gestionPeliculas(nodoArbol* arbol, char DB_peliculas[]){
 
 }
 
+///---------------------------------------------------------------------------------------------------------------------------------------
+///                                               Menu alta peliculas
+///---------------------------------------------------------------------------------------------------------------------------------------
 
+void menuAltaPeliculas(nodoArbol* arbol, char DB_peliculas[]){
+
+    int opcion_elegida;
+    do{
+        opcion_elegida=mostrarDarAltaPeliculas();
+        switch(opcion_elegida){
+            case 0:
+                ingresarPeliculas(DB_peliculas, arbol);
+                break;
+            case 1:
+                habilitarPelicula(DB_peliculas);
+                break;
+        }
+    }while(opcion_elegida!=2);
+    return;
+
+}
