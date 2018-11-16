@@ -348,12 +348,7 @@ void iniciarSesion(char DB_usuarios[],char DB_peliculas[]){
 ///****************************************************************************************************************************************
 ///                                                 MENU USUARIO
 ///****************************************************************************************************************************************
-
-
-
 ///    **  A MODIFICAR
-
-
 void menuUsuario(int index, stCelda usuarios[], nodoArbol arbol){
 
     int i=0;
@@ -465,6 +460,7 @@ void mostrarHistorial(stCelda usuario){
             borrar Historial               /// Debería retornar NULL ??
         }
     }
+}
 
 ///---------------------------------------------------------------------------------------------------------------------------------------
 ///                                                      Editar perfil
@@ -588,6 +584,7 @@ void editarPais(stUsuario* user){
         strcpy(user->pais,aux);
     }
 }
+
 ///****************************************************************************************************************************************
 ///                                                      CREAR UN USUARIO
 ///****************************************************************************************************************************************
@@ -631,55 +628,6 @@ void crearUsuario(char archivo[], stCelda adl[], int val){
     }while((ok!=0)&&(esc!=27));
 }
 
-
-void editarNombre(stUsuario* user, char[] DB_usuarios){
-
-    int existe;
-    char nuevo_nombre[];
-
-    do{
-        system("cls");
-        printf("MODIFICAR NOMBRE DE USUARIO\n\n");
-        printf("Valor actual: %i\n",user->nombre);
-        printf("Nuevo valor: ");
-        gets(nuevo_nombre);
-        ok = verificarDatos(DB_usuarios,nuevo_nombre)
-        if(existe){
-            printf("Ese nombre ya esta en uso.");
-        }
-    }while((existe) || (!strcmp(nuevo_nombre,user->nombre)));                 // Considerar para futuras correcciones.
-    if(!existe){
-        strcpy(user->nombre,nuevo_nombre);
-    }
-}
-
-void editarEliminado(stUsuario* user){
-
-    int aux;
-
-    do{
-        system("cls");
-        printf("MODIFICAR ELIMINACION LOGICA (1-Eliminado / 0-Activo)\n\n");
-        printf("Valor actual: %i\n",user->eliminado);
-        printf("Nuevo valor: ");
-        scanf("%i",&aux);
-    }while((aux!=1) || (aux!=0));
-    user->eliminado = aux;
-}
-
-void editarAdmin(stUsuario* user){
-
-    int aux;
-
-    do{
-        system("cls");
-        printf("MODIFICAR PERMISOS DE ADMINISTRADOR (1-Admin / 0-Usuario)\n\n");
-        printf("Valor actual: %i\n",user->admin);
-        printf("Nuevo valor: ");
-        scanf("%i",&aux);
-    }while((aux!=1) || (aux!=0));
-    user->admin = aux;
-}
 ///************************************************************************************************************************************************
 ///                                                        MENU ADMIN
 ///************************************************************************************************************************************************
@@ -859,7 +807,7 @@ void habilitarUsuario(stCelda adl[], int val, char DB_usuario[]){
 }
 
 ///--------------------------------------------------------------------------------------------------------------------------------
-///                                             Menu baja de usuario
+///                                                  Menu baja de usuario
 ///--------------------------------------------------------------------------------------------------------------------------------
 
 void bajaUsuario(stCelda adl[], int val){
@@ -894,45 +842,40 @@ void bajaUsuario(stCelda adl[], int val){
 }
 
 ///----------------------------------------------------------------------------------------------------------------------------------
-///                                              Menu listar usuarios
+///                                                  Menu listar usuarios
 ///----------------------------------------------------------------------------------------------------------------------------------
 
-
-
-///************************************************************************************************************************************************************
-///                                                Gestion de peliculas
-///************************************************************************************************************************************************************
-
-void gestionPeliculas(nodoArbol* arbol, char DB_peliculas[]){
-
-    int opcion_elegida;
-
+void listarUsuarios(stCelda adl[], int val, char archivo[]){
+    system("cls");
+    int opcion;
     do{
-        opcion_elegida=mostrarGestionPeliculas();
-        switch(opcion_elegida){
+        mostrarUsuarios(archivo);
+        gotoxy(0,3);
+        opcion=mostrarMenuListadoU();
+        system("cls");
+        switch(opcion){
             case 0:
-                menuAltaPeliculas(arbol, DB_peliculas);
+                modificarUsuario(adl, val, archivo);
+                system("cls");
                 break;
             case 1:
-                bajaPelicula(arbol);
-                break;
-            case 2:
-                listarPeliculas(arbol, DB_peliculas);
-                break;
-            case 3:
-                system("cls");
-                menuBackUpP(DB_peliculas);
+                proximamente();
+                presionarContinuar();
+                siguiente();
                 break;
         }
-    }while(opcion_elegida!=4);
-
+    }while((opcion<2)&&(cant!=-1));
 }
 
+//------------------------------------------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------------------------------------------
 
 
 ///----------------------------------------------------------------------------------------------------------------------------------
 ///                                                     Modificar usuario
 ///----------------------------------------------------------------------------------------------------------------------------------
+
 void modificarUsuario(stUsuario* user,char[] DB_usuarios){
 
     char pass[max_pass+1];
@@ -976,3 +919,84 @@ void modificarUsuario(stUsuario* user,char[] DB_usuarios){
         }
     }while(opcion!=7);
 }
+
+void editarNombre(stUsuario* user, char[] DB_usuarios){
+
+    int existe;
+    char nuevo_nombre[];
+
+    do{
+        system("cls");
+        printf("MODIFICAR NOMBRE DE USUARIO\n\n");
+        printf("Valor actual: %i\n",user->nombre);
+        printf("Nuevo valor: ");
+        gets(nuevo_nombre);
+        ok = verificarDatos(DB_usuarios,nuevo_nombre)
+        if(existe){
+            printf("Ese nombre ya esta en uso.");
+        }
+    }while((existe) || (!strcmp(nuevo_nombre,user->nombre)));                 // Considerar para futuras correcciones.
+    if(!existe){
+        strcpy(user->nombre,nuevo_nombre);
+    }
+}
+
+void editarEliminado(stUsuario* user){
+
+    int aux;
+
+    do{
+        system("cls");
+        printf("MODIFICAR ELIMINACION LOGICA (1-Eliminado / 0-Activo)\n\n");
+        printf("Valor actual: %i\n",user->eliminado);
+        printf("Nuevo valor: ");
+        scanf("%i",&aux);
+    }while((aux!=1) || (aux!=0));
+    user->eliminado = aux;
+}
+
+void editarAdmin(stUsuario* user){
+
+    int aux;
+
+    do{
+        system("cls");
+        printf("MODIFICAR PERMISOS DE ADMINISTRADOR (1-Admin / 0-Usuario)\n\n");
+        printf("Valor actual: %i\n",user->admin);
+        printf("Nuevo valor: ");
+        scanf("%i",&aux);
+    }while((aux!=1) || (aux!=0));
+    user->admin = aux;
+}
+
+
+///************************************************************************************************************************************************************
+///                                                Gestion de peliculas
+///************************************************************************************************************************************************************
+
+void gestionPeliculas(nodoArbol* arbol, char DB_peliculas[]){
+
+    int opcion_elegida;
+
+    do{
+        opcion_elegida=mostrarGestionPeliculas();
+        switch(opcion_elegida){
+            case 0:
+                menuAltaPeliculas(arbol, DB_peliculas);
+                break;
+            case 1:
+                bajaPelicula(arbol);
+                break;
+            case 2:
+                listarPeliculas(arbol, DB_peliculas);
+                break;
+            case 3:
+                system("cls");
+                menuBackUpP(DB_peliculas);
+                break;
+        }
+    }while(opcion_elegida!=4);
+
+}
+
+
