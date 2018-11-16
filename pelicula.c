@@ -484,6 +484,7 @@ void mostrarListadoP(nodoArbol* arbol, int opc, stUsuario user){
 }
 
 
+
 ///***************************************************************************************************************************************
 ///*******************************                       FILTRO PARA USUARIOS                              *******************************
 ///***************************************************************************************************************************************
@@ -582,6 +583,25 @@ void mostrarListadoPDis(nodoArbol* arbol, int opc, stUsuario user){
             break;
     }
 }
+
+//Muestra una Película.
+void mostrarPelicula(stPelicula peli){
+    printf("Nombre: %s\n", peli.nombre);
+    printf("Anio: %d\n", peli.anio);
+    printf("Director: %s\n", peli.director);
+    printf("Pais: %s\n", peli.pais);
+    printf("Genero: %s\n", peli.genero);
+    printf("Lenguajes: %s\n", peli.lenguaje);
+    if (peli.subtitulo == 1){
+        printf("Subtitulos: Si\n");
+    }else{
+        printf("Subtitulos: No\n");
+    }
+    printf("PM: %d\n", peli.pm);
+    printf("Sinopsis: %s\n", peli.sinopsis);
+    printf("Valoracion: %d puntos\n", peli.valoracion);
+    printf("------------------------------------------\n");
+    return;
 
 
 ///***************************************************************************************************************************************
