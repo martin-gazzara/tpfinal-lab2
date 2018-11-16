@@ -703,6 +703,67 @@ void menuAdmin(nodoArbol* arbol, stCelda adl[],int val, char DB_usuarios[], char
 
 }
 
+
+///**************************************************************************************************************************************************
+///                                                     Gestion de usuarios
+///**************************************************************************************************************************************************
+
+void gestionUsuarios(stCelda adl[], int val, char DB_usuarios[]){
+
+    int opcion_elegida;
+    do{
+        opcion_elegida=mostrarGestionUsuarios();
+        switch(opcion_elegida){
+            case 0:
+                menuAltaUsuarios(adl, val, DB_usuarios);
+                break;
+            case 1:
+                bajaUsuario(adl,val);
+                break;
+            case 2:
+                listarUsuarios(adl, val, DB_usuarios);
+                break;
+            case 3:
+                system("cls");
+                menuBackUpU(DB_usuarios);
+                break;
+
+        }
+    }while(opcion_elegida!=4);
+
+}
+
+///************************************************************************************************************************************************************
+///                                                Gestion de peliculas
+///************************************************************************************************************************************************************
+
+void gestionPeliculas(nodoArbol* arbol, char DB_peliculas[]){
+
+    int opcion_elegida;
+
+    do{
+        opcion_elegida=mostrarGestionPeliculas();
+        switch(opcion_elegida){
+            case 0:
+                menuAltaPeliculas(arbol, DB_peliculas);
+                break;
+            case 1:
+                bajaPelicula(arbol);
+                break;
+            case 2:
+                listarPeliculas(arbol, DB_peliculas);
+                break;
+            case 3:
+                system("cls");
+                menuBackUpP(DB_peliculas);
+                break;
+        }
+    }while(opcion_elegida!=4);
+
+}
+
+
+
 ///----------------------------------------------------------------------------------------------------------------------------------
 ///                                                     Modificar usuario
 ///----------------------------------------------------------------------------------------------------------------------------------
