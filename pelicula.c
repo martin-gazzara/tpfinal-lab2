@@ -274,58 +274,58 @@ void modificarPelicula(char archivo[],nodoArbol* arbolPeliculas){
             gotoxy(0,7);
             switch (opcion){
                 case 0:
-                    printf("Nombre actual: %s\n",pelicula.nombre);
+                    printf("Nombre actual: %s\n",nodoPelicula->p.nombre);
                     printf("Ingrese nuevo nombre: ");
                     fflush(stdin);
                     gets(&(nodoPelicula->p.nombre));
                     break;
                 case 1:
-                    printf("Director actual: %s\n",pelicula.director);
+                    printf("Director actual: %s\n",nodoPelicula->p.director);
                     printf("Ingrese nuevo director: ");
                     fflush(stdin);
                     gets(&(nodoPelicula->p.director));
                     break;
                 case 2:
-                    printf("Anio actual: %i\n",pelicula.anio);
+                    printf("Anio actual: %i\n",nodoPelicula->p.anio);
                     printf("Ingrese anio nuevo: ");
                     scanf("%i",&(nodoPelicula->p.anio));
                     break;
                 case 3:
-                    printf("Genero actual: %s\n",pelicula.genero);
+                    printf("Genero actual: %s\n",nodoPelicula->p.genero);
                     printf("Ingrese nuevo genero: ");
                     fflush(stdin);
                     gets(&(nodoPelicula->p.genero));
                     break;
                 case 4:
-                    printf("Lenguaje actual: %s\n",pelicula.lenguaje);
+                    printf("Lenguaje actual: %s\n",nodoPelicula->p.lenguaje);
                     printf("Ingrese nuevo lenguaje: ");
                     fflush(stdin);
                     gets(&(nodoPelicula->p.lenguaje));
                     break;
                 case 5:
-                    printf("Pais actual: %s\n",pelicula.pais);
+                    printf("Pais actual: %s\n",nodoPelicula->p.pais);
                     printf("Ingrese nuevo pais: ");
                     fflush(stdin);
                     gets(&(nodoPelicula->p.pais));
                     break;
                 case 6:
-                    printf("PM actual: %i\n",pelicula.pm);
+                    printf("PM actual: %i\n",nodoPelicula->p.pm);
                     printf("Ingrese PM nuevo: ");
                     scanf("%i",&(nodoPelicula->p.pm));
                     break;
                 case 7:
-                    printf("Subtitulo actual (1-Si 0-No): %i\n",pelicula.subtitulo);
+                    printf("Subtitulo actual (1-Si 0-No): %i\n",nodoPelicula->p.subtitulo);
                     printf("Ingrese subtitulo nuevo: ");
                     do{
                         scanf("%i",&(nodoPelicula->p.pm));
-                    }while((pelicula.pm != 0) && (pelicula.pm != 1));
+                    }while((nodoPelicula->p.pm != 0) && (nodoPelicula->p.pm != 1));
                     break;
                 case 8:
-                    printf("Valoracion actual: %i\n",pelicula.valoracion);
+                    printf("Valoracion actual: %i\n",nodoPelicula->p.valoracion);
                     printf("Ingrese valoracion nueva: ");
                     do{
                         scanf("%i",&(nodoPelicula->p.pm));
-                    }while((pelicula.pm < 1) && (pelicula.pm > 10));
+                    }while((nodoPelicula->p.pm < 1) && (nodoPelicula->p.pm > 10));
                     break;
                 case 9:
                     printf("Ingrese nueva sinopsis: \n");

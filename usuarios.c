@@ -70,7 +70,7 @@ int recomendar(char genero[], stPelicula peliGeneros[], nodoListaPelicula* lista
     return i;
 }
 
-// Recomendar peliculas segun los generos más vistos por el usuario
+// Recomendar peliculas segun los generos mï¿½s vistos por el usuario
 stPelicula recomendarPelisGenero(stCelda user){
     srand(time(NULL));
     int pos, val, cant, random;
@@ -139,7 +139,7 @@ int calcularAnioActual() {
     return decimal;
 }
 
-// Calcula la edad del usuario en base a su año de nacimiento paara ver si puede ver "x" pelicula
+// Calcula la edad del usuario en base a su aï¿½o de nacimiento paara ver si puede ver "x" pelicula
 int calcularEdad(stUsuario usuario){
     int anio1=calcularAnioActual();
     int anio2=usuario.anioNacimiento;
@@ -171,7 +171,7 @@ int escribirString(char arreglo[]){
     return aux;
 }
 
-//Oculta caracteres al ingresar contraseña
+//Oculta caracteres al ingresar contraseï¿½a
 int escribirPass(char pass[]){
     int aux,i=0;
     while ((aux!=13)&&(aux!=27)){
@@ -212,12 +212,12 @@ int comprobarPass(char passIngresada[],int pass[][c_pass],int vKey[]){
     return strcmp(passIngresada,passUser);
 }
 
-//Verifica si las contraseñas ingresadas son iguales.
+//Verifica si las contraseï¿½as ingresadas son iguales.
 int verificarPass(char pass1[],char pass2[]){
     return strcmp(pass1,pass2);
 }
 
-//Verifica si el username está en uso.
+//Verifica si el username estï¿½ en uso.
 int verificarDatos(char archivo[], char username[]){
     FILE* arch;
     arch = fopen(archivo, "rb");
@@ -233,7 +233,7 @@ int verificarDatos(char archivo[], char username[]){
 }
 
 //Verifica los datos a escenciales para registrar al usuario.
-// 0: correcto 1: Contraseñas incorrectas 2: Usuario existente
+// 0: correcto 1: Contraseï¿½as incorrectas 2: Usuario existente
 int verificarCrearUser(char user[], char pass1[], char pass2[], char archivo[]){
     int flag = 0;
     int i;
@@ -299,7 +299,7 @@ void bienvenida(){
         opcion=menuPrincipal();
         switch(opcion) {
         case 0:
-            iniciarSesion(nombreDBUsuarios,nombreDBPeliculas);////////////modificarlo para que use el adl
+            iniciarSesion(val, adl, arbol, nombreDBUsuarios,nombreDBPeliculas);
             break;
         case 1:
             crearUsuario(adl, val, nombreDBUsuarios);
@@ -313,27 +313,27 @@ void bienvenida(){
 ///                                                INICIO DE SESION
 ///****************************************************************************************************************************************
 // Inicio de sesion
-void iniciarSesion(char DB_usuarios[],char DB_peliculas[]){
-    // Variables que adquirirán los datos ingresados
+void iniciarSesion(int val, stCelda adl[], nodoArbol* arbol, char DB_usuarios[],char DB_peliculas[]){
+    // Variables que adquirirï¿½n los datos ingresados
     char nombreUsuario[string_max];
     char password[max_pass+1]={0};
     // Variable que adquiere el usuario en caso de haberse encontrado. Caso contrario adquiere un id=0
-    stUsuario usuario;
+    int index;
     int esc;
     mostrarIniciarSesion();    //   Grafica
     esc=tomarDatos(nombreUsuario,password);    // Se adquieren los datos para el inicio de sesion
     system("cls");
     if (esc!=27){
         gotoxy(0,0);
-        usuario=buscarUsuario(DB_usuarios,nombreUsuario);   //  Busqueda del usuario, devuelve el usuario en cuestion
-        if (usuario.id>0){                                   // Si id==0, el usuario no existe
+        index=buscarUsuario(adl, val, nombreUsuario);   //  Busqueda del usuario, devuelve el usuario en cuestion
+        if (index > -1){                                   // Si id==0, el usuario no existe
             system("cls");
             gotoxy(0,0);
-            if (comprobarPass(password,usuario.pass,usuario.vectorKey)==0){    // Se comprueba que la contraseña ingresada sea la correcta
+            if (comprobarPass(password,adl[index].usr.pass, adl[index].usr.vectorKey)==0){    // Se comprueba que la contraseï¿½a ingresada sea la correcta
                 if (usuario.tipo==0){                        // En caso de un inicio correcto, se ejecuta el modo usuario o modo admin
-                    menuUsuario(usuario,DB_usuarios,DB_peliculas);
+                    menuUsuario(val, adl, arbol, DB_usuarios, DB_peliculas);
                 }else{
-                    menuAdmin(usuario,DB_usuarios,DB_peliculas);
+                    menuAdmin(arbol, adl, val, DB_usuarios, DB_peliculas);
                 }
             }else{
                 printf("Password incorrecta\n");  /// borrar
@@ -354,7 +354,7 @@ void iniciarSesion(char DB_usuarios[],char DB_peliculas[]){
 ///    **  A MODIFICAR
 
 
-void menuUsuario(int index, stCelda usuarios[], nodoArbol arbol){
+void menuUsuario(int index, stCelda usuarios[], nodoArbol* arbol, char DB_usuarios[], char DB_peliculas[]){
 
     int i=0;
     stPelicula pelicula;
@@ -382,7 +382,7 @@ void menuUsuario(int index, stCelda usuarios[], nodoArbol arbol){
                         if(resp==0){
                             edad=calcularEdad(usuarios[index].usr);
                             if(edad>=pelicula.pm){
-                                verPelicula(usuarios[index],pelicula);          ///   verPelicula()  .. Puede ser una nueva funcion que irá solo en grafica
+                                verPelicula(usuarios[index],pelicula);          ///   verPelicula()  .. Puede ser una nueva funcion que irï¿½ solo en grafica
                                 system("cls");
                                 printf("Pelicula vista!!");
                                 presionarContinuar();
@@ -462,7 +462,7 @@ void mostrarHistorial(stCelda usuario){
         generarHistorial(usuario.listaPelis);
         i=mostrarMenuHistorial();
         if (i==0){
-            borrar Historial               /// Debería retornar NULL ??
+            borrar Historial               /// Deberï¿½a retornar NULL ??
         }
     }
 
@@ -536,7 +536,7 @@ void editarPass(stUsuario* user,char passActual[]){
     }
 }
 
-// Editar año
+// Editar aï¿½o
 
 void editarAnio(stUsuario* user){
 

@@ -123,3 +123,14 @@ void actualizarUsuarios(stCelda adl[], int val, char DB_usuarios[]){
     }
     fclose(arch);
 }
+
+int buscarUsuario(stCelda adl[], int validos, char nombre[]){
+    int i = 0;
+    while((i<val) && (strcpy(adl[i].usr.nombre, nombre)!=0)){
+        i+=1;
+    }
+    if(strcpy(adl[i].usr.nombre, nombre)!=0){
+        i = -1;
+    }
+    return i;
+}
