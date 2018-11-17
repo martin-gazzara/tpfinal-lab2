@@ -5,7 +5,7 @@
 int usuariosActivos(char DB_usuarios[]);
 
 //Crea el arreglo de listas (USAR AL PRINCIPIO DEL PROGRAMA)
- stCelda* pasarDeArchivoPelisVistasToADL(char DB_usuarios[], DB_peliculasVistas[], int cantActivos, nodoArbol* arbol);
+ stCelda* pasarDeArchivoPelisVistasToADL(char DB_usuarios[], char DB_peliculasVistas[], int cantActivos, nodoArbol* arbol);
 
 //Agrega las peliculas vista al adl (USAR CUANDO SE VE UNA PELICULA)
 void agregarPeliVista(int id, stPelicula p, int val, stCelda adl[]);
