@@ -1020,7 +1020,7 @@ void gestionPeliculas(nodoArbol* arbol, char DB_peliculas[]){
                 menuAltaPeliculas(arbol, DB_peliculas);
                 break;
             case 1:
-                bajaPelicula(arbol);
+                bajaPelicula(DB_peliculas, arbol);
                 break;
             case 2:
                 listarPeliculas(arbol, DB_peliculas);
@@ -1055,3 +1055,10 @@ void menuAltaPeliculas(nodoArbol* arbol, char DB_peliculas[]){
     return;
 
 }
+
+
+///---------------------------------------------------------------------------------------------------------------------------------------
+///                                            Generar Back up peliculas
+///---------------------------------------------------------------------------------------------------------------------------------------
+
+// Ya hay una función dentro de la librería películas.
