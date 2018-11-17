@@ -798,7 +798,7 @@ void presionarContinuar(){
     gotoxy(69,23);
     printf("Presione una tecla para continuar");
 }
-/**
+
 void proximamente(){
     system("cls");
     gotoxy(44,8);
@@ -806,7 +806,7 @@ void proximamente(){
     gotoxy(33,10);
     printf("Estamos construyendo esta seccion.");
 }
-*/
+
 void mostrarFormularioPeliculas(){
     int i;
 

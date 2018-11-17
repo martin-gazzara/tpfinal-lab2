@@ -297,9 +297,9 @@ void bienvenida(){
     int opcion=0;
     while(opcion!=2){
         opcion=menuPrincipal();
-        switch(opcion) {                        /// Iniciar debe llevar nombreDBPeliculas para tareas de Admin
+        switch(opcion) {
         case 0:
-            iniciarSesion(nombreDBUsuarios,nombreDBPeliculas);////////////modificarlo para que use el adl
+            iniciarSesion(adl, val, arbol, nombreDBUsuarios, nombreDBPeliculas);
             break;
         case 1:
             crearUsuario(adl, val, nombreDBUsuarios);
@@ -313,27 +313,26 @@ void bienvenida(){
 ///                                                INICIO DE SESION
 ///****************************************************************************************************************************************
 // Inicio de sesion
-void iniciarSesion(char DB_usuarios[],char DB_peliculas[]){
+void iniciarSesion(stCelda adl[], int val, nodoArbol* arbol, char DB_usuarios[], char DB_peliculas[]){
     // Variables que adquirirán los datos ingresados
     char nombreUsuario[string_max];
     char password[max_pass+1]={0};
     // Variable que adquiere el usuario en caso de haberse encontrado. Caso contrario adquiere un id=0
-    stUsuario usuario;
-    int esc;
+    int esc, index;
     mostrarIniciarSesion();    //   Grafica
     esc=tomarDatos(nombreUsuario,password);    // Se adquieren los datos para el inicio de sesion
     system("cls");
     if (esc!=27){
         gotoxy(0,0);
-        usuario=buscarUsuario(DB_usuarios,nombreUsuario);   //  Busqueda del usuario, devuelve el usuario en cuestion
-        if (usuario.id>0){                                   // Si id==0, el usuario no existe
+        index=buscarUsuario(adl, val, nombreUsuario);   //  Busqueda del usuario, devuelve el usuario en cuestion
+        if (index > -1){                                   // Si id==0, el usuario no existe
             system("cls");
             gotoxy(0,0);
-            if (comprobarPass(password,usuario.pass,usuario.vectorKey)==0){    // Se comprueba que la contraseña ingresada sea la correcta
+            if (comprobarPass(password, adl[index].usr.pass, adl[index].usr.vectorKey)==0){    // Se comprueba que la contraseña ingresada sea la correcta
                 if (usuario.tipo==0){                        // En caso de un inicio correcto, se ejecuta el modo usuario o modo admin
-                    menuUsuario(usuario,DB_usuarios,DB_peliculas);
+                    menuUsuario(adl, val, DB_usuarios, DB_peliculas);
                 }else{
-                    menuAdmin(usuario,DB_usuarios,DB_peliculas);
+                    menuAdmin(adl, val, arbol, DB_usuarios,DB_peliculas);
                 }
             }else{
                 printf("Password incorrecta\n");  /// borrar
@@ -349,7 +348,7 @@ void iniciarSesion(char DB_usuarios[],char DB_peliculas[]){
 ///                                                 MENU USUARIO
 ///****************************************************************************************************************************************
 ///    **  A MODIFICAR
-void menuUsuario(int index, stCelda usuarios[], nodoArbol arbol){
+void menuUsuario(stCelda adl[], int val, char DB_usuarios[], char DB_peliculas[]){
 
     int i=0;
     stPelicula pelicula;
@@ -879,49 +878,94 @@ void listarUsuarios(stCelda adl[], int val, char archivo[]){
 //                                                    Modificar usuario
 //------------------------------------------------------------------------------------------------------------------------------------
 
-void modificarUsuario(stUsuario* user,char[] DB_usuarios){
+stUsuario buscarUsuarioArchivo(char DB_usuarios[], int id){
+
+    FILE* arch = fopen(DB_usuarios, 'rb');
+    stUsuario user;
+    fseek(arch, (sizeof(stUsuario)* (id-1)), SEEK_SET);
+    fread(&user, sizeof(stUsuario), 1, arch);
+    fclose(arch);
+    return user;
+}
+
+
+void modificarEnArchivo(stUsuario usuario,char DB_usuarios[]){
+
+    FILE* arch = fopen(DB_usuarios, "r+b");
+
+    fseek(arch, (sizeof(stUsuario) * (usuario.id - 1)), SEEK_SET);
+    fwrite(&usuario,sizeof(stUsuario),1,arch);
+    fclose(arch);
+}
+
+void modificarUsuario(stCelda adl[], int val, char DB_usuarios[]){
 
     char pass[max_pass+1];
-    int opcion;
+    int opcion, id, index;
+    stUsuario user;
 
-    desencriptar(user->vectorKey,user->pass,pass);
     system("cls");
-    do{
-        gotoxy(0,7);
-        printf("       Nombre       : %s",user->nombre);
-        printf("      Password      : %s",pass);
-        printf("        Anio        : %i",user->anioNacimiento);
-        printf("        Pais        : %s",user->pais);
-        printf("       Genero       : %s",user->genero);
-        printf("       Admin        : %i (1-Si/0-No)",user->admin);
-        printf("      Eliminado     : %i (1-Si/0-No)",user->eliminado);
-        printf("       SALIR        ");
-        opcion = mostrarModificarUsuario();
-        switch (opcion){
-            case 0:
-                editarNombre(user,DB_usuarios);
-                break;
-            case 1:
-                editarPass(user,pass);
-                break;
-            case 2:
-                editarAnio(user);
-                break;
-            case 3:
-                editarPais(user);
-                break;
-            case 4:
-                editarGenero(user);
-                break;
-            case 5:
-                editarAdmin(user);
-                break;
-            case 6:
-                editarEliminado(user);
-                break;
+    mostrarIngresarID();
+    scanf("%i",&id);
+    hidecursor(0);
+
+    if ( (id <= cantidadRegistros(DB_usuarios,sizeof(stUsuario))) && (id > 0)){
+
+        user = buscarUsuarioArchivo(DB_usuarios, id);
+        desencriptar(user->vectorKey,user->pass,pass);
+
+        system("cls");
+
+        do{
+            gotoxy(0,7);
+            printf("       Nombre       : %s",user.nombre);
+            printf("      Password      : %s",pass);
+            printf("        Anio        : %i",user.anioNacimiento);
+            printf("        Pais        : %s",user.pais);
+            printf("       Genero       : %s",user.genero);
+            printf("       Admin        : %i (1-Si/0-No)",user.admin);
+            printf("      Eliminado     : %i (1-Si/0-No)",user.eliminado);
+            printf("       SALIR        ");
+            opcion = mostrarModificarUsuario();
+            switch (opcion){
+                case 0:
+                    editarNombre(&user,DB_usuarios);
+                    break;
+                case 1:
+                    editarPass(&user,pass);
+                    break;
+                case 2:
+                    editarAnio(&user);
+                    break;
+                case 3:
+                    editarPais(&user);
+                    break;
+                case 4:
+                    editarGenero(&user);
+                    break;
+                case 5:
+                    editarAdmin(&user);
+                    break;
+                case 6:
+                    editarEliminado(&user);
+                    break;
+            }
+        }while(opcion!=7);
+
+        index = buscarUsuarioPorId(adl,val, id);
+
+        if ( index > -1){
+             adl[index].usr = user;
         }
-    }while(opcion!=7);
+        modificarEnArchivo(user, DB_usuarios);
+
+    }else{
+        printf("Usuario no encontrado.");
+    }
+
 }
+
+//--- Editar nombre
 
 void editarNombre(stUsuario* user, char[] DB_usuarios){
 
@@ -1062,3 +1106,5 @@ void menuAltaPeliculas(nodoArbol* arbol, char DB_peliculas[]){
 ///---------------------------------------------------------------------------------------------------------------------------------------
 
 // Ya hay una función dentro de la librería películas.
+
+

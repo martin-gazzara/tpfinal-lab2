@@ -6,6 +6,6 @@ int main(){
     Sleep(1000);
     intro();
     system("cls");
-    bienvenidos();
+    bienvenida();
     return 0;
 }
