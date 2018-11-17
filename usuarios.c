@@ -888,7 +888,6 @@ stUsuario buscarUsuarioArchivo(char DB_usuarios[], int id){
     return user;
 }
 
-
 void modificarEnArchivo(stUsuario usuario,char DB_usuarios[]){
 
     FILE* arch = fopen(DB_usuarios, "r+b");
