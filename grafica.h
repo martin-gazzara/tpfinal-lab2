@@ -3,6 +3,15 @@
 #include <windows.h>
 #include <ctype.h>
 #include "gotoxy.h"
+#include "structs.h"
+
+
+
+#ifndef GRAFICA_H
+#define GRAFICA_H
+
+
+
 #define t2 50
 
 ///__________________________________________///
@@ -50,3 +59,6 @@ void intro();
 
 ///                                                            *** NUEVO ***
 int mostrarModificarPelicula(stPelicula pelicula);
+
+
+#endif // GRAFICA_H

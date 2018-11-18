@@ -107,7 +107,7 @@ void matrizAString(int matriz[f][c],char arreglo[]){
 }
 
 //Desencripta una contraseña.
-void desecriptarPass(int vKey[], int encriptPass[f][c], char pass[]){
+void desencriptarPass(int vKey[], int encriptPass[f][c], char pass[]){
     int matKey[f_mkey][c_mkey];
     int desencriptPass[f][c];
     generarMatrizKey(vKey, matKey);

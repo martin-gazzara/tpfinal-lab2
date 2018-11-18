@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "structs.h"
 
 nodoListaPelicula* inicLista();
 nodoListaPelicula* crearNodoLista(stPelicula pelicula);
@@ -11,6 +10,6 @@ nodoListaPelicula* agregarAlFinal(nodoListaPelicula *lista,nodoListaPelicula *nu
 nodoListaPelicula* agregarEnOrdenPorNombreDePelicula(nodoListaPelicula *lista,nodoListaPelicula *nuevoNodo);
 nodoListaPelicula* buscarNodoPorNombre(nodoListaPelicula *lista, char nombre[]);
 nodoListaPelicula* buscarNodoPorId(nodoListaPelicula *lista,int id);
-void mostrarNodoLista(stPelicula pelicula);
+void mostrarNodo(stPelicula pelicula);
 void recorrerYmostrar(nodoListaPelicula *lista);
 nodoListaPelicula* borrarNodoPorIdPelicula(nodoListaPelicula *lista,int dato);

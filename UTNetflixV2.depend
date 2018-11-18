@@ -1,0 +1,91 @@
+# depslib dependency file v1.0
+1542493384 source:c:\users\usuario\desktop\tp final\tpfinal-lab2\encriptacion.c
+	"encriptacion.h"
+
+1542481523 c:\users\usuario\desktop\tp final\tpfinal-lab2\encriptacion.h
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	<time.h>
+	"matrices_int.h"
+
+1542357324 c:\users\usuario\desktop\tp final\tpfinal-lab2\matrices_int.h
+	<stdlib.h>
+	<stdio.h>
+	<time.h>
+
+1542357324 source:c:\users\usuario\desktop\tp final\tpfinal-lab2\gotoxy.c
+	<stdio.h>
+	<stdlib.h>
+	<windows.h>
+
+1542543396 source:c:\users\usuario\desktop\tp final\tpfinal-lab2\adl.c
+	"adl.h"
+
+1542481683 c:\users\usuario\desktop\tp final\tpfinal-lab2\adl.h
+	<stdlib.h>
+	<stdio.h>
+	"listasSimplesPeliculas.h"
+	"structs.h"
+
+1542507513 c:\users\usuario\desktop\tp final\tpfinal-lab2\structs.h
+
+1542560764 source:c:\users\usuario\desktop\tp final\tpfinal-lab2\grafica.c
+	"grafica.h"
+
+1542481488 c:\users\usuario\desktop\tp final\tpfinal-lab2\grafica.h
+	<stdlib.h>
+	<stdio.h>
+	<windows.h>
+	<ctype.h>
+	"gotoxy.h"
+	"structs.h"
+
+1542357324 c:\users\usuario\desktop\tp final\tpfinal-lab2\gotoxy.h
+
+1542501772 source:c:\users\usuario\desktop\tp final\tpfinal-lab2\main.c
+	<stdio.h>
+	<stdlib.h>
+	"usuarios.h"
+	"grafica.h"
+
+1542480961 c:\users\usuario\desktop\tp final\tpfinal-lab2\usuarios.h
+	<string.h>
+	"adl.h"
+	"encriptacion.h"
+	"structs.h"
+	"grafica.h"
+	"pelicula.h"
+
+1542357324 source:c:\users\usuario\desktop\tp final\tpfinal-lab2\matrices_int.c
+	"matrices_int.h"
+	<time.h>
+
+1542502429 source:c:\users\usuario\desktop\tp final\tpfinal-lab2\libarbol.c
+	"libarbol.h"
+
+1542492638 c:\users\usuario\desktop\tp final\tpfinal-lab2\libarbol.h
+	<stdlib.h>
+	<stdio.h>
+	"structs.h"
+
+1542481892 source:c:\users\usuario\desktop\tp final\tpfinal-lab2\listassimplespeliculas.c
+	"listasSimplesPeliculas.h"
+
+1542481867 c:\users\usuario\desktop\tp final\tpfinal-lab2\listassimplespeliculas.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"structs.h"
+
+1542481140 c:\users\usuario\desktop\tp final\tpfinal-lab2\pelicula.h
+	"grafica.h"
+	"libarbol.h"
+	"structs.h"
+
+1542558947 source:c:\users\usuario\desktop\tp final\tpfinal-lab2\pelicula.c
+	"pelicula.h"
+
+1542561019 source:c:\users\usuario\desktop\tp final\tpfinal-lab2\usuarios.c
+	"usuarios.h"
+
