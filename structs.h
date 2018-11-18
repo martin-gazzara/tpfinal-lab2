@@ -3,8 +3,8 @@
 #define STRUCTS_H
 
 
-#define string_max 30
-#define nombre_max 60
+#define string_max 20
+#define nombre_max 50
 #define sinopsis_max 400
 #define f_pass 2
 #define c_pass 5

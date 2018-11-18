@@ -420,6 +420,26 @@ void completarCampoBin(int* num,int* val){
     return;
 }
 
+//Completa un campo char
+void completarCampoChar(char* caracter,int* val){
+
+    printf("Valor actual: ");
+    if (*caracter!=' '){
+        printf("%i\n",*caracter);
+    }else{
+        printf("vacio\n");
+    }
+    printf("Valor a filtrar: ");
+    fflush(stdin);
+    scanf("%c",caracter);
+    if (*caracter==' '){
+        *val=0;
+    }else{
+        *val=1;
+    }
+    return;
+}
+
 //Completa un campo int
 void completarCampoInt(int* num,int* val){
 
@@ -463,7 +483,7 @@ int filtroString(char string1[],char string2[],int fil){
     int val;
 
     if (fil==1){
-        if (strcmpi(string1,string2)==0){
+        if (strcmp(string1,string2)==0){
             val=1;
         }else{
             val=0;
@@ -494,46 +514,31 @@ int filtroNum(int num1,int num2,int fil){
 ///***************************************************************************************************************************************
 ///*******************************                         FILTRO PARA ADMIN                               *******************************
 ///***************************************************************************************************************************************
-
-int aplicarFiltros(stPelicula criterio,int campFil[],nodoArbol* peliculasFiltradas,nodoArbol* arbol){
-    int nombreValido,
-        directorValido,
-        anioValido,
-        generoValido,
-        lenguajeValido,
-        paisValido,
-        eliminadoValido,
-        pmValido,
-        subtituloValido,
-        valoracionValido;
+/*
+nodoArbol* aplicarFiltros(stPelicula criterio, int campFil[], nodoArbol* peliculasFiltradas, char DB_peliculas[]){
+    stPelicula aux;
+    int a,b,c,e,d,f,g,h,i,j;
     int cont=0;
-    while(arbol){
-        nombreValido=filtroString(arbol->p.nombre,criterio.nombre,campFil[0]);
-        directorValido=filtroString(arbol->p.director,criterio.director,campFil[1]);
-        anioValido=filtroNum(arbol->p.anio,criterio.anio,campFil[2]);
-        generoValido=filtroString(arbol->p.genero,criterio.genero,campFil[3]);
-        lenguajeValido=filtroString(arbol->p.lenguaje,criterio.lenguaje,campFil[4]);
-        paisValido=filtroNum(arbol->p.pais,criterio.pais,campFil[5]);
-        eliminadoValido=filtroNum(arbol->p.eliminado,criterio.eliminado,campFil[6]);
-        pmValido=filtroNum(arbol->p.pm,criterio.pm,campFil[7]);
-        subtituloValido=filtroNum(arbol->p.subtitulo,criterio.subtitulo,campFil[8]);
-        valoracionValido=filtroNum(arbol->p.valoracion,criterio.valoracion,campFil[9]);
-
-        if (nombreValido &&
-            directorValido &&
-            anioValido &&
-            generoValido &&
-            lenguajeValido &&
-            paisValido &&
-            eliminadoValido &&
-            pmValido &&
-            subtituloValido &&
-            valoracionValido){
-               nodo = crearNodo(arbol->p);
+    nodoArbol* nodo = NULL;
+    if ((arch=fopen(DB_peliculas,"rb"))!=NULL){ //deberia recorrer el arbol
+        while(fread(&aux,sizeof(stPelicula),1,arch)>0){
+            a=filtroString(aux.nombre,criterio.nombre,campFil[0]);
+            b=filtroString(aux.director,criterio.director,campFil[1]);
+            c=filtroNum(aux.anio,criterio.anio,campFil[2]);
+            d=filtroString(aux.genero,criterio.genero,campFil[3]);
+            e=filtroString(aux.lenguaje,criterio.lenguaje,campFil[4]);
+            f=filtroNum(aux.pais,criterio.pais,campFil[5]);
+            g=filtroNum(arbol->p.eliminado,criterio.eliminado,campFil[6]);
+            h=filtroNum(aux.pm,criterio.pm,campFil[6]);
+            i=filtroNum(aux.subtitulo,criterio.subtitulo,campFil[7]);
+            j=filtroNum(aux.valoracion,criterio.valoracion,campFil[8]);
+            if (a&&b&&c&&d&&e&&f&&g&&h&&i){
+               nodo = crearNodo(aux);
                peliculasFiltradas = insertar(peliculasFiltradas, nodo);
+            }
         }
-        aplicarFiltros(criterio, campFil, peliculasFiltradas, arbol->izq);
-        aplicarFiltros(criterio, campFil, peliculasFiltradas, arbol->der);
+    }else{
+        printf("Error en la apertura.");
     }
     return peliculasFiltradas;
 }
@@ -620,10 +625,12 @@ int filtroPeliculas(nodoArbol* arbol){
     }
     return arbol;
 }
-
+*/
 ///***************************************************************************************************************************************
 ///*******************************                     LISTAR PELICULAS PARA ADMIN                         *******************************
 ///***************************************************************************************************************************************
+
+
 
 //Lista las peliculas
 void mostrarListadoP(nodoArbol* arbol, int opc, stUsuario user){
@@ -651,6 +658,47 @@ void mostrarListadoP(nodoArbol* arbol, int opc, stUsuario user){
 ///***************************************************************************************************************************************
 ///*******************************                       FILTRO PARA USUARIOS                              *******************************
 ///***************************************************************************************************************************************
+/*
+nodoArbol* aplicarFiltrosDisp(stPelicula criterio, int campFil[], nodoArbol* peliculasFiltradas, nodoArbol* arbol){
+    int nombreValido,
+        directorValido,
+        anioValido,
+        generoValido,
+        lenguajeValido,
+        paisValido,
+        pmValido,
+        subtituloValido,
+        valoracionValido;
+    int cont=0;
+    while(arbol){
+        nombreValido=filtroString(arbol->p.nombre,criterio.nombre,campFil[0]);
+        directorValido=filtroString(arbol->p.director,criterio.director,campFil[1]);
+        anioValido=filtroNum(arbol->p.anio,criterio.anio,campFil[2]);
+        generoValido=filtroString(arbol->p.genero,criterio.genero,campFil[3]);
+        lenguajeValido=filtroString(arbol->p.lenguaje,criterio.lenguaje,campFil[4]);
+        paisValido=filtroNum(arbol->p.pais,criterio.pais,campFil[5]);
+        pmValido=filtroNum(arbol->p.pm,criterio.pm,campFil[7]);
+        subtituloValido=filtroNum(arbol->p.subtitulo,criterio.subtitulo,campFil[8]);
+        valoracionValido=filtroNum(arbol->p.valoracion,criterio.valoracion,campFil[9]);
+
+        if (nombreValido &&
+            directorValido &&
+            anioValido &&
+            generoValido &&
+            lenguajeValido &&
+            paisValido &&
+            eliminadoValido &&
+            pmValido &&
+            subtituloValido &&
+            valoracionValido){
+               nodo = crearNodo(arbol->p);
+               peliculasFiltradas = insertar(peliculasFiltradas, nodo);
+        }
+        aplicarFiltros(criterio, campFil, peliculasFiltradas, arbol->izq);
+        aplicarFiltros(criterio, campFil, peliculasFiltradas, arbol->der);
+    }
+    return peliculasFiltradas;
+}
 
 int filtroPeliculasDisp(nodoArbol* arbol,stPelicula arreglo[],int dim){
     stPelicula aux;
@@ -722,7 +770,7 @@ int filtroPeliculasDisp(nodoArbol* arbol,stPelicula arreglo[],int dim){
     }
     return cont;
 }
-
+*/
 ///***************************************************************************************************************************************
 ///*******************************                   LISTAR PELICULAS PARA USUARIOS                        *******************************
 ///***************************************************************************************************************************************
@@ -767,7 +815,100 @@ void mostrarPelicula(stPelicula peli){
     return;
 
 }
+/*
+//Encuentra el menor de los nombres de películas.
+int encontrarMenor(stPelicula arr[], int cant, int posIni){
+    int menor = posIni;
+    int i;
 
+    for(i = posIni + 1; i < cant; i++){
+        if(strcmp(arr[menor].nombre, arr[i].nombre)>0){
+            menor = i;
+        }
+    }
+    return menor;
+}
+
+//Ordena un arreglo por Título.
+void ordenarTitulos(stPelicula arr[], int cant){
+    int i=0;
+    while(i < cant){
+        int menor = encontrarMenor(arr, cant, i);
+        stPelicula aux = arr[menor];
+        arr[menor] = arr[i];
+        arr[i] = aux;
+        i++;
+    }
+}
+
+//Insertar una película en orden por Género.
+void insertarPelicula(stPelicula peliculas[], int pos, stPelicula peli) {
+    while ((pos >= 0) && ((strcmp(peli.genero, peliculas[pos].genero)) < 0)){
+        peliculas[pos+1] = peliculas[pos];
+        pos--;
+    }
+    peliculas[pos+1] = peli;
+}
+
+//Ordena un arreglo por Género.
+void ordenarGeneros(stPelicula peliculas[], int val) {
+    nodoArbol* arbolGeneros = inicArbol();
+    int pos = 0;
+    while (pos < val) {
+        insertarPelicula(peliculas, pos, peliculas[pos + 1]);
+        pos++;
+    }
+}
+
+//Ordena películas por Título o por Género.
+int ordenarPeliculas(stPelicula arregloPeliculas[],int dim){
+    int num;
+    num=mostrarListarPorP();
+    system("cls");
+    switch(num){
+        case 0:
+          ordenarTitulos(arregloPeliculas, dim);
+            break;
+        case 1:
+          ordenarGeneros(arregloPeliculas, (dim-1));
+            break;
+    }
+    return num;
+}
+////SOLO ESTA FUNCION SE VA A LLAMAR DESDE ALGUN MENU, EL RESTO SE LLAMAN INTERNAMENTE/
+//Genera un listado de las películas
+void listarPeliculas(char archivo[]){
+    system("cls");
+    int numOpc=3;
+    int opcion;
+    FILE* arch;
+    arch = fopen(archivo, "rb");
+    int dim,dimFiltro,d;
+
+    dim = cantidadRegistros(arch, sizeof(stPelicula));
+    rewind(arch);
+    stPelicula arregloPeliculas[dim];
+    pasarArreglo(arch,arregloPeliculas,dim);
+    fclose(arch);
+    d=ordenarPeliculas(arregloPeliculas,dim);
+    if (d!=2){
+        do{
+            mostrarListadoP(arregloPeliculas,dim);
+            gotoxy(0,3);
+            opcion=mostrarMenuListado();
+            switch(opcion){
+            case 0:
+                modificarPelicula(archivo,arregloPeliculas,dim);
+                system("cls");
+                break;
+            case 1:
+                dim=filtroPeliculas(archivo,arregloPeliculas);
+                break;
+            }
+        }while((opcion<2)&&(dim!=-1));
+    }
+ }
+*/
 ///***************************************************************************************************************************************
 /// ****************************                              BACK UP                                         ****************************
 ///***************************************************************************************************************************************

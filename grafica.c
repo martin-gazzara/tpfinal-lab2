@@ -689,7 +689,7 @@ int mostrarModificarUsuario(){
 
     char opciones[][21] = {"       Nombre       ","      Password      ","        Anio        ","        Pais        ","       Genero       ","       Admin        ","      Eliminado     ","       SALIR        "};
     int eleccion,numOpc = 8;
-    printf("Modificar usuario");
+    gotoxy(1,1);printf("Modificar usuario");
     eleccion=elegirOpcionV("borde",opciones,numOpc);
     return eleccion;
 }
@@ -1083,12 +1083,40 @@ int mostrarModificarPelicula(stPelicula pelicula){
 
 ///    *** NUEVO ***
 
-void mostrarUsuarios(char archivo[]){
+int evaluar(int filtrosAplicados[], stUsuario userFiltro, stUsuario temp){
+
+    int ok = 0;
+
+    if(
+        ((filtrosAplicados[0] && (userFiltro.genero == temp.genero))||(!filtrosAplicados[0])) &&
+        ((filtrosAplicados[1] && (strcmp(userFiltro.pais,temp.pais) == 0))||(!filtrosAplicados[1])) &&
+        ((filtrosAplicados[2] && (userFiltro.eliminado == temp.eliminado))||(!filtrosAplicados[2])) &&
+        ((filtrosAplicados[3] && (userFiltro.anioNacimiento == temp.anioNacimiento))||(!filtrosAplicados[3]))
+    ){
+        ok = 1;
+    }else{
+        ok = 0;
+    }
+    return ok;
+}
+
+void mostrarUsuarios(char archivo[],int filtroActivado, int filtrosAplicados[], stUsuario userFiltro){
 
     FILE* arch = fopen(archivo,"rb");
     stUsuario temp;
-
-
+    int line = 5;
+    int mostrar;
+/*
+    system("cls");
+                printf("flag mostrarUsuarios - filtro.\n");
+                printf("%c\n",userFiltro.genero);
+                printf("%s\n",userFiltro.pais);
+                printf("%i\n",userFiltro.eliminado);
+                printf("%i\n",userFiltro.anioNacimiento);
+                printf("Arreglo de filtros: ");
+                printf("%i %i %i %i",filtros[0],filtros[1],filtros[2],filtros[3]);
+                siguiente();
+*/
     system("cls");
     gotoxy(1,4);printf("ID");
     gotoxy(17,4);printf("NOMBRE");
@@ -1098,11 +1126,34 @@ void mostrarUsuarios(char archivo[]){
     gotoxy(96,4);printf("ELIM");
     printf("\n");
 
-    while( (fread(&temp,sizeof(stUsuario),1,arch)) > 0 ){
-        printf("%i %s %i %s %s %i\n", temp.id, temp.nombre, temp.anioNacimiento, temp.genero, temp.pais, temp.eliminado);
+    while( (fread(&temp,sizeof(stUsuario),1,arch)) > 0  ){
+
+        if(filtroActivado){
+            mostrar = evaluar(filtrosAplicados, userFiltro, temp);
+        }else{
+            mostrar = 1;
+        }
+
+        if (mostrar){
+            gotoxy(1,line);printf("%i",temp.id);
+            gotoxy(5,line);printf("%s",temp.nombre);
+            gotoxy(45,line);printf("%i", temp.anioNacimiento);
+            gotoxy(56,line);printf("%c",temp.genero);
+            gotoxy(65,line);printf("%s",temp.pais);
+            gotoxy(98,line);printf("%o",temp.eliminado);
+            line++;
+        }
     }
 
     fclose(arch);
 
 }
 
+int mostrarFiltroDeUsuarios(){
+    char opciones[][21]={"       Genero       ","        Pais        ","      Eliminado     ","        Anio        ","   Aplicar filtros  ","   Quitar filtros   ","        Salir       "};
+    int eleccion,numOpc=7;
+    gotoxy(1,1);
+    printf("Filtros a aplicar");
+    eleccion=elegirOpcionV("borde",opciones,numOpc);
+    return eleccion;
+}
