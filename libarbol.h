@@ -1,7 +1,9 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include "structs.h"
 
-
+#ifndef LIBARBOL_H
+#define LIBARBOL_H
 
 ///------------------------------------------------------------------------------------------------------------------------------Iniciar arbol
 nodoArbol* inicArbol();
@@ -13,19 +15,19 @@ nodoArbol* crearNodo(stPelicula p);
 nodoArbol* insertar(nodoArbol* arbol, nodoArbol* nuevo_nodo);
 
 ///--------------------------------------------------------------------------------------------------------------------------Mostrar pre-order
-void preorder(nodoArbol* arbol);
+void preorder(nodoArbol* arbol, stUsuario user);
 
 ///---------------------------------------------------------------------------------------------------------------------------Mostrar in-order
-void inorder(nodoArbol* arbol);
+void inorder(nodoArbol* arbol, stUsuario user);
 
 ///-------------------------------------------------------------------------------------------------------------------------Mostrar post-order
-void postorder(nodoArbol* arbol);
+void postorder(nodoArbol* arbol, stUsuario user);
 
 ///--------------------------------------------------------------------------------------------------------------------------------Buscar nodo
 nodoArbol* buscar(nodoArbol* arbol, int id);
 
 ///-------------------------------------------------------------------------------------------------------------------------------Mostrar nodo
-void mostrarNodo(nodoArbol* nodo);
+void mostrarNodo(nodoArbol* nodo, stUsuario user);
 
 ///--------------------------------------------------------------------------------------------------------------------------------Borrar nodo
 nodoArbol* borrarNodo(nodoArbol* arbol, int id);
@@ -35,3 +37,5 @@ nodoArbol* nmd(nodoArbol* arbol);
 
 ///-------------------------------------------------------------------------------------------------------------------------Nodo mas izquierdo
 nodoArbol* nmi(nodoArbol* arbol);
+
+#endif // LIBARBOL_H

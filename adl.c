@@ -15,13 +15,16 @@ int usuariosActivos(char DB_usuarios[]) {
 }
 
 //Carga el arreglo con usuarios
-void cargarArregloUsuarios(char DB_usuarios, stCelda adl[]){
+void cargarArregloUsuarios(char DB_usuarios[], stCelda adl[]){
+
     FILE* arch = fopen(DB_usuarios, "rb");
     stUsuario user;
     int index = 0;
     while(fread(&user, sizeof(stUsuario), 1, arch)>0){
+
         if(user.eliminado == 0){
             adl[index].usr = user;
+
             adl[index].listaPelis = NULL;
             index += 1;
         }
@@ -48,31 +51,36 @@ void cargarArregloPelisVistas(char DB_peliculasVistas[], nodoArbol* arbol, stCel
     int index = 0;
     while(fread(&p, sizeof(stPelisVistas), 1, arch)>0){
         peli= buscar(arbol, p.idPelicula);
-        agregarPeliVista(p.idUsuario, peli.p, cantActivos, adl);
+        agregarPeliVista(p.idUsuario, peli->p, cantActivos, adl);
     }
     fclose(arch);
 }
 
 //Agregar usuario al adl
-int agregarUsuario(stCelda adl[], int val, stUsuario user){
-    stCelda* adl = (stCelda*)realloc(adl, sizeof(stCelda) * (val+1));
+int agregarUsuario(stCelda* adl, int val, stUsuario user){
+    adl = (stCelda*)realloc(adl, sizeof(stCelda) * (val+1));
     adl[val].usr = user;
     adl[val].listaPelis = NULL;
-    return val++;
+    val+=1;
+    return val;
 }
 
 //Crea el arreglo de listas
- stCelda* pasarDeArchivoPelisVistasToADL(char DB_usuarios[], DB_peliculasVistas[], int cantActivos, nodoArbol* arbol){
+ stCelda* pasarDeArchivoPelisVistasToADL(char DB_usuarios[],char DB_peliculasVistas[], int cantActivos, nodoArbol* arbol){
+
+    printf("%i",cantActivos);
+    siguiente();
     stCelda* adl = (stCelda*)malloc(sizeof(stCelda) * cantActivos);
     cargarArregloUsuarios(DB_usuarios, adl);
+
     cargarArregloPelisVistas(DB_peliculasVistas, arbol, adl, cantActivos);
     return adl;
  }
 
  //Borrar logicamente el elemento del adl en base al id
- void borrarUsuarioADL(stCelda adl[] ,int id){
+ void borrarUsuarioADL(stCelda adl[], int val ,int id){
     int index;
-    while(index<val && adl[index].usr.id != id){
+    while((index<val) && (adl[index].usr.id != id)){
         index++;
     }
     if(adl[index].usr.id == id){
@@ -86,13 +94,15 @@ void actualizarPeliculasVistas(stCelda adl[], int val, char DB_peliculasVistas[]
     int index = 0;
     int id = 0;
     stPelisVistas pv;
+    nodoListaPelicula* aux;
     while(index<val){
-        while(!adl[index].listaPelis){
+        aux = adl[index].listaPelis;
+        while(aux){
             pv.idAutoincremental = id;
             pv.idUsuario = adl[index].usr.id;
-            pv.idPelicula = adl[index].listaPelis.p.id; ///ver si es con . o con ->/////////////////////////////////////////////
-            fwrite(&, sizeof(stPelisVistas), 1, arch);
-            adl[index].listaPelis = adl[index].listaPelis.sig;
+            pv.idPelicula = aux->p.id;
+            fwrite(&pv, sizeof(stPelisVistas), 1, arch);
+            aux = aux -> sig;
             id += 1;
         }
             index += 1;
@@ -124,12 +134,12 @@ void actualizarUsuarios(stCelda adl[], int val, char DB_usuarios[]){
     fclose(arch);
 }
 
-int buscarUsuarioPorNombre(stCelda adl[], int validos, char nombre[]){
+int buscarUsuarioPorNombre(stCelda adl[], int val, char nombre[]){
     int i = 0;
-    while((i<val) && (strcpy(adl[i].usr.nombre, nombre)!=0)){
+    while((i<val) && (strcmp(adl[i].usr.nombre, nombre)!=0)){
         i+=1;
     }
-    if(strcpy(adl[i].usr.nombre, nombre)!=0){
+    if(strcmp(adl[i].usr.nombre, nombre)!=0){
         i = -1;
     }
     return i;

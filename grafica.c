@@ -489,7 +489,7 @@ int mostrarMenuUsuario(char nombreUsuario[],stPelicula recom[]){
     for(i=0;i<102;i++){
         printf("%c",s_linea_h);
     }
-    mostrarRecomendadas(recom);
+    //mostrarRecomendadas(recom);
     char opciones[][21]={"  Ver una pelicula  ","Todas las peliculas","    Ver historial   ","    Editar perfil   ","    Cerrar sesion   "};
     int numOpc=5;
     eleccion=elegirOpcionH("abajo",opciones,numOpc);

@@ -14,7 +14,7 @@ int cantidadRegistros(FILE* arch, size_t tamanioDeTipo) {
 ///***************************************************************************************************************************************
 
 //Habilita nuevamente una Película eliminada.
-void habilitarPelicula(char DB_peliculas[]){
+void habilitarPelicula(nodoArbol* arbol, char DB_peliculas[]){
     FILE* arch;
     stPelicula temp;
     int id;
@@ -133,14 +133,53 @@ void verificacionVal(int* valoracion) {
 }
 
 //Calcula el ID de una Película.
-int calcularId(FILE* arch){
+int calcularId(char DB_peliculas){
     int id;
+    FILE* arch;
+
+    arch = fopen(DB_peliculas,"rb");
+
     if(!feof(arch)){
         id = cantidadRegistros(arch, sizeof(stPelicula))+1;
     }else{
         id=1;
     }
+    fclose(arch);
     return id;
+}
+
+// Ingresa sinopsis de pelicula.
+
+int escribirSinopsis(char arreglo[]){
+
+int aux,index=0,i=0;
+
+    while ((aux!=13)&&(aux!=27)){
+        if(whereX()==93){
+            gotoxy(whereX()-87,whereY()+1);
+        }
+        fflush(stdin);
+        aux=getch();
+        if ((aux!=13)&&(((aux<123)&&(aux>64))||((aux>47)&&(aux<58)))&&(i<sinopsis_max-1)){
+            arreglo[i]=(char)aux;
+            printf("%c",arreglo[i]);
+            i++;
+        }else if((aux==8)&&(i>0)){
+            if(whereX()==6){
+                gotoxy(whereX()+86,whereY()-1);
+                printf(" ");
+                gotoxy(whereX()-1,whereY());
+            }else{
+                gotoxy(whereX()-1,whereY());
+                printf(" ");
+                gotoxy(whereX()-1,whereY());
+            }
+            i--;
+        }
+    }
+    arreglo[i]='\0';
+    return aux;
+
 }
 
 //Carga una Pelicula al Arbol/Lista
@@ -150,11 +189,11 @@ void cargarPelisArbol(nodoArbol** arbol, stPelicula peli){
 }
 
 //Pedir datos de pelicula
-stPelicula pedirInfo(char nombre[], int anio){
+stPelicula pedirInfo(char nombre[], int anio, char DB_peliculas[]){
     stPelicula peli;
 
     peli.eliminado = 0;
-    peli.id = calcularId(arch);
+    peli.id = calcularId(DB_peliculas);
     gotoxy(82,4);printf("%i",peli.id);
     strcpy(peli.nombre,nombre);
     peli.anio = anio;
@@ -197,7 +236,6 @@ stPelicula pedirInfo(char nombre[], int anio){
 //Carga una Película a un Archivo.
 void cargarPelisArchivo(char archivo[], stPelicula peli){
     FILE * arch;
-    stPelicula peli;
     arch = fopen(archivo, "ab");
     int val;
     val = fwrite(&peli, sizeof(stPelicula), 1, arch);
@@ -232,13 +270,13 @@ void ingresarPeliculas(char DB_peliculas[], nodoArbol** arbol){
     gotoxy(71,4);
     scanf("%d", &anio);
     if (verificacionPelicula(DB_peliculas, nombre, anio) == 0) {
-        p = pedirInfo(nombre, anio);
+        p = pedirInfo(nombre, anio, DB_peliculas);
         cargarPelisArchivo(DB_peliculas, p);
         cargarPelisArbol(arbol, p);
         if(cantAltasSeguidas < 10) {
             cantAltasSeguidas++;
         } else {
-            generarArbol(DB_peliculas);
+           // arbol = generarArbol(DB_peliculas);
             cantAltasSeguidas = 0;
         }
     } else {
@@ -269,63 +307,63 @@ void modificarPelicula(char archivo[],nodoArbol* arbolPeliculas){
     if (nodoPelicula){
         while (opcion!=10){
             system("cls");
-            opcion = mostrarModificarPelicula(pelicula);
-            system("cls")
+            opcion = mostrarModificarPelicula(nodoPelicula->p);
+            system("cls");
             gotoxy(0,7);
             switch (opcion){
                 case 0:
-                    printf("Nombre actual: %s\n",pelicula.nombre);
+                    printf("Nombre actual: %s\n",nodoPelicula->p.nombre);
                     printf("Ingrese nuevo nombre: ");
                     fflush(stdin);
                     gets(&(nodoPelicula->p.nombre));
                     break;
                 case 1:
-                    printf("Director actual: %s\n",pelicula.director);
+                    printf("Director actual: %s\n",nodoPelicula->p.director);
                     printf("Ingrese nuevo director: ");
                     fflush(stdin);
                     gets(&(nodoPelicula->p.director));
                     break;
                 case 2:
-                    printf("Anio actual: %i\n",pelicula.anio);
+                    printf("Anio actual: %i\n",nodoPelicula->p.anio);
                     printf("Ingrese anio nuevo: ");
                     scanf("%i",&(nodoPelicula->p.anio));
                     break;
                 case 3:
-                    printf("Genero actual: %s\n",pelicula.genero);
+                    printf("Genero actual: %s\n",nodoPelicula->p.genero);
                     printf("Ingrese nuevo genero: ");
                     fflush(stdin);
                     gets(&(nodoPelicula->p.genero));
                     break;
                 case 4:
-                    printf("Lenguaje actual: %s\n",pelicula.lenguaje);
+                    printf("Lenguaje actual: %s\n",nodoPelicula->p.lenguaje);
                     printf("Ingrese nuevo lenguaje: ");
                     fflush(stdin);
                     gets(&(nodoPelicula->p.lenguaje));
                     break;
                 case 5:
-                    printf("Pais actual: %s\n",pelicula.pais);
+                    printf("Pais actual: %s\n",nodoPelicula->p.pais);
                     printf("Ingrese nuevo pais: ");
                     fflush(stdin);
                     gets(&(nodoPelicula->p.pais));
                     break;
                 case 6:
-                    printf("PM actual: %i\n",pelicula.pm);
+                    printf("PM actual: %i\n",nodoPelicula->p.pm);
                     printf("Ingrese PM nuevo: ");
                     scanf("%i",&(nodoPelicula->p.pm));
                     break;
                 case 7:
-                    printf("Subtitulo actual (1-Si 0-No): %i\n",pelicula.subtitulo);
+                    printf("Subtitulo actual (1-Si 0-No): %i\n",nodoPelicula->p.subtitulo);
                     printf("Ingrese subtitulo nuevo: ");
                     do{
                         scanf("%i",&(nodoPelicula->p.pm));
-                    }while((pelicula.pm != 0) && (pelicula.pm != 1));
+                    }while((nodoPelicula->p.pm != 0) && (nodoPelicula->p.pm != 1));
                     break;
                 case 8:
-                    printf("Valoracion actual: %i\n",pelicula.valoracion);
+                    printf("Valoracion actual: %i\n",nodoPelicula->p.valoracion);
                     printf("Ingrese valoracion nueva: ");
                     do{
                         scanf("%i",&(nodoPelicula->p.pm));
-                    }while((pelicula.pm < 1) && (pelicula.pm > 10));
+                    }while((nodoPelicula->p.pm < 1) && (nodoPelicula->p.pm > 10));
                     break;
                 case 9:
                     printf("Ingrese nueva sinopsis: \n");
@@ -457,6 +495,131 @@ int filtroNum(int num1,int num2,int fil){
 ///*******************************                         FILTRO PARA ADMIN                               *******************************
 ///***************************************************************************************************************************************
 
+int aplicarFiltros(stPelicula criterio,int campFil[],nodoArbol* peliculasFiltradas,nodoArbol* arbol){
+    int nombreValido,
+        directorValido,
+        anioValido,
+        generoValido,
+        lenguajeValido,
+        paisValido,
+        eliminadoValido,
+        pmValido,
+        subtituloValido,
+        valoracionValido;
+    int cont=0;
+    while(arbol){
+        nombreValido=filtroString(arbol->p.nombre,criterio.nombre,campFil[0]);
+        directorValido=filtroString(arbol->p.director,criterio.director,campFil[1]);
+        anioValido=filtroNum(arbol->p.anio,criterio.anio,campFil[2]);
+        generoValido=filtroString(arbol->p.genero,criterio.genero,campFil[3]);
+        lenguajeValido=filtroString(arbol->p.lenguaje,criterio.lenguaje,campFil[4]);
+        paisValido=filtroNum(arbol->p.pais,criterio.pais,campFil[5]);
+        eliminadoValido=filtroNum(arbol->p.eliminado,criterio.eliminado,campFil[6]);
+        pmValido=filtroNum(arbol->p.pm,criterio.pm,campFil[7]);
+        subtituloValido=filtroNum(arbol->p.subtitulo,criterio.subtitulo,campFil[8]);
+        valoracionValido=filtroNum(arbol->p.valoracion,criterio.valoracion,campFil[9]);
+
+        if (nombreValido &&
+            directorValido &&
+            anioValido &&
+            generoValido &&
+            lenguajeValido &&
+            paisValido &&
+            eliminadoValido &&
+            pmValido &&
+            subtituloValido &&
+            valoracionValido){
+               nodo = crearNodo(arbol->p);
+               peliculasFiltradas = insertar(peliculasFiltradas, nodo);
+        }
+        aplicarFiltros(criterio, campFil, peliculasFiltradas, arbol->izq);
+        aplicarFiltros(criterio, campFil, peliculasFiltradas, arbol->der);
+    }
+    return peliculasFiltradas;
+}
+
+int filtroPeliculas(nodoArbol* arbol){
+    nodoArbol* pelisFiltradas = inicArbol;
+    stPelicula aux;
+    vaciar(&aux);
+    int resp=2;
+    int camposFiltrados[10]={0};
+    int cont=0;
+    while (resp>1){
+        system("cls");
+        gotoxy(0,5);
+        printf("Filtrar peliculas por:");
+        gotoxy(0,7);
+        printf("   APLICAR FILTROS  \n");
+        printf("        SALIR       \n");
+        printf("       Nombre        %s\n",aux.nombre);
+        printf("      Director       %s\n",aux.director);
+        printf("        Anio         %i\n",aux.anio);
+        printf("       Genero        %s\n",aux.genero);
+        printf("      Lenguaje       %s\n",aux.lenguaje);
+        printf("        Pais         %s\n",aux.pais);
+        printf("      Eliminado      %i\n",aux.eliminado);
+        printf("         PM          %i\n",aux.pm);
+        printf("     Subtitulado     %i\n",aux.subtitulo);
+        printf("     Valoracion      %i\n",aux.valoracion);
+        resp=mostrarMenuFiltro();
+        system("cls");
+        gotoxy(0,7);
+        switch (resp){
+            case 0:
+                pelisFiltradas=aplicarFiltros(aux,camposFiltrados,peliculasFiltradas,arbol);
+                break;
+            case 1:
+                cont=-1;
+                break;
+            case 2:
+                printf("NOMBRE\n");
+                completarCampoString(aux.nombre,&camposFiltrados[0]);
+                break;
+            case 3:
+                printf("DIRECTOR\n");
+                completarCampoString(aux.director,&camposFiltrados[1]);
+
+                break;
+            case 4:
+                printf("ANIO\n");
+                completarCampoInt(&aux.anio,&camposFiltrados[2]);
+                break;
+            case 5:
+                printf("GENERO\n");
+                completarCampoString(aux.genero,&camposFiltrados[3]);
+                break;
+            case 6:
+                printf("LENGUAJE\n");
+                completarCampoString(aux.lenguaje,&camposFiltrados[4]);
+                break;
+            case 7:
+                printf("PAIS\n");
+                completarCampoString(aux.pais,&camposFiltrados[5]);
+                break;
+            case 8:
+                printf("ELIMINADO\n");
+                completarCampoBin(&aux.eliminado,&camposFiltrados[6]);
+
+                break;
+            case 9:
+                printf("PM\n");
+                completarCampoInt(&aux.pm,&camposFiltrados[7]);
+
+                break;
+            case 10:
+                printf("SUBTITULOS\n");
+                completarCampoBin(&aux.subtitulo,&camposFiltrados[8]);
+                break;
+            default:
+                printf("VALORACION\n");
+                completarCampoInt(&aux.valoracion,&camposFiltrados[9]);
+                break;
+        }
+        system("cls");
+    }
+    return arbol;
+}
 
 ///***************************************************************************************************************************************
 ///*******************************                     LISTAR PELICULAS PARA ADMIN                         *******************************
@@ -478,7 +641,7 @@ void mostrarListadoP(nodoArbol* arbol, int opc, stUsuario user){
             break;
         case 2: inorder(arbol, user);
             break;
-        case 3: posorder(arbol, user);
+        case 3: postorder(arbol, user);
             break;
     }
 }
@@ -549,7 +712,7 @@ int filtroPeliculasDisp(nodoArbol* arbol,stPelicula arreglo[],int dim){
                 break;
             case 0:
                 printf("\n");
-                cont=aplicarFiltrosDisp(aux,camposFiltrados,arreglo,DB_peliculas); //usar arbol, no archivo/para que usa arreglo?//////////////////////
+                //cont = aplicarFiltrosDisp(aux,camposFiltrados,arreglo,DB_peliculas); //usar arbol, no archivo/para que usa arreglo?//////////////////////
                 break;
             default:
                 cont=dim;
@@ -575,11 +738,11 @@ void mostrarListadoPDis(nodoArbol* arbol, int opc, stUsuario user){
     gotoxy(87,4);printf("LENGUAJE");
     printf("\n");
     switch(opc){
-        case 1: preorder(arbol, user)
+        case 1: preorder(arbol, user);
             break;
         case 2: inorder(arbol, user);
             break;
-        case 3: posorder(arbol, user);
+        case 3: postorder(arbol, user);
             break;
     }
 }
@@ -603,51 +766,6 @@ void mostrarPelicula(stPelicula peli){
     printf("------------------------------------------\n");
     return;
 
-
-///***************************************************************************************************************************************
-/// ****************************                             GENERAR ARBOL                                    ****************************
-///***************************************************************************************************************************************
-
-// Lee el registro del medio de un intervalo de registros del archivo de películas
-nodoArbol* leerMitad(nodoArbol* arbol, FILE* arch,int desde, int hasta){
-
-    int index;
-    stPelicula pelicula;
-
-    // Se intenta buscar la mitad del segmento que existe entre <desde> y <hasta>
-    if ((hasta-desde) > 0){
-        // El index, o la pelicula que vamos a leer, dependerá si el segmento es par o impar.
-        if ((hasta-desde) % 2 == 0){
-            index = (hasta-desde)/2 ;
-        }else{
-            index = (hasta-desde)/2 + 1;
-        }
-        // Sumar el valor de <desde> permite hacer las lecturas del segmento de la derecha
-        // Index resulta al final, un valor de referencia de cuanto vamos a movernos con el fseek
-        index += desde;
-        // Como veniamos haciendo, la realidad es que debemos movernos un valor menos al index, para poder hacer la lectura
-        // de la pelicula
-        fseek(arch,(index-1)*sizeof(stPelicula),SEEK_SET);
-        if((fread(&pelicula,sizeof(stPelicula),1,arch)!=NULL)){
-            arbol->p = pelicula;
-            arbol->izq = leerMitad(arbol->izq,arch,desde,index-1);
-            arbol->der = leerMitad(arbol->der,arch,index,hasta);
-        }
-    }
-    return arbol;
-}
-
-// Funcion que retorna un arbol de peliculas.
-nodoArbol* generarArbol(char DB_peliculas[]){
-
-    FILE* arch = NULL;
-    nodoArbol* arbol = inicArbol();
-
-    arch = fopen(DB_peliculas,"rb");
-    int cantPeliculas = cantidadRegistros(arch,sizeof(stPelicula));
-    arbol = leerMitad(arbol,arch,0,cantPeliculas);
-
-    return arbol;
 }
 
 ///***************************************************************************************************************************************
@@ -658,41 +776,44 @@ nodoArbol* generarArbol(char DB_peliculas[]){
 void generarBackUpP(char archivoOriginal[], nodoArbol* arbol){
     char ruta[40] ={"backUp\\peliculas\\"};
     FILE* archBU = fopen(strcat(ruta,archivoOriginal), "wb");
-    guardar(archBU, arbol);
+    guardarP(archBU, arbol);
     fclose(archBU);
 }
 
-void guardar(FILE* arch, nodoArbol* arbol){
+void guardarP(FILE* arch, nodoArbol* arbol){
     if(arbol!=NULL){
         fwrite(&arbol->p,sizeof(stPelicula), 1, arch);
-        guardar(arch, arbol->izq);
-        guardar(arch, arbol->der);
+        guardarP(arch, arbol->izq);
+        guardarP(arch, arbol->der);
     }
 }
 
 void recuperarDatosPeliculas(char archivo[], nodoArbol* arbol){
     char ruta[]={"backUp\\peliculas\\"};
-    arbol = generarArbol(ruta);
+//    arbol = generarArbol(ruta);
     return arbol;
 }
 
-void menuBackUpP(char DB_peliculas[]){
+void menuBackUpP(char DB_peliculas[],nodoArbol* arbol){
+
     int opc=mostrarBackUp();
     switch (opc){
-    case 0:
-        generarBackUpP(DB_peliculas);
-        system("cls");
-        printf("Back up generado correctamente en carpeta backUp.");
-        presionarContinuar();
-        siguiente();
-        break;
-    case 1:
-        recuperarDatosPeliculas(DB_peliculas);
-        system("cls");
-        printf("Se han restaurado los datos.");
-        presionarContinuar();
-        siguiente();
-        break;
-
+        case 0:
+            generarBackUpP(DB_peliculas, arbol);
+            system("cls");
+            printf("Back up generado correctamente en carpeta backUp.");
+            presionarContinuar();
+            siguiente();
+            break;
+        case 1:
+            recuperarDatosPeliculas(DB_peliculas, arbol);
+            system("cls");
+            printf("Se han restaurado los datos.");
+            presionarContinuar();
+            siguiente();
+            break;
     }
 }
+
+
+

@@ -3,6 +3,12 @@
 #include <string.h>
 #include <time.h>
 #include "matrices_int.h"
+
+
+#ifndef ENCRIPTACION_H
+#define ENCRIPTACION_H
+
+
 #define f_mkey 2
 #define c_mkey 2
 #define c 5
@@ -35,3 +41,6 @@ void encriptarPass(char pass[], int vKey[], int encriptPass[f][c]);
  * @param pass Arreglo en el cual se va a devolver la contraseña desencriptada.
  */
 void desecriptarPass(int vKey[], int encriptPass[f][c], char pass[]);
+
+
+#endif // ENCRIPTACION_H

@@ -1,8 +1,14 @@
+
+#ifndef STRUCTS_H
+#define STRUCTS_H
+
+
 #define string_max 30
 #define nombre_max 60
 #define sinopsis_max 400
 #define f_pass 2
 #define c_pass 5
+#define max_pass 10
 
 // stUsuario
 typedef struct {
@@ -63,3 +69,5 @@ typedef struct{
     int idUsuario;
     int idPelicula;
 } stPelisVistas;
+
+#endif // STRUCTS_H

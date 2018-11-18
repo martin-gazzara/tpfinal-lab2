@@ -66,13 +66,13 @@ void preorder(nodoArbol* arbol, stUsuario user){
 
     if (arbol){
         if(user.admin == 1){
-            mostrarPeliAdmin(arbol.p);
+            mostrarPeliAdmin(arbol->p);
         }else{
-            mostrarPeli(arbol.p);
+            mostrarPeliDisp(arbol->p);
         }
-        mostrarPeliDisp(arbol.p);
-        preorder(arbol->izq);
-        preorder(arbol->der);
+        //mostrarPeliDisp(arbol->p);
+        preorder(arbol->izq, user);
+        preorder(arbol->der, user);
     }
 }
 
@@ -81,13 +81,13 @@ void preorder(nodoArbol* arbol, stUsuario user){
 void inorder(nodoArbol* arbol, stUsuario user){
 
     if (arbol){
-        inorder(arbol->izq);
+        inorder(arbol->izq, user);
         if(user.admin == 1){
-            mostrarPeliAdmin(arbol.p);
+            mostrarPeliAdmin(arbol->p);
         }else{
-            mostrarPeli(arbol.p);
+            mostrarPeliDisp(arbol->p);
         }
-        inorder(arbol->der);
+        inorder(arbol->der, user);
     }
 }
 
@@ -96,12 +96,12 @@ void inorder(nodoArbol* arbol, stUsuario user){
 void postorder(nodoArbol* arbol, stUsuario user){
 
     if (arbol){
-        postorder(arbol->izq);
-        postorder(arbol->der);
+        postorder(arbol->izq, user);
+        postorder(arbol->der, user);
         if(user.admin == 1){
-            mostrarPeliAdmin(arbol.p);
+            mostrarPeliAdmin(arbol->p);
         }else{
-            mostrarPeli(arbol.p);
+            mostrarPeliDisp(arbol->p);
         }
     }
 }
@@ -127,7 +127,7 @@ nodoArbol* buscar(nodoArbol* arbol, int id){
 }
 
 ///------------------------------------------------------------------------------------------------------------------------------Buscar por nombre
-nodoArbol * buscarEnpreorderNombre(nodoArbol * arbol, char nombre[]){
+/*nodoArbol * buscarEnpreorderNombre(nodoArbol * arbol, char nombre[]){
     nodoArbol * rta = NULL;
     if(arbol!=NULL){
         if(strcmp(arbol->p.nombre,nombre)){
@@ -141,17 +141,17 @@ nodoArbol * buscarEnpreorderNombre(nodoArbol * arbol, char nombre[]){
     }
     return rta;
 }
-
+*/
 ///------------------------------------------------------------------------------------------------------------------------------Buscar por genero
-nodoArbol * buscarEnpreorderNombre(nodoArbol * arbol, char genero[]){
+nodoArbol* buscarEnpreorderGenero(nodoArbol * arbol, char genero[]){
     nodoArbol * rta = NULL;
     if(arbol!=NULL){
         if(strcmp(arbol->p.genero,genero)){
             rta=arbol;
         } else {
-            rta=buscarEnpreorder(arbol->izq, genero);
+            rta=buscarEnpreorderGenero(arbol->izq, genero);
             if(!rta){
-                rta=buscarEnpreorder(arbol->der, genero);
+                rta=buscarEnpreorderGenero(arbol->der, genero);
             }
         }
     }
@@ -165,7 +165,7 @@ void mostrarNodo(nodoArbol* nodo, stUsuario user){
     if(user.admin == 1){
         mostrarPeliAdmin(nodo->p);
     }else{
-        mostrarPeli(nodo->p);
+        mostrarPeliDisp(nodo->p);
     }
     printf("Rama izquierda: %p\n",nodo->izq);
     printf("Rama derecha: %p\n",nodo->der);
@@ -223,3 +223,58 @@ nodoArbol* nmi(nodoArbol* arbol){
     }
     return arbol;
 }
+
+///------------------------------------------------------------------------------------------------------------Generador de arbol
+
+
+//Pasa las películas de un archivo a un arreglo.
+void pasarArreglo(FILE* arch, stPelicula arregloPeliculas[],int cant) {
+    fread(arregloPeliculas, sizeof(stPelicula), cant, arch);
+}
+
+nodoArbol* leerMitad(nodoArbol* arbol, stPelicula arregloTemporal[] ,int desde, int hasta){
+
+    int index;
+    stPelicula pelicula;
+
+    // Se intenta buscar la mitad del segmento que existe entre <desde> y <hasta>
+    if ((hasta-desde) > 0){
+
+        // El index, o la pelicula que vamos a leer, dependerá si el segmento es par o impar.
+        if ((hasta-desde) % 2 == 0){
+
+            index = (hasta-desde)/2 ;
+
+        }else{
+            index = (hasta-desde)/2 + 1;
+        }
+        // Sumar el valor de <desde> permite hacer las lecturas del segmento de la derecha
+        // Index resulta al final, un valor de referencia de cuanto vamos a movernos con el fseek
+        index += desde;
+        // Como veniamos haciendo, la realidad es que debemos movernos un valor menos al index, para poder hacer la lectura
+        // de la pelicula
+
+        arbol = insertar(arbol,crearNodo(pelicula));
+        arbol->izq = leerMitad(arbol->izq,arregloTemporal,desde,index-1);
+        arbol->der = leerMitad(arbol->der,arregloTemporal,index,hasta);
+
+    }
+    return arbol;
+}
+
+nodoArbol* generarArbol(char DB_peliculas[]){
+
+    FILE* arch = NULL;
+    arch = fopen(DB_peliculas,"rb");
+    nodoArbol* arbol = inicArbol();
+    int cantPeliculas =  cantidadRegistros(arch,sizeof(stPelicula));
+
+    stPelicula arregloTemporal[cantPeliculas];
+    pasarArreglo(arch,arregloTemporal,cantPeliculas);
+
+    fclose(arch);
+
+    arbol = leerMitad(arbol,arregloTemporal,0,cantPeliculas-1);
+    return arbol;
+}
+

@@ -77,7 +77,7 @@ stPelicula recomendarPelisGenero(stCelda user){
     char generos[][20]={{"Drama"}, {"Comedia"}, {"Accion"}, {"Ciencia Ficcion"}, {"Fantasia"}, {"Terror"}, {"Aventura"}, {"Romance"}, {"Musical"}, {"Suspenso"}};
     int g[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     generosHistorial(user.listaPelis, g);
-    cant = cantidadNodos(user.listaPelis);
+    //cant = cantidadNodos(user.listaPelis);
     stPelicula pelis[cant];
     pos = buscarMayor(g);
     val = recomendar(generos[pos], pelis, user.listaPelis);
@@ -98,22 +98,23 @@ int pelisMayorVal(stPelicula pelis[], nodoListaPelicula* lista){
     }
     return i;
 }
-
+/*
 // Recomienda una peli por mayor valoracion
-stPelicula recomendarPelisValoracion(stCelda user){
+stPelicula recomendarPelisValoracion(nodoArbol* arbol){
     srand(time(NULL));
     int i, val;
-    int cant =cantidadNodos(user.listaPelis);
+    int cant = cantidadNodos(arbol);
     stPelicula pelisMayor7[cant];
     val = pelisMayorVal(pelisMayor7, user.listaPelis);
     i= rand()%val;
     return pelisMayor7[i];
 }
+*/
 
 // Recomienda la ultima peli cargada
 stPelicula recomendarPelisNueva(nodoArbol* arbol){
     nodoArbol* ultimaPeli = nmi(arbol);
-    stPelicula temp = ultimaPeli.p;
+    stPelicula temp = ultimaPeli->p;
     return temp;
 }
 
@@ -208,7 +209,7 @@ int tomarDatos(char us[],char pass[]){
 // Verificacion de password
 int comprobarPass(char passIngresada[],int pass[][c_pass],int vKey[]){
     char passUser[max_pass];
-    desecriptarPass(vKey,pass,passUser);
+    desencriptarPass(vKey,pass,passUser);
     return strcmp(passIngresada,passUser);
 }
 
@@ -258,6 +259,39 @@ int calcularIdU(FILE* arch){
     return id;
 }
 
+// Solicita informacion personal a la hora de crear un usuario.
+
+void pedirInformacionPersonal(stUsuario* user){
+    system("cls");
+    char gen;
+    int esc,anioActual,anioBase=1900,condicion;
+    anioActual=calcularAnioActual();
+    mostrarPedirInformacion();
+    gotoxy(55,9);
+    do{
+        hidecursor(1);
+        scanf("%i",&user->anioNacimiento);
+        condicion=(user->anioNacimiento>=anioActual)||(user->anioNacimiento<1900);
+        if (condicion){
+            hidecursor(0);
+            gotoxy(34,11);printf("El anio debe ser entre %i y %i",anioBase,anioActual);
+            siguiente();
+            gotoxy(34,11);printf("                                  ");
+            gotoxy(55,9);printf("           ");
+            gotoxy(55,9);
+        }
+    }while(condicion);
+    gotoxy(41,13);
+    esc=escribirString(&user->pais);
+    gotoxy(48,17);
+    do{
+        fflush(stdin);
+        scanf("%c",&user->genero);
+        user->genero=tolower(user->genero);
+    }while((user->genero!='m')&&(user->genero!='f'));
+    hidecursor(0);
+}
+
 // Graba un usuario al archivo.
 void grabarUser(stCelda adl[], int val, char archivo[], char username[], char pass[]){
     FILE* arch = fopen(archivo, "a+b");
@@ -270,13 +304,13 @@ void grabarUser(stCelda adl[], int val, char archivo[], char username[], char pa
         user.eliminado = 0;
         pedirInformacionPersonal(&user);
         if (user.id!=1){
-            user.tipo = 0;
+            user.admin = 0;
         }else{
             rewind(arch);
-            user.tipo = 1;
+            user.admin = 1;
         }
         fwrite(&user, sizeof(stUsuario), 1, arch);
-        agregarUser(adl, val, user);
+        agregarUsuario(adl, val, user);
     }
     fclose(arch);
 }
@@ -287,12 +321,18 @@ void grabarUser(stCelda adl[], int val, char archivo[], char username[], char pa
 ///****************************************************************************************************************************************
 //Funcion de bienvenida
 void bienvenida(){
+
     char nombreDBUsuarios[]={"usuarios.bin"};
     char nombreDBPeliculas[]={"peliculas.bin"};
-    char nombreDBPeliculasVistas[]={"peliculasVistas.bin"}
+    char nombreDBPeliculasVistas[]={"peliculasVistas.bin"};
     nodoArbol* arbol = generarArbol(nombreDBPeliculas);
+    stCelda* adl = NULL;
     int val = usuariosActivos(nombreDBUsuarios);
-    stCelda* adl = pasarDeArchivoPelisVistasToADL(nombreDBUsuarios, nombreDBPeliculasVistas, val, arbol);
+    if (val>0){
+        adl = pasarDeArchivoPelisVistasToADL(nombreDBUsuarios, nombreDBPeliculasVistas, val, arbol);
+    }else{
+        adl = (stCelda*)malloc(0);
+    }
     mostrarBienvenida();
     int opcion=0;
     while(opcion!=2){
@@ -324,13 +364,13 @@ void iniciarSesion(stCelda adl[], int val, nodoArbol* arbol, char DB_usuarios[],
     system("cls");
     if (esc!=27){
         gotoxy(0,0);
-        index=buscarUsuario(adl, val, nombreUsuario);   //  Busqueda del usuario, devuelve el usuario en cuestion
+        index=buscarUsuarioPorNombre(adl, val, nombreUsuario);   //  Busqueda del usuario, devuelve el usuario en cuestion
         if (index > -1){                                   // Si id==0, el usuario no existe
             system("cls");
             gotoxy(0,0);
             if (comprobarPass(password, adl[index].usr.pass, adl[index].usr.vectorKey)==0){    // Se comprueba que la contraseña ingresada sea la correcta
-                if (usuario.tipo==0){                        // En caso de un inicio correcto, se ejecuta el modo usuario o modo admin
-                    menuUsuario(adl, val, DB_usuarios, DB_peliculas);
+                if (adl[index].usr.admin==0){                        // En caso de un inicio correcto, se ejecuta el modo usuario o modo admin
+                    menuUsuario(adl, index, DB_usuarios, DB_peliculas);
                 }else{
                     menuAdmin(adl, val, arbol, DB_usuarios,DB_peliculas);
                 }
@@ -348,22 +388,23 @@ void iniciarSesion(stCelda adl[], int val, nodoArbol* arbol, char DB_usuarios[],
 ///                                                 MENU USUARIO
 ///****************************************************************************************************************************************
 ///    **  A MODIFICAR
-void menuUsuario(stCelda adl[], int val, char DB_usuarios[], char DB_peliculas[]){
+void menuUsuario(stCelda usuarios[], int index, nodoArbol* arbol, char DB_usuarios[], char DB_peliculas[]){
 
     int i=0;
     stPelicula pelicula;
-    int resp,edad;
+    int resp,edad,opcionArbol;
     stPelicula recomendadas[3];;
     while (i!=4){
-        recomendadas[0]=recomendarPelisGenero(usuario);
-        recomendadas[1]=recomendarPelisNueva(DB_peliculas);
-        recomendadas[2]=recomendarPelisValoracion(DB_peliculas);      ///  MODIFICAR
+        siguiente();
+        //recomendadas[0]=recomendarPelisGenero(usuarios[index]);
+        //recomendadas[1]=recomendarPelisNueva(arbol);
+        //recomendadas[2]=recomendarPelisValoracion(DB_peliculas);      ///  MODIFICAR
         i=mostrarMenuUsuario(usuarios[index].usr.nombre,recomendadas);
         switch (i){
         //Ver una pelicula
         case 0:
             do{
-                pelicula=buscarPelicula(DB_peliculas);              /// stPelicula = buscarPelicula(nodoArbol arbol)   MODIFICAR
+               // pelicula = buscarPelicula(DB_peliculas);              /// stPelicula = buscarPelicula(nodoArbol arbol)   MODIFICAR
                 if (pelicula.id==0){
                      system("cls");
                         printf("La pelicula no esta disponible o no existe.");
@@ -393,7 +434,10 @@ void menuUsuario(stCelda adl[], int val, char DB_usuarios[], char DB_peliculas[]
             break;
         //Lista todas las peliculas disponibles
         case 1:
-            listarPeliculasDisponibles(DB_peliculas);                   /// MODIFICAR     void listarPeliculasDisponibles(nodoArbol arbol)
+            system("cls");
+            printf("Ingrese opcion para mostrar el arbol");
+            scanf("%i",&opcionArbol);
+            mostrarListadoPDis(arbol,opcionArbol,usuarios[index].usr);                   /// MODIFICAR     void listarPeliculasDisponibles(nodoArbol arbol)
             break;
         //Ver historial
         case 2:
@@ -402,7 +446,7 @@ void menuUsuario(stCelda adl[], int val, char DB_usuarios[], char DB_peliculas[]
             break;
         //Editar perfil
         case 3:
-            usuarios[index].usr = editarPerfil(usuarios[index].usr);
+            //usuarios[index].usr = editarPerfil(usuarios[index].usr);
             break;
         //Cerrar sesion
         case 4:
@@ -452,11 +496,11 @@ void mostrarHistorial(stCelda usuario){
             printf("No hay historial disponible. Presione una tecla para continuar...\n");
             siguiente();
     }else{
-        gotoxy()                ///   Mover a una posicion adecuada, para empezar a imprimir cada pelicula
+        gotoxy(0,3);                ///   Mover a una posicion adecuada, para empezar a imprimir cada pelicula
         generarHistorial(usuario.listaPelis);
         i=mostrarMenuHistorial();
         if (i==0){
-            borrar Historial               /// Debería retornar NULL ??
+            //borrar Historial               /// Debería retornar NULL ??
         }
     }
 }
@@ -470,7 +514,7 @@ stUsuario editarPerfil(stUsuario user){
     char pass[max_pass+1];
     do{
         system("cls");
-        desecriptarPass(user.vectorKey,user.pass,pass);
+        desencriptarPass(user.vectorKey,user.pass,pass);
         gotoxy(0,7);
         printf("      Password      : %s\n",pass);
         printf("        Anio        : %i\n",user.anioNacimiento);
@@ -587,6 +631,8 @@ void editarPais(stUsuario* user){
 ///****************************************************************************************************************************************
 ///                                                      CREAR UN USUARIO
 ///****************************************************************************************************************************************
+
+/*
 //Crea un usuario nuevo
 void crearUsuario(char archivo[], stCelda adl[], int val){
     char temp1[max_pass+1];
@@ -627,7 +673,7 @@ void crearUsuario(char archivo[], stCelda adl[], int val){
     }while((ok!=0)&&(esc!=27));
 }
 
-
+*/
 
 ///000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 ///000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
@@ -794,7 +840,7 @@ void habilitarUsuario(stCelda adl[], int val, char DB_usuario[]){
             fseek(arch, (-1)*sizeof(stUsuario), SEEK_CUR);
             fwrite(&temp, sizeof(stUsuario), 1,arch);
             fclose(arch);
-            habilitarUsuarioAdl(adl,val,id)
+            habilitarUsuarioAdl(adl,val,id);
             mostrarAltaUsuario(temp.nombre);
             }else{
                 system("cls");
@@ -833,9 +879,9 @@ void bajaUsuario(stCelda adl[], int val){
         system("cls");
         gotoxy(32,9);
         if (( adl[i].usr.id != id )){
-            if (temp.tipo!=1){
-                temp.eliminado = 1;
-                mostrarBajaUsuario(temp.nombre);
+            if (adl[i].usr.admin!=1){
+                adl[i].usr.eliminado = 1;
+                mostrarBajaUsuario(adl[i].usr.nombre);
             }else{
                 printf("Imposible dar de baja a un Administrador.");
 
@@ -871,7 +917,7 @@ void listarUsuarios(stCelda adl[], int val, char archivo[]){
                 siguiente();
                 break;
         }
-    }while((opcion<2)&&(cant!=-1));
+    }while((opcion<2)/*&&(cant!=-1)*/);
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------
@@ -911,7 +957,7 @@ void modificarUsuario(stCelda adl[], int val, char DB_usuarios[]){
     if ( (id <= cantidadRegistros(DB_usuarios,sizeof(stUsuario))) && (id > 0)){
 
         user = buscarUsuarioArchivo(DB_usuarios, id);
-        desencriptar(user->vectorKey,user->pass,pass);
+        desencriptarPass(user.vectorKey,user.pass,pass);
 
         system("cls");
 
@@ -966,10 +1012,10 @@ void modificarUsuario(stCelda adl[], int val, char DB_usuarios[]){
 
 //--- Editar nombre
 
-void editarNombre(stUsuario* user, char[] DB_usuarios){
+void editarNombre(stUsuario* user, char DB_usuarios[]){
 
     int existe;
-    char nuevo_nombre[];
+    char nuevo_nombre[string_max];
 
     do{
         system("cls");
@@ -977,7 +1023,7 @@ void editarNombre(stUsuario* user, char[] DB_usuarios){
         printf("Valor actual: %i\n",user->nombre);
         printf("Nuevo valor: ");
         gets(nuevo_nombre);
-        ok = verificarDatos(DB_usuarios,nuevo_nombre)
+        existe = verificarDatos(DB_usuarios,nuevo_nombre);
         if(existe){
             printf("Ese nombre ya esta en uso.");
         }
@@ -1024,6 +1070,37 @@ void editarAdmin(stUsuario* user){
 ///                                                     Generar Back up
 ///------------------------------------------------------------------------------------------------------------------------------
 
+void generarBackUpU(char archivoOriginal[]){
+    char ruta[40] ={"backUp\\usuarios\\"};
+    FILE* archO = fopen(archivoOriginal, "rb");
+    strcat(ruta,archivoOriginal);
+    FILE* archBU = NULL;
+    archBU = fopen(ruta, "ab");
+    stUsuario temp;
+    while(fread(&temp, sizeof(stUsuario), 1, archO)>0){
+        fwrite(&temp, sizeof(stUsuario), 1, archBU);
+    }
+    fclose(archO);
+    fclose(archBU);
+}
+
+void recuperarDatosUsuarios(char archivo[]){
+
+    char ruta[]={"backUp\\usuarios\\"};
+    strcat(ruta,archivo);
+    system("cls");
+
+    FILE* BA=fopen(ruta,"rb");
+    FILE* arch=fopen(archivo,"wb");
+    stUsuario temp;
+
+    while(fread(&temp,sizeof(stUsuario),1,BA)>0){
+        fwrite(&temp,sizeof(stUsuario),1,arch);
+    }
+    fclose(BA);
+    fclose(arch);
+}
+
 void menuBackUpU(char DB_usuarios[]){
 
     int opc=mostrarBackUp();
@@ -1066,11 +1143,11 @@ void gestionPeliculas(nodoArbol* arbol, char DB_peliculas[]){
                 bajaPelicula(DB_peliculas, arbol);
                 break;
             case 2:
-                listarPeliculas(arbol, DB_peliculas);
+                mostrarListadoPDis(arbol, DB_peliculas);
                 break;
             case 3:
                 system("cls");
-                menuBackUpP(DB_peliculas);
+                menuBackUpP(DB_peliculas, arbol);
                 break;
         }
     }while(opcion_elegida!=4);
@@ -1091,7 +1168,7 @@ void menuAltaPeliculas(nodoArbol* arbol, char DB_peliculas[]){
                 ingresarPeliculas(DB_peliculas, arbol);
                 break;
             case 1:
-                habilitarPelicula(DB_peliculas);
+                habilitarPelicula(arbol, DB_peliculas);
                 break;
         }
     }while(opcion_elegida!=2);

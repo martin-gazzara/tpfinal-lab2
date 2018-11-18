@@ -61,12 +61,12 @@ nodoListaPelicula *agregarEnOrdenPorNombreDePelicula(nodoListaPelicula *lista,no
     if(lista){
         lista = nuevoNodo;
     }else{
-        if(nuevoNodo->p.idPelicula < lista->p.idPelicula){
+        if(nuevoNodo->p.id < lista->p.id){
             agregarAlPrincipio(lista,nuevoNodo);
         }else{
             nodoListaPelicula *ante = lista;
             nodoListaPelicula *sig = lista->sig;
-            while(sig != NULL && sig->p.idPelicula,nuevoNodo->p.idPelicula>=0){
+            while(sig != NULL && sig->p.id,nuevoNodo->p.id>=0){
                 ante = sig;
                 sig =sig->sig;
             }
@@ -82,7 +82,7 @@ nodoListaPelicula *agregarEnOrdenPorNombreDePelicula(nodoListaPelicula *lista,no
 nodoListaPelicula *buscarNodoPorNombre(nodoListaPelicula *lista, char nombre[]){
     nodoListaPelicula *aux;
     aux = lista;
-        while(aux !=NULL && strcmp(aux->p.nombrePelicula,nombre)!=0){
+        while(aux !=NULL && strcmp(aux->p.nombre,nombre)!=0){
                 aux = aux->sig;
         }
     return aux;
@@ -92,7 +92,7 @@ nodoListaPelicula *buscarNodoPorNombre(nodoListaPelicula *lista, char nombre[]){
 nodoListaPelicula *buscarNodoPorId(nodoListaPelicula *lista,int id){
     nodoListaPelicula *aux;
     aux = lista;
-    while(aux !=NULL && aux->p.idPelicula != id){
+    while(aux !=NULL && aux->p.id != id){
         aux = aux->sig;
     }
     return aux;
@@ -102,9 +102,9 @@ nodoListaPelicula *buscarNodoPorId(nodoListaPelicula *lista,int id){
 
 
 
-void mostrarNodo(stPelicula pelicula){
-    printf("idPelicula: %i\n",pelicula.idPelicula);
-    printf("Nombre: %s\n",pelicula.nombrePelicula);
+void mostrarNodoLista(stPelicula pelicula){
+    printf("idPelicula: %i\n",pelicula.id);
+    printf("Nombre: %s\n",pelicula.nombre);
     printf("Director: %s\n",pelicula.director);
     printf("Genero: %s\n",pelicula.genero);
     printf("Pais: %s\n",pelicula.pais);
@@ -122,13 +122,13 @@ void recorrerYmostrar(nodoListaPelicula *lista){
 nodoListaPelicula *borrarNodoPorIdPelicula(nodoListaPelicula *lista,int dato){
     nodoListaPelicula * ante;
     nodoListaPelicula * sig;
-    if(lista != NULL && lista->p.idPelicula==dato){
+    if(lista != NULL && lista->p.id==dato){
         nodoListaPelicula * aux = lista;
         lista = lista->sig;
         free(aux);
     }else{
         sig = lista;
-        while(sig != NULL && sig->p.idPelicula==dato){
+        while(sig != NULL && sig->p.id==dato){
          ante = sig;
          sig = sig->sig;
         }
