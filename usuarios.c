@@ -483,8 +483,7 @@ void menuUsuario(stCelda usuarios[], int val, int index, nodoArbol* arbol, char 
             system("cls");
             printf("Ingrese opcion para mostrar el arbol: 1-Preorder 2-Inorder 3-Posorder\n"); //crear menu lindo///////////////////////////
             scanf("%i",&opcionArbol);
-            //listarPeliculasDisponibles(arbol, DB_peliculas, arreglo,  dim);           /// DEBERIA LLAMAR A ESTA PERO SE ROMPE
-            mostrarListadoPDis(arbol,opcionArbol,usuarios[index].usr);                   /// MODIFICAR     void listarPeliculasDisponibles(nodoArbol arbol)
+            listarPeliculasDisponibles(arbol, opcionArbol, usuarios[index].usr);           /// DEBERIA LLAMAR A ESTA PERO SE ROMPE
             break;
         //Ver historial
         case 2:

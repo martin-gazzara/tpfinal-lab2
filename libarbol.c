@@ -131,12 +131,12 @@ nodoArbol* buscar(nodoArbol* arbol, int id){
 nodoArbol * buscarEnpreorderNombre(nodoArbol * arbol, char nombre[]){
     nodoArbol * rta = NULL;
     if(arbol!=NULL){
-        if(strcmp(arbol->p.nombre,nombre)){
-            rta=arbol;
+        if(strcmp(arbol->p.nombre,nombre)== 0){
+            rta = arbol;
         } else {
-            rta=buscarEnpreorderNombre(arbol->izq, nombre);
+            rta = buscarEnpreorderNombre(arbol->izq, nombre);
             if(!rta){
-                rta=buscarEnpreorderNombre(arbol->der, nombre);
+                rta = buscarEnpreorderNombre(arbol->der, nombre);
             }
         }
     }
@@ -147,7 +147,7 @@ nodoArbol * buscarEnpreorderNombre(nodoArbol * arbol, char nombre[]){
 nodoArbol* buscarEnpreorderGenero(nodoArbol * arbol, char genero[]){
     nodoArbol * rta = NULL;
     if(arbol!=NULL){
-        if(strcmp(arbol->p.genero,genero)){
+        if(strcmp(arbol->p.genero,genero)==0){
             rta=arbol;
         } else {
             rta=buscarEnpreorderGenero(arbol->izq, genero);
@@ -158,7 +158,6 @@ nodoArbol* buscarEnpreorderGenero(nodoArbol * arbol, char genero[]){
     }
     return rta;
 }
-
 
 ///-------------------------------------------------------------------------------------------------------------------------------Mostrar nodo
 
