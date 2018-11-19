@@ -225,6 +225,15 @@ nodoArbol* nmi(nodoArbol* arbol){
     return arbol;
 }
 
+///----------------------------------------------------------------------------------------------------------------------------------Cantidad Nodos
+int cantidadNodosArbol(nodoArbol*arbol){
+    int i = 0;
+    if(arbol!=NULL){
+        i = 1 + cantidadNodosArbol(arbol->izq) + cantidadNodosArbol(arbol->der);
+    }
+    return i;
+}
+
 ///------------------------------------------------------------------------------------------------------------Generador de arbol
 
 
@@ -255,7 +264,7 @@ nodoArbol* leerMitad(nodoArbol* arbol, stPelicula arregloTemporal[] ,int desde, 
         // Como veniamos haciendo, la realidad es que debemos movernos un valor menos al index, para poder hacer la lectura
         // de la pelicula
 
-        arbol = insertar(arbol,crearNodo(pelicula));
+        arbol = insertar(arbol,crearNodo(arregloTemporal[index]));
         arbol->izq = leerMitad(arbol->izq,arregloTemporal,desde,index-1);
         arbol->der = leerMitad(arbol->der,arregloTemporal,index,hasta);
 

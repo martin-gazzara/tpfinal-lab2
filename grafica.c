@@ -60,7 +60,6 @@ void reiniciarColores(int colores[],int num){
     for(i=0;i<num;i++){
         colores[i]=8;
     }
-    return;
 }
 
 void mostrarOpcionesV(char opciones[][21],int colores[],int num){
@@ -71,7 +70,6 @@ void mostrarOpcionesV(char opciones[][21],int colores[],int num){
         gotoxy(whereX()-20,(whereY()+1));
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8);
     }
-    return;
 }
 
 int elegirOpcionV(char formato[],char opc[][21],int num){
@@ -115,7 +113,6 @@ void mostrarOpcionesH(char opciones[][21],int colores[],int num){
         gotoxy(whereX(),whereY());
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8);
     }
-    return;
 }
 
 int elegirOpcionH(char formato[],char opc[][21],int num){
@@ -153,14 +150,12 @@ int elegirOpcionH(char formato[],char opc[][21],int num){
 
 void pausa(){
     Sleep(1000);
-    return;
 }
 
 void siguiente(){
     char aux;
     fflush(stdin);
     aux=getch();
-    return;
 }
 
 void mostrarBienvenida(){
@@ -168,7 +163,6 @@ void mostrarBienvenida(){
     hidecursor(0);
     printf("Bienvenido a UTNetflix");             /// Si tenemos tiempo, podriamos averiguar la posibilidad de emitir sonidos, incluso algun
     pausa();                                      /// audio, y poner con ASCII alguna imagen bonita, ASCII ART le dicen?
-    return;
 }
 
 int menuPrincipal(){
@@ -375,7 +369,6 @@ void mostrarIniciarSesion(){
     printf("Password:");
     presionarEsc();
     gotoxy(38,9);
-    return;
 }
 
 void insertarTexto(char formato[],char texto[]){
@@ -402,7 +395,6 @@ void insertarTexto(char formato[],char texto[]){
     if(i==limite){
         printf("...");
     }
-    return;
 }
 
 void generarRecuadro(stPelicula peli){
@@ -437,7 +429,6 @@ void generarRecuadro(stPelicula peli){
     insertarTexto("titulo",peli.nombre);
     gotoxy(x_aux,y_aux+5);
     insertarTexto("sinopsis",peli.sinopsis);
-    return;
 }
 
 void mostrarRecomendadas(stPelicula recom[]){
@@ -489,7 +480,7 @@ int mostrarMenuUsuario(char nombreUsuario[],stPelicula recom[]){
     for(i=0;i<102;i++){
         printf("%c",s_linea_h);
     }
-    //mostrarRecomendadas(recom);
+    mostrarRecomendadas(recom);
     char opciones[][21]={"  Ver una pelicula  ","Todas las peliculas","    Ver historial   ","    Editar perfil   ","    Cerrar sesion   "};
     int numOpc=5;
     eleccion=elegirOpcionH("abajo",opciones,numOpc);
@@ -552,7 +543,6 @@ void mostrarIngresarNombre(){
     printf("Ingrese un nombre");
     gotoxy(21,10);
     printf("Nombre:");
-    return;
 }
 
 int mostrarVerPelicula(){
@@ -620,7 +610,6 @@ int mostrarGestionPeliculas(){
     printf("  GESTION DE PELICULAS");
     eleccion=elegirOpcionV("centrado",opciones,numOpc);
     return eleccion;
-    return;
 }
 
 int mostrarMenuListadoDisp(){
@@ -700,13 +689,11 @@ void cerrarPrograma(){
     gotoxy(38,11);
     printf("Gracias por usar UTNETFLIX!");
     pausa();
-    return;
 }
 
 void mensaje_passIncorrecto(){
     gotoxy(40,15);
     printf("Contrasaeña incorrecta");
-    return;
 }
 
 void mostrarBajaUsuario(char nombre[]){
@@ -717,8 +704,6 @@ void mostrarBajaUsuario(char nombre[]){
     printf("%s",nombre);
     gotoxy(41,11);
     printf("ha sido dado de baja.");
-    /*presionarContinuar();
-    siguiente();*/
 }
 
 void mostrarBajaPelicula(char nombre[]){
@@ -731,7 +716,6 @@ void mostrarBajaPelicula(char nombre[]){
     printf("ha sido dada de baja.");
     presionarContinuar();
     siguiente();
-    return;
 }
 
 void mostrarAltaUsuario(char nombre[]){
@@ -744,7 +728,6 @@ void mostrarAltaUsuario(char nombre[]){
     printf("ha sido dado de alta.");
     presionarContinuar();
     siguiente();
-    return;
 }
 
 void mostrarAltaPelicula(char nombre[]){
@@ -757,7 +740,6 @@ void mostrarAltaPelicula(char nombre[]){
     printf("ha sido dada de alta.");
     presionarContinuar();
     siguiente();
-    return;
 }
 
 int mostrarListarPorP(){
@@ -784,13 +766,11 @@ int mostrarListarPorU(){
 void presionarEsc(){
     gotoxy(79,24);
     printf("Presione ESC para salir");
-    return;
 }
 
 void presionarNum(){
     gotoxy(79,23);
     printf("Presione -1 para salir");
-    return;
 }
 
 void presionarContinuar(){
