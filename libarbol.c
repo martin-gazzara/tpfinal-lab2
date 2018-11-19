@@ -63,14 +63,12 @@ void mostrarPeliAdmin(stPelicula peli){
 ///--------------------------------------------------------------------------------------------------------------------------Mostrar pre-order
 
 void preorder(nodoArbol* arbol, stUsuario user){
-
     if (arbol){
         if(user.admin == 1){
             mostrarPeliAdmin(arbol->p);
         }else{
             mostrarPeliDisp(arbol->p);
         }
-        //mostrarPeliDisp(arbol->p);
         preorder(arbol->izq, user);
         preorder(arbol->der, user);
     }
@@ -127,21 +125,21 @@ nodoArbol* buscar(nodoArbol* arbol, int id){
 }
 
 ///------------------------------------------------------------------------------------------------------------------------------Buscar por nombre
-/*nodoArbol * buscarEnpreorderNombre(nodoArbol * arbol, char nombre[]){
+nodoArbol* buscarEnpreorderNombre(nodoArbol * arbol, char nombre[]){
     nodoArbol * rta = NULL;
     if(arbol!=NULL){
         if(strcmp(arbol->p.nombre,nombre)){
             rta=arbol;
         } else {
-            rta=buscarEnpreorder(arbol->izq, nombre);
+            rta= buscarEnpreorderNombre(arbol->izq, nombre);
             if(!rta){
-                rta=buscarEnpreorder(arbol->der, nombre);
+                rta= buscarEnpreorderNombre(arbol->der, nombre);
             }
         }
     }
     return rta;
 }
-*/
+
 ///------------------------------------------------------------------------------------------------------------------------------Buscar por genero
 nodoArbol* buscarEnpreorderGenero(nodoArbol * arbol, char genero[]){
     nodoArbol * rta = NULL;
@@ -171,6 +169,14 @@ void mostrarNodo(nodoArbol* nodo, stUsuario user){
     printf("Rama derecha: %p\n",nodo->der);
 }
 
+///----------------------------------------------------------------------------------------------------------------------------------Cantidad Nodos
+int cantidadNodosArbol(nodoArbol*arbol){
+    int i = 0;
+    if(arbol!=NULL){
+        i = 1 + cantidadNodosArbol(arbol->izq) + cantidadNodosArbol(arbol->der);
+    }
+    return i;
+}
 
 ///--------------------------------------------------------------------------------------------------------------------------------Borrar nodo
 
@@ -254,7 +260,7 @@ nodoArbol* leerMitad(nodoArbol* arbol, stPelicula arregloTemporal[] ,int desde, 
         // Como veniamos haciendo, la realidad es que debemos movernos un valor menos al index, para poder hacer la lectura
         // de la pelicula
 
-        arbol = insertar(arbol,crearNodo(pelicula));
+        arbol = insertar(arbol,crearNodo(arregloTemporal[index]));
         arbol->izq = leerMitad(arbol->izq,arregloTemporal,desde,index-1);
         arbol->der = leerMitad(arbol->der,arregloTemporal,index,hasta);
 

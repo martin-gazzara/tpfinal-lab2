@@ -38,4 +38,7 @@ nodoArbol* nmd(nodoArbol* arbol);
 ///-------------------------------------------------------------------------------------------------------------------------Nodo mas izquierdo
 nodoArbol* nmi(nodoArbol* arbol);
 
+///----------------------------------------------------------------------------------------------------------------------------Cantidad Nodos
+int cantidadNodosArbol(nodoArbol* arbol);
+
 #endif // LIBARBOL_H

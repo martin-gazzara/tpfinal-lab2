@@ -89,3 +89,93 @@
 1542561019 source:c:\users\usuario\desktop\tp final\tpfinal-lab2\usuarios.c
 	"usuarios.h"
 
+1491400450 source:c:\users\rightonhana\desktop\utnetflixv2\gotoxy.c
+	<stdio.h>
+	<stdlib.h>
+	<windows.h>
+
+1528792996 source:c:\users\rightonhana\desktop\utnetflixv2\matrices_int.c
+	"matrices_int.h"
+	<time.h>
+
+1528761877 c:\users\rightonhana\desktop\utnetflixv2\matrices_int.h
+	<stdlib.h>
+	<stdio.h>
+	<time.h>
+
+1542564469 source:c:\users\rightonhana\desktop\utnetflixv2\adl.c
+	"adl.h"
+
+1542564469 c:\users\rightonhana\desktop\utnetflixv2\adl.h
+	<stdlib.h>
+	<stdio.h>
+	"listasSimplesPeliculas.h"
+	"structs.h"
+
+1542564469 c:\users\rightonhana\desktop\utnetflixv2\listassimplespeliculas.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"structs.h"
+
+1542564469 c:\users\rightonhana\desktop\utnetflixv2\structs.h
+
+1542564469 source:c:\users\rightonhana\desktop\utnetflixv2\encriptacion.c
+	"encriptacion.h"
+
+1542564469 c:\users\rightonhana\desktop\utnetflixv2\encriptacion.h
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	<time.h>
+	"matrices_int.h"
+
+1542631363 source:c:\users\rightonhana\desktop\utnetflixv2\grafica.c
+	"grafica.h"
+
+1542564469 c:\users\rightonhana\desktop\utnetflixv2\grafica.h
+	<stdlib.h>
+	<stdio.h>
+	<windows.h>
+	<ctype.h>
+	"gotoxy.h"
+	"structs.h"
+
+1491399896 c:\users\rightonhana\desktop\utnetflixv2\gotoxy.h
+
+1542632396 source:c:\users\rightonhana\desktop\utnetflixv2\libarbol.c
+	"libarbol.h"
+
+1542591091 c:\users\rightonhana\desktop\utnetflixv2\libarbol.h
+	<stdlib.h>
+	<stdio.h>
+	"structs.h"
+
+1542633088 source:c:\users\rightonhana\desktop\utnetflixv2\listassimplespeliculas.c
+	"listasSimplesPeliculas.h"
+
+1542564469 source:c:\users\rightonhana\desktop\utnetflixv2\main.c
+	<stdio.h>
+	<stdlib.h>
+	"usuarios.h"
+	"grafica.h"
+
+1542564469 c:\users\rightonhana\desktop\utnetflixv2\usuarios.h
+	<string.h>
+	"adl.h"
+	"encriptacion.h"
+	"structs.h"
+	"grafica.h"
+	"pelicula.h"
+
+1542565383 c:\users\rightonhana\desktop\utnetflixv2\pelicula.h
+	"grafica.h"
+	"libarbol.h"
+	"structs.h"
+
+1542634631 source:c:\users\rightonhana\desktop\utnetflixv2\usuarios.c
+	"usuarios.h"
+
+1542591716 source:c:\users\rightonhana\desktop\utnetflixv2\pelicula.c
+	"pelicula.h"
+
