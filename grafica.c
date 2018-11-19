@@ -641,7 +641,7 @@ int mostrarMenuListadoU(){
     return eleccion;
 }
 
-int mostrarMenuListado(){
+int mostrarMenuListadoP(){
     gotoxy(0,0);
     printf("MENU");
     char opciones[][21]={" Modificar pelicula ","       Filtrar      ","        Salir       "};
@@ -717,9 +717,8 @@ void mostrarBajaUsuario(char nombre[]){
     printf("%s",nombre);
     gotoxy(41,11);
     printf("ha sido dado de baja.");
-    presionarContinuar();
-    siguiente();
-    return;
+    /*presionarContinuar();
+    siguiente();*/
 }
 
 void mostrarBajaPelicula(char nombre[]){
@@ -1072,18 +1071,87 @@ void mostrarFormularioPeliculas(){
 }
 
 
-int mostrarModificarPelicula(stPelicula pelicula){
+int mostrarModificarPelicula(){
 
     char opciones[][21]={"       Nombre       ","      Director      ","        Anio        ","       Genero       ","      Lenguaje      ","        Pais        ","         PM         ","     Subtitulado    ","     Valoracion     ","      Sinopsis      ","        Salir       "};
     int numOpc=11,eleccion;
+    gotoxy(1,1);printf("Modificar película");
     eleccion=elegirOpcionV("borde",opciones,numOpc);
     return eleccion;
 
 }
 
-///    *** NUEVO ***
+///******* PARA FILTRAR PELICULAS
 
-int evaluar(int filtrosAplicados[], stUsuario userFiltro, stUsuario temp){
+int evaluarPelicula(int filtrosAplicados[], stPelicula peliculaFiltro, stPelicula temp){
+
+    int ok = 0;
+
+    if(
+        ((filtrosAplicados[0] && (peliculaFiltro.anio == temp.anio))||(!filtrosAplicados[0])) &&
+        ((filtrosAplicados[1] && (strcmp(peliculaFiltro.genero,temp.genero) == 0))||(!filtrosAplicados[1])) &&
+        ((filtrosAplicados[2] && (strcmp(peliculaFiltro.director,temp.director)== 0))||(!filtrosAplicados[2])) &&
+        ((filtrosAplicados[3] && (peliculaFiltro.eliminado == temp.eliminado))||(!filtrosAplicados[3]))
+    ){
+        ok = 1;
+    }else{
+        ok = 0;
+    }
+    return ok;
+}
+
+void mostrarListadoPeliculas(char archivo[],int filtroActivado, int filtrosAplicados[], stPelicula peliculaFiltro){
+
+    FILE* arch = fopen(archivo,"rb");
+    stPelicula temp;
+    int line = 5;
+    int mostrar;
+
+    system("cls");
+    gotoxy(1,2);printf("filtroact: %i %i %i %i A: %i E: %i G: %s D:%s ",filtrosAplicados[0],filtrosAplicados[1],filtrosAplicados[2],filtrosAplicados[3],peliculaFiltro.anio,peliculaFiltro.eliminado,peliculaFiltro.genero,peliculaFiltro.director);
+    gotoxy(1,4);printf("ID");
+    gotoxy(17,4);printf("NOMBRE");
+    gotoxy(45,4);printf("ANIO");
+    gotoxy(54,4);printf("GENERO");
+    gotoxy(86,4);printf("DIRECTOR");
+    gotoxy(110,4);printf("ELIM");
+    printf("\n");
+
+    while( (fread(&temp,sizeof(stPelicula),1,arch)) > 0  ){
+
+        if(filtroActivado){
+            mostrar = evaluarPelicula(filtrosAplicados, peliculaFiltro, temp);
+        }else{
+            mostrar = 1;
+        }
+
+        if (mostrar){
+            gotoxy(1,line);printf("%i",temp.id);
+            gotoxy(5,line);printf("%s",temp.nombre);
+            gotoxy(45,line);printf("%i", temp.anio);
+            gotoxy(54,line);printf("%s",temp.genero);
+            gotoxy(84,line);printf("%s",temp.director);
+            gotoxy(112,line);printf("%o",temp.eliminado);
+            line++;
+        }
+    }
+
+    fclose(arch);
+
+}
+
+int mostrarFiltroDePeliculas(){
+    char opciones[][21]={"        Anio        ","       Genero       ","      Director      ","      Eliminado     ","   Aplicar filtros  ","   Quitar filtros   ","        Salir       "};
+    int eleccion,numOpc=7;
+    gotoxy(1,1);
+    printf("Filtros a aplicar");
+    eleccion=elegirOpcionV("borde",opciones,numOpc);
+    return eleccion;
+}
+
+///*****  PARA FITLRAR USUARIOS
+
+int evaluarUsuario(int filtrosAplicados[], stUsuario userFiltro, stUsuario temp){
 
     int ok = 0;
 
@@ -1100,7 +1168,7 @@ int evaluar(int filtrosAplicados[], stUsuario userFiltro, stUsuario temp){
     return ok;
 }
 
-void mostrarUsuarios(char archivo[],int filtroActivado, int filtrosAplicados[], stUsuario userFiltro){
+void mostrarListadoUsuarios(char archivo[],int filtroActivado, int filtrosAplicados[], stUsuario userFiltro){
 
     FILE* arch = fopen(archivo,"rb");
     stUsuario temp;
@@ -1129,7 +1197,7 @@ void mostrarUsuarios(char archivo[],int filtroActivado, int filtrosAplicados[], 
     while( (fread(&temp,sizeof(stUsuario),1,arch)) > 0  ){
 
         if(filtroActivado){
-            mostrar = evaluar(filtrosAplicados, userFiltro, temp);
+            mostrar = evaluarUsuario(filtrosAplicados, userFiltro, temp);
         }else{
             mostrar = 1;
         }

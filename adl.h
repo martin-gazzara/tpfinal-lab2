@@ -18,7 +18,7 @@ int usuariosActivos(char DB_usuarios[]);
 void agregarPeliVista(int id, stPelicula p, int val, stCelda adl[]);
 
 //Agregar usuario al adl (USAR EN ALTA)
-int agregarUsuario(stCelda adl[], int val, stUsuario user);
+int agregarUsuario(stCelda* adl, int val, stUsuario user);
 
  //Borrar logicamente el elemento del adl en base al id (USAR EN BAJA USUARIOS)
  void borrarUsuarioADL(stCelda adl[], int val ,int id);
