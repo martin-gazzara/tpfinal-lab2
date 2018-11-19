@@ -5,9 +5,9 @@ nodoListaPelicula *inicLista()
     return NULL;
 }
 //Crea un nodo de Lista
-nodoListaPelicula *crearNodoLista(stPelicula pelicula)
+nodoListaPelicula* crearNodoLista(stPelicula pelicula)
 {
-    nodoListaPelicula *nuevoNodo;
+    nodoListaPelicula* nuevoNodo = (nodoListaPelicula*)malloc(sizeof(nodoListaPelicula));
     nuevoNodo->p = pelicula;
     nuevoNodo->sig = NULL;
 
@@ -41,19 +41,15 @@ nodoListaPelicula *buscarUltimo(nodoListaPelicula *lista)
 }
 
 //Agrega un nodo al final de la Lista
-nodoListaPelicula *agregarAlFinal(nodoListaPelicula *lista,nodoListaPelicula *nuevoNodo)
-{
-    nodoListaPelicula *ultimo;
-    if(!lista)
-    {
+nodoListaPelicula *agregarAlFinal(nodoListaPelicula *lista,nodoListaPelicula *nuevoNodo){
+
+    if(!lista){
         lista = nuevoNodo;
-    }
-    else
-    {
-        ultimo  = buscarUltimo(lista);
-        ultimo->sig = nuevoNodo;
+    }else{
+        lista->sig = agregarAlFinal(lista->sig, nuevoNodo);
     }
     return lista;
+
 }
 
 //Agrega en orden a la Lista

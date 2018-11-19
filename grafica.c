@@ -62,6 +62,14 @@ void reiniciarColores(int colores[],int num){
     }
 }
 
+void lineaHorizontalDoble(){
+
+    for(int i =0; i<110; i++){
+        printf("%c",d_linea_h);
+    }
+
+}
+
 void mostrarOpcionesV(char opciones[][21],int colores[],int num){
     int i;
     for(i=0;i<num;i++){
@@ -567,6 +575,7 @@ int mostrarEditarPerfil(char nombreUser[],int id){
     int eleccion,numOpc=5;
     gotoxy(1,1);
     printf("Editar perfil - %s (%i)",nombreUser,id);
+    gotoxy(1,2);lineaHorizontalDoble();
     eleccion=elegirOpcionV("borde",opciones,numOpc);
     return eleccion;
 }
@@ -1055,7 +1064,8 @@ int mostrarModificarPelicula(){
 
     char opciones[][21]={"       Nombre       ","      Director      ","        Anio        ","       Genero       ","      Lenguaje      ","        Pais        ","         PM         ","     Subtitulado    ","     Valoracion     ","      Sinopsis      ","        Salir       "};
     int numOpc=11,eleccion;
-    gotoxy(1,1);printf("Modificar película");
+    gotoxy(1,1);printf("Modificar pelicula");
+    gotoxy(1,2);lineaHorizontalDoble();
     eleccion=elegirOpcionV("borde",opciones,numOpc);
     return eleccion;
 
@@ -1088,6 +1098,7 @@ void mostrarListadoPeliculas(char archivo[],int filtroActivado, int filtrosAplic
     int mostrar;
 
     system("cls");
+    gotoxy(1,2);lineaHorizontalDoble();
     gotoxy(1,4);printf("ID");
     gotoxy(17,4);printf("NOMBRE");
     gotoxy(45,4);printf("ANIO");
@@ -1124,6 +1135,7 @@ int mostrarFiltroDePeliculas(){
     int eleccion,numOpc=7;
     gotoxy(1,1);
     printf("Filtros a aplicar");
+    gotoxy(1,2);lineaHorizontalDoble();
     eleccion=elegirOpcionV("borde",opciones,numOpc);
     return eleccion;
 }
@@ -1153,18 +1165,10 @@ void mostrarListadoUsuarios(char archivo[],int filtroActivado, int filtrosAplica
     stUsuario temp;
     int line = 5;
     int mostrar;
-/*
+
     system("cls");
-                printf("flag mostrarUsuarios - filtro.\n");
-                printf("%c\n",userFiltro.genero);
-                printf("%s\n",userFiltro.pais);
-                printf("%i\n",userFiltro.eliminado);
-                printf("%i\n",userFiltro.anioNacimiento);
-                printf("Arreglo de filtros: ");
-                printf("%i %i %i %i",filtros[0],filtros[1],filtros[2],filtros[3]);
-                siguiente();
-*/
-    system("cls");
+
+    gotoxy(1,2);lineaHorizontalDoble();
     gotoxy(1,4);printf("ID");
     gotoxy(17,4);printf("NOMBRE");
     gotoxy(45,4);printf("ANIO");
