@@ -287,7 +287,7 @@ void ingresarPeliculas(char DB_peliculas[], nodoArbol** arbol){
         if(cantAltasSeguidas < 10) {
             cantAltasSeguidas++;
         } else {
-           // arbol = generarArbol(DB_peliculas);
+            arbol = generarArbol(DB_peliculas);
             cantAltasSeguidas = 0;
         }
     } else {
