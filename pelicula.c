@@ -886,7 +886,7 @@ int filtroPeliculasDisp(nodoArbol* arbol, nodoArbol* arbolFiltrado ){
                 break;
             case 0:
                 printf("\n");
-                arbolFiltrado = aplicarFiltrosDisp(aux,camposFiltrados,arbolFiltrado, arbol);
+               // arbolFiltrado = aplicarFiltrosDisp(aux,camposFiltrados,arbolFiltrado, arbol);
                 break;
             /*default:
                 cont=dim;
@@ -1095,11 +1095,16 @@ void listarPeliculasDisponibles(nodoArbol* arbol, int opc, stUsuario user){
             case 0:
                 resultBusqueda = buscarPelicula(arbol);
                 system("cls");
-                if(resultBusqueda.id != -1){
+                if(resultBusqueda.id > 0){
                     mostrarPelicula(resultBusqueda);
-                presionarContinuar();
-                siguiente();
+                    presionarContinuar();
+                    siguiente();
+                }else if(resultBusqueda.id == -1){
+                    printf("La pelicula no existe");
+                    presionarContinuar();
+                    siguiente();
                 }
+
                 system("cls");
                 break;
             case 1:
@@ -1154,26 +1159,20 @@ stPelicula buscarPelicula(nodoArbol* arbol){
             }
             break;
         case 1:
-            printf("Busqueda 2");
-            siguiente();
-/*
             system("cls");
             presionarEsc();
             mostrarIngresarNombre();
             esc = escribirNombre(buscarNombre);
             if (esc!=27){
-                nodo = buscarEnpreorderNombre(arbol, buscarNombre);
-                if(nodo != NULL){
-                    pelicula = nodo->p;
+                nodoBusqueda = buscarEnpreorderNombre(arbol, buscarNombre);
+                if(nodoBusqueda != NULL){
+                    pelicula = nodoBusqueda->p;
+                }else{
+                    pelicula.id=-1;
                 }
-            }
-            while((fread(&pelicula,sizeof(stPelicula),1,arch)>0)&&(strcmp(pelicula.nombre,buscarNombre)!=0));
-            if(strcmp(pelicula.nombre,buscarNombre)!=0){
-                pelicula.id=0;
-            }
             }else{
-                pelicula.id=-1;
-            }*/
+                pelicula.id=-2;
+            }
             break;
         case 2:
             pelicula.id=-1;
