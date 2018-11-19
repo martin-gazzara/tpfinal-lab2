@@ -97,7 +97,6 @@ void bajaPelicula(char DB_peliculas[], nodoArbol* arbol){
         }
     }
     fclose(arch);
-    return;
 }
 
 ///***************************************************************************************************************************************
@@ -534,7 +533,6 @@ void vaciar(stPelicula* peli){
     peli->pm=0;
     peli->subtitulo=0;
     peli->valoracion=0;
-    return;
 }
 
 //Completa un campo bin 0 1
@@ -554,7 +552,6 @@ void completarCampoBin(int* num,int* val){
     }else{
         *val=1;
     }
-    return;
 }
 
 //Completa un campo char
@@ -574,7 +571,6 @@ void completarCampoChar(char* caracter,int* val){
     }else{
         *val=1;
     }
-    return;
 }
 
 //Completa un campo int
@@ -593,7 +589,6 @@ void completarCampoInt(int* num,int* val){
     }else{
         *val=1;
     }
-    return;
 }
 
 //Completa un campo de string
@@ -612,7 +607,6 @@ void completarCampoString(char string[],int* val){
     }else{
         *val=0;
     }
-    return;
 }
 
 //Filtra strings
@@ -651,8 +645,7 @@ int filtroNum(int num1,int num2,int fil){
 ///***************************************************************************************************************************************
 ///*******************************                         FILTRO PARA ADMIN                               *******************************
 ///***************************************************************************************************************************************
-/*
-int aplicarFiltros(stPelicula criterio,int campFil[],stPelicula arreglo[],char DB_peliculas[]){
+/*int aplicarFiltros(stPelicula criterio,int campFil[],stPelicula arreglo[],char DB_peliculas[]){
 
     FILE* arch;
     stPelicula aux;
@@ -764,8 +757,6 @@ int filtroPeliculas(char DB_peliculas[],stPelicula arreglo[]){
 ///*******************************                     LISTAR PELICULAS PARA ADMIN                         *******************************
 ///***************************************************************************************************************************************
 
-
-
 //Lista las peliculas
 void mostrarListadoP(nodoArbol* arbol, int opc, stUsuario user){
     int i=0;
@@ -794,6 +785,7 @@ void mostrarListadoP(nodoArbol* arbol, int opc, stUsuario user){
 ///***************************************************************************************************************************************
 /*
 nodoArbol* aplicarFiltrosDisp(stPelicula criterio, int campFil[], nodoArbol* peliculasFiltradas, nodoArbol* arbol){
+    nodoArbol* nodo = NULL;
     int nombreValido,
         directorValido,
         anioValido,
@@ -821,20 +813,19 @@ nodoArbol* aplicarFiltrosDisp(stPelicula criterio, int campFil[], nodoArbol* pel
             generoValido &&
             lenguajeValido &&
             paisValido &&
-            eliminadoValido &&
             pmValido &&
             subtituloValido &&
             valoracionValido){
                nodo = crearNodo(arbol->p);
                peliculasFiltradas = insertar(peliculasFiltradas, nodo);
         }
-        aplicarFiltros(criterio, campFil, peliculasFiltradas, arbol->izq);
-        aplicarFiltros(criterio, campFil, peliculasFiltradas, arbol->der);
+        aplicarFiltrosDisp(criterio, campFil, peliculasFiltradas, arbol->izq);
+        aplicarFiltrosDisp(criterio, campFil, peliculasFiltradas, arbol->der);
     }
     return peliculasFiltradas;
-}
+}*/
 
-int filtroPeliculasDisp(nodoArbol* arbol,stPelicula arreglo[],int dim){
+int filtroPeliculasDisp(nodoArbol* arbol, nodoArbol* arbolFiltrado ){
     stPelicula aux;
     vaciar(&aux);
     int resp=2;
@@ -894,17 +885,17 @@ int filtroPeliculasDisp(nodoArbol* arbol,stPelicula arreglo[],int dim){
                 break;
             case 0:
                 printf("\n");
-                //cont = aplicarFiltrosDisp(aux,camposFiltrados,arreglo,DB_peliculas); //usar arbol, no archivo/para que usa arreglo?//////////////////////
+                arbolFiltrado = aplicarFiltrosDisp(aux,camposFiltrados,arbolFiltrado, arbol);
                 break;
-            default:
+            /*default:
                 cont=dim;
-                break;
+                break;*/
         }
         system("cls");
     }
     return cont;
 }
-*/
+
 ///***************************************************************************************************************************************
 ///*******************************                   LISTAR PELICULAS PARA USUARIOS                        *******************************
 ///***************************************************************************************************************************************
@@ -946,8 +937,6 @@ void mostrarPelicula(stPelicula peli){
     printf("Sinopsis: %s\n", peli.sinopsis);
     printf("Valoracion: %d puntos\n", peli.valoracion);
     printf("------------------------------------------\n");
-    return;
-
 }
 
 //Encuentra el menor de los nombres de películas.
@@ -1091,59 +1080,62 @@ void menuBackUpP(char DB_peliculas[],nodoArbol* arbol){
             break;
     }
 }
-/*
-void listarPeliculasDisponibles(nodoArbol* arbol, char archivo[], stPelicula arregloPeliculas[], int dim){
+
+void listarPeliculasDisponibles(nodoArbol* arbol, int opc, stUsuario user){
     system("cls");
     int dimFiltro,numOpc=3,opcion;
     stPelicula resultBusqueda;
+    nodoArbol* arbolFiltrado = inicArbol();
     do{
         gotoxy(0,3);
-        mostrarListadoPDis(arbol);
+        mostrarListadoPDis(arbol, opc, user);
         opcion=mostrarMenuListadoDisp();
         switch(opcion){
             case 0:
-                resultBusqueda=buscarPelicula(archivo)
+                resultBusqueda = buscarPelicula(arbol);
                 system("cls");
-                mostrarPelicula(resultBusqueda);
+                if(resultBusqueda.id != -1){
+                    mostrarPelicula(resultBusqueda);
                 presionarContinuar();
                 siguiente();
+                }
                 system("cls");
                 break;
             case 1:
-                dim=filtroPeliculasDisp(arbol,arregloPeliculas,dim);
-                if(dim>0){
-                    mostrarListadoPelis(arregloPeliculas,dim);
-                }
+                arbolFiltrado = filtroPeliculasDisp(arbol,arbolFiltrado);
+                mostrarListadoPDis(arbolFiltrado, 1, user);
                 break;
         }
 
     }while((opcion<2));
-    return;
 }
-*/
-void mostrarListadoPelis(stPelicula peli, int dim){
-    int i = 0;
-    gotoxy(1,4);printf("ID");
-    gotoxy(22,4);printf("NOMBRE");
-    gotoxy(45,4);printf("ANIO");
-    gotoxy(54,4);printf("GENERO");
-    gotoxy(72,4);printf("DIRECTOR");
-    gotoxy(87,4);printf("LENGUAJE");
-    printf("\n");
-    while(i<dim){
-        mostrarPeliDisp(peli);
-        i++;
+
+int escribirNombre(char arreglo[]){
+int aux,i=0;
+    while ((aux!=13)&&(aux!=27)){
+        fflush(stdin);
+        aux=getch();
+        if ((aux!=13)&&(((aux<123)&&(aux>64))||((aux>47)&&(aux<58))||(aux==32))&&(i<nombre_max-1)){
+            arreglo[i]=(char)aux;
+            printf("%c",arreglo[i]);
+            i++;
+        }else if((aux==8)&&(i>0)){
+            gotoxy(whereX()-1,whereY());
+            printf(" ");
+            gotoxy(whereX()-1,whereY());
+            i--;
+        }
     }
+    arreglo[i]='\0';
+    return aux;
 }
-/*
-stPelicula buscarPelicula(char DB_peliculas[]){
+
+stPelicula buscarPelicula(nodoArbol* arbol){
 
     stPelicula pelicula;
+    nodoArbol* nodo = NULL;
     int buscarId,opcion,esc;
     char buscarNombre[nombre_max];
-    FILE* arch;
-
-    arch=fopen(DB_peliculas,"r+b");
     system("cls");
     opcion=mostrarElegirPelicula();
     switch(opcion){
@@ -1152,27 +1144,21 @@ stPelicula buscarPelicula(char DB_peliculas[]){
             presionarNum();
             mostrarIngresarID();
             scanf("%i",&buscarId);
-            if(buscarId!=-1){
-            while((fread(&pelicula,sizeof(stPelicula),1,arch)>0)&&(pelicula.id!=buscarId));
-            if((pelicula.id!=buscarId)||(pelicula.eliminado==1)){
-                pelicula.id=0;
-            }
-            }else{
-                pelicula.id=-1;
+            nodo = buscar(arbol, buscarId);
+            if(nodo != NULL){
+                pelicula = nodo->p;
             }
             break;
         case 1:
             system("cls");
             presionarEsc();
             mostrarIngresarNombre();
-            esc=escribirNombre(buscarNombre);
+            esc = escribirNombre(buscarNombre);
             if (esc!=27){
-            while((fread(&pelicula,sizeof(stPelicula),1,arch)>0)&&(strcmp(pelicula.nombre,buscarNombre)!=0));
-            if(strcmp(pelicula.nombre,buscarNombre)!=0){
-                pelicula.id=0;
-            }
-            }else{
-                pelicula.id=-1;
+                nodo = buscarEnpreorderNombre(arbol, buscarNombre);
+                if(nodo != NULL){
+                    pelicula = nodo->p;
+                }
             }
             break;
         case 2:
@@ -1183,4 +1169,5 @@ stPelicula buscarPelicula(char DB_peliculas[]){
     return pelicula;
 }
 
-*/
+
+

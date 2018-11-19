@@ -39,7 +39,6 @@ void completarMatriz(int filas,int col,int matriz[f][c]){
         filas++;
         col=0;
     }
-    return;
 }
 
 //Pasa un arreglo de caracteres a una matriz de int.
@@ -61,7 +60,6 @@ void stringAMatriz(char arreglo[],int matriz[f][c]){
     if (i!=f){
         completarMatriz(i,j,matriz);
     }
-    return;
 }
 
 
@@ -103,7 +101,6 @@ void matrizAString(int matriz[f][c],char arreglo[]){
         j=0;
     }
     arreglo[index]='\0';
-    return;
 }
 
 //Desencripta una contraseña.

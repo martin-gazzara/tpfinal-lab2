@@ -140,7 +140,7 @@
 	"grafica.h"
 	"pelicula.h"
 
-1542635901 c:\users\rightonhana\desktop\utnetflixv2\grafica.h
+1542663010 c:\users\rightonhana\desktop\utnetflixv2\grafica.h
 	<stdlib.h>
 	<stdio.h>
 	<windows.h>
@@ -150,7 +150,7 @@
 
 1491399896 c:\users\rightonhana\desktop\utnetflixv2\gotoxy.h
 
-1542638357 c:\users\rightonhana\desktop\utnetflixv2\pelicula.h
+1542663053 c:\users\rightonhana\desktop\utnetflixv2\pelicula.h
 	"grafica.h"
 	"libarbol.h"
 	"structs.h"
@@ -167,12 +167,15 @@
 1542638357 source:c:\users\rightonhana\desktop\utnetflixv2\grafica.c
 	"grafica.h"
 
-1542638357 source:c:\users\rightonhana\desktop\utnetflixv2\libarbol.c
+1542648347 source:c:\users\rightonhana\desktop\utnetflixv2\libarbol.c
 	"libarbol.h"
 
 1542638357 source:c:\users\rightonhana\desktop\utnetflixv2\listassimplespeliculas.c
 	"listasSimplesPeliculas.h"
 
-1542638357 source:c:\users\rightonhana\desktop\utnetflixv2\pelicula.c
+1542649310 source:c:\users\rightonhana\desktop\utnetflixv2\pelicula.c
 	"pelicula.h"
+
+1542643525 source:c:\users\rightonhana\desktop\utnetflixv2\usuarios.c
+	"usuarios.h"
 
