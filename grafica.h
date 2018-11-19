@@ -56,9 +56,58 @@
 */
 void intro();
 
-
-///                                                            *** NUEVO ***
+void reiniciarColores(int colores[],int num);
+void mostrarOpcionesV(char opciones[][21],int colores[],int num);
+int elegirOpcionV(char formato[],char opc[][21],int num);
+void mostrarOpcionesH(char opciones[][21],int colores[],int num);
+int elegirOpcionH(char formato[],char opc[][21],int num);
+void pausa();
+void siguiente();
+void mostrarBienvenida();
+int menuPrincipal();
+void mostrarCrearUsuario();
+void mostrarIniciarSesion();
+void insertarTexto(char formato[],char texto[]);
+void generarRecuadro(stPelicula peli);
+void mostrarRecomendadas(stPelicula recom[]);
+int mostrarMenuUsuario(char nombreUsuario[],stPelicula recom[]);
+int mostrarElegirPelicula();
+void mostrarIngresarID();
+void mostrarIngresarNombre();
+int mostrarVerPelicula();
+int mostrarMenuHistorial();
+int mostrarEditarPerfil(char nombreUser[],int id);
+int mostrarMenuAdmin();
+int mostrarGestionUsuarios();
+int mostrarBackUp();
+int mostrarGestionPeliculas();
+int mostrarMenuListadoDisp();
+int mostrarMenuListadoU();
+int mostrarMenuListadoP();
+int mostrarMenuFiltroDisp();
+int mostrarMenuFiltro();
+int mostrarDarAltaPeliculas();
+int mostrarDarAltaUsuarios();
+int mostrarModificarUsuario();
+void cerrarPrograma();
+void mensaje_passIncorrecto();
+void mostrarBajaUsuario(char nombre[]);
+void mostrarBajaPelicula(char nombre[]);
+void mostrarAltaUsuario(char nombre[]);
+void mostrarAltaPelicula(char nombre[]);
+int mostrarListarPorP();
+int mostrarListarPorU();
+void presionarEsc();
+void presionarNum();
+void presionarContinuar();
+void proximamente();
+void mostrarFormularioPeliculas();
 int mostrarModificarPelicula();
-
+int evaluarPelicula(int filtrosAplicados[], stPelicula peliculaFiltro, stPelicula temp);
+void mostrarListadoPeliculas(char archivo[],int filtroActivado, int filtrosAplicados[], stPelicula peliculaFiltro);
+int mostrarFiltroDePeliculas();
+int evaluarUsuario(int filtrosAplicados[], stUsuario userFiltro, stUsuario temp);
+void mostrarListadoUsuarios(char archivo[],int filtroActivado, int filtrosAplicados[], stUsuario userFiltro);
+int mostrarFiltroDeUsuarios();
 
 #endif // GRAFICA_H
