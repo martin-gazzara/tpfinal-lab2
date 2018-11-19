@@ -90,6 +90,7 @@ int recomendar(char genero[], stPelicula peliGeneros[], nodoListaPelicula* lista
 // Recomendar peliculas segun los generos más vistos por el usuario
 stPelicula recomendarPelisGenero(stCelda user, nodoArbol* arbol){
     srand(time(NULL));
+    stPelicula p;
     int pos, val, cant, random;
     char generos[][20]={{"Drama"}, {"Comedia"}, {"Accion"}, {"Ciencia Ficcion"}, {"Fantasia"}, {"Terror"}, {"Aventura"}, {"Romance"}, {"Musical"}, {"Suspenso"}};
     int g[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -105,7 +106,6 @@ stPelicula recomendarPelisGenero(stCelda user, nodoArbol* arbol){
         p = arbol->p;
     }
     return p;
-	}
 }
 
 
