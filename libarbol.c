@@ -127,21 +127,22 @@ nodoArbol* buscar(nodoArbol* arbol, int id){
 }
 
 ///------------------------------------------------------------------------------------------------------------------------------Buscar por nombre
-/*nodoArbol * buscarEnpreorderNombre(nodoArbol * arbol, char nombre[]){
+
+nodoArbol * buscarEnpreorderNombre(nodoArbol * arbol, char nombre[]){
     nodoArbol * rta = NULL;
     if(arbol!=NULL){
         if(strcmp(arbol->p.nombre,nombre)){
             rta=arbol;
         } else {
-            rta=buscarEnpreorder(arbol->izq, nombre);
+            rta=buscarEnpreorderNombre(arbol->izq, nombre);
             if(!rta){
-                rta=buscarEnpreorder(arbol->der, nombre);
+                rta=buscarEnpreorderNombre(arbol->der, nombre);
             }
         }
     }
     return rta;
 }
-*/
+
 ///------------------------------------------------------------------------------------------------------------------------------Buscar por genero
 nodoArbol* buscarEnpreorderGenero(nodoArbol * arbol, char genero[]){
     nodoArbol * rta = NULL;

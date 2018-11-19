@@ -58,7 +58,7 @@ void intro();
 
 
 ///                                                            *** NUEVO ***
-int mostrarModificarPelicula(stPelicula pelicula);
+int mostrarModificarPelicula();
 
 
 #endif // GRAFICA_H
