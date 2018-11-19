@@ -19,10 +19,10 @@
 	<stdlib.h>
 	<windows.h>
 
-1542564213 source:c:\users\usuario\desktop\tp final\tpfinal-lab2\adl.c
+1542588383 source:c:\users\usuario\desktop\tp final\tpfinal-lab2\adl.c
 	"adl.h"
 
-1542564213 c:\users\usuario\desktop\tp final\tpfinal-lab2\adl.h
+1542588381 c:\users\usuario\desktop\tp final\tpfinal-lab2\adl.h
 	<stdlib.h>
 	<stdio.h>
 	"listasSimplesPeliculas.h"
@@ -30,7 +30,7 @@
 
 1542564213 c:\users\usuario\desktop\tp final\tpfinal-lab2\structs.h
 
-1542585141 source:c:\users\usuario\desktop\tp final\tpfinal-lab2\grafica.c
+1542627651 source:c:\users\usuario\desktop\tp final\tpfinal-lab2\grafica.c
 	"grafica.h"
 
 1542577568 c:\users\usuario\desktop\tp final\tpfinal-lab2\grafica.h
@@ -83,9 +83,9 @@
 	"libarbol.h"
 	"structs.h"
 
-1542584651 source:c:\users\usuario\desktop\tp final\tpfinal-lab2\pelicula.c
+1542627296 source:c:\users\usuario\desktop\tp final\tpfinal-lab2\pelicula.c
 	"pelicula.h"
 
-1542585396 source:c:\users\usuario\desktop\tp final\tpfinal-lab2\usuarios.c
+1542627995 source:c:\users\usuario\desktop\tp final\tpfinal-lab2\usuarios.c
 	"usuarios.h"
 

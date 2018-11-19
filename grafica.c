@@ -1108,6 +1108,7 @@ void mostrarListadoPeliculas(char archivo[],int filtroActivado, int filtrosAplic
     int mostrar;
 
     system("cls");
+    gotoxy(1,2);printf("filtroact: %i %i %i %i A: %i E: %i G: %s D:%s ",filtrosAplicados[0],filtrosAplicados[1],filtrosAplicados[2],filtrosAplicados[3],peliculaFiltro.anio,peliculaFiltro.eliminado,peliculaFiltro.genero,peliculaFiltro.director);
     gotoxy(1,4);printf("ID");
     gotoxy(17,4);printf("NOMBRE");
     gotoxy(45,4);printf("ANIO");

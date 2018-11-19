@@ -13,7 +13,7 @@ int cantidadRegistros(FILE* arch, size_t tamanioDeTipo) {
 ///****************************                           HABILITAR PELICULA                                 *****************************
 ///***************************************************************************************************************************************
 
-//Habilita nuevamente una PelÃ­cula eliminada.
+//Habilita nuevamente una Película eliminada.
 void habilitarPelicula(nodoArbol* arbol, char DB_peliculas[]){
     FILE* arch;
     stPelicula temp;
@@ -37,16 +37,25 @@ void habilitarPelicula(nodoArbol* arbol, char DB_peliculas[]){
                 if (nodo){
                     nodo->p.eliminado = 0;
                 }
+                system("cls");
+                gotoxy(46,7);
+                printf("La pelicula");
+                gotoxy(47,9);
+                printf("%s",temp.nombre);
+                gotoxy(41,11);
+                printf("ha sido dada de alta.");
+                presionarContinuar();
+                siguiente();
             }else{
                 system("cls");
-                    gotoxy(46,7);
-                    printf("La pelicula");
-                    gotoxy(47,9);
-                    printf("%s",temp.nombre);
-                    gotoxy(41,11);
-                    printf("no ha sido dada de baja.");
-                    presionarContinuar();
-                    siguiente();
+                gotoxy(46,7);
+                printf("La pelicula");
+                gotoxy(47,9);
+                printf("%s",temp.nombre);
+                gotoxy(41,11);
+                printf("no ha sido dada de baja.");
+                presionarContinuar();
+                siguiente();
             }
         }
     }
@@ -56,7 +65,7 @@ void habilitarPelicula(nodoArbol* arbol, char DB_peliculas[]){
 ///****************************                              BAJA PELICULA                                   *****************************
 ///***************************************************************************************************************************************
 
-//Da de baja una pelÃ­cula
+//Da de baja una película
 void bajaPelicula(char DB_peliculas[], nodoArbol* arbol){
 
     stPelicula pelicula;
@@ -95,7 +104,7 @@ void bajaPelicula(char DB_peliculas[], nodoArbol* arbol){
 ///****************************                              ALTA PELICULA                                   *****************************
 ///***************************************************************************************************************************************
 
-//Verifica si una PelÃ­cula ya fue cargada.
+//Verifica si una Película ya fue cargada.
 int verificacionPelicula(char archivo[], char nombre[], int anio) {
     FILE* arch;
     arch = fopen(archivo, "rb");
@@ -109,7 +118,7 @@ int verificacionPelicula(char archivo[], char nombre[], int anio) {
     fclose(arch);
     return flag;
 }
-//Verifica si el campo subtÃ­tulo es correcto.
+//Verifica si el campo subtítulo es correcto.
 void verificacionSub(int* valor) {
     while ((*valor > 1) || (*valor < 0)) {
         printf("Valor ingresado incorrecto. Ingrese 0 o 1\n");
@@ -133,7 +142,7 @@ void verificacionVal(int* valoracion) {
     }
 }
 
-//Calcula el ID de una PelÃ­cula.
+//Calcula el ID de una Película.
 int calcularId(char DB_peliculas[]){
     int id;
     FILE* arch;
@@ -235,7 +244,7 @@ stPelicula pedirInfo(char nombre[], int anio, char DB_peliculas[]){
 }
 
 
-//Carga una PelÃ­cula a un Archivo.
+//Carga una Película a un Archivo.
 void cargarPelisArchivo(char archivo[], stPelicula peli){
     FILE * arch;
     arch = fopen(archivo, "ab");
@@ -251,14 +260,14 @@ void cargarPelisArchivo(char archivo[], stPelicula peli){
     }
 }
 
-//Verifica si el usuario desea cargar otra PelÃ­cula.
+//Verifica si el usuario desea cargar otra Película.
 void verificarNuevaCarga(char* control){
     printf("Desea cargar otra pelicula? s/n\n");
     fflush(stdin);
     scanf("%c", control);
 }
 
-//Ingresa una PelÃ­cula.
+//Ingresa una Película.
 void ingresarPeliculas(char DB_peliculas[], nodoArbol** arbol){
     char nombre[nombre_max];
     int anio;
@@ -424,7 +433,7 @@ void mostrarPeliculaAModificar(stPelicula pelicula){
     gotoxy(21,16);printf(": Ingrese para ver el contenido");
 }
 
-//Modifica una pelÃ­cula.
+//Modifica una película.
 void modificarPelicula(char archivo[], nodoArbol* arbol){
 
     int opcion = 10,id;
@@ -579,7 +588,7 @@ void completarCampoInt(int* num,int* val){
     }
     printf("Valor a filtrar: ");
     scanf("%i",num);
-    if (*num<0){
+    if (*num<=0){
         *val=0;
     }else{
         *val=1;
@@ -920,7 +929,7 @@ void mostrarListadoPDis(nodoArbol* arbol, int opc, stUsuario user){
     }
 }
 
-//Muestra una PelÃ­cula.
+//Muestra una Película.
 void mostrarPelicula(stPelicula peli){
     printf("Nombre: %s\n", peli.nombre);
     printf("Anio: %d\n", peli.anio);
@@ -941,7 +950,7 @@ void mostrarPelicula(stPelicula peli){
 
 }
 
-//Encuentra el menor de los nombres de pelÃ­culas.
+//Encuentra el menor de los nombres de películas.
 int encontrarMenor(stPelicula arr[], int cant, int posIni){
     int menor = posIni;
     int i;
@@ -954,7 +963,7 @@ int encontrarMenor(stPelicula arr[], int cant, int posIni){
     return menor;
 }
 
-//Ordena un arreglo por TÃ­tulo.
+//Ordena un arreglo por Título.
 void ordenarTitulos(stPelicula arr[], int cant){
     int i=0;
     while(i < cant){
@@ -966,7 +975,7 @@ void ordenarTitulos(stPelicula arr[], int cant){
     }
 }
 
-//Insertar una pelÃ­cula en orden por GÃ©nero.
+//Insertar una película en orden por Género.
 void insertarPelicula(stPelicula peliculas[], int pos, stPelicula peli) {
     while ((pos >= 0) && ((strcmp(peli.genero, peliculas[pos].genero)) < 0)){
         peliculas[pos+1] = peliculas[pos];
@@ -975,7 +984,7 @@ void insertarPelicula(stPelicula peliculas[], int pos, stPelicula peli) {
     peliculas[pos+1] = peli;
 }
 
-//Ordena un arreglo por GÃ©nero.
+//Ordena un arreglo por Género.
 void ordenarGeneros(stPelicula peliculas[], int val) {
     nodoArbol* arbolGeneros = inicArbol();
     int pos = 0;
@@ -985,7 +994,7 @@ void ordenarGeneros(stPelicula peliculas[], int val) {
     }
 }
 
-//Ordena pelÃ­culas por TÃ­tulo o por GÃ©nero.
+//Ordena películas por Título o por Género.
 int ordenarPeliculas(stPelicula arregloPeliculas[],int dim){
     int num;
     num=mostrarListarPorP();
@@ -1003,7 +1012,7 @@ int ordenarPeliculas(stPelicula arregloPeliculas[],int dim){
 
 /*
 ////SOLO ESTA FUNCION SE VA A LLAMAR DESDE ALGUN MENU, EL RESTO SE LLAMAN INTERNAMENTE/
-//Genera un listado de las pelÃ­culas
+//Genera un listado de las películas
 void listarPeliculas(char archivo[]){
     system("cls");
     int numOpc=3;

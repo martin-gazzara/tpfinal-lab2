@@ -727,7 +727,7 @@ int menuAltaUsuarios(stCelda adl[], int val, char DB_usuarios[]){
                 val = crearUsuario(adl, val, DB_usuarios);
                 break;
             case 1:
-                habilitarUsuario(adl, val, DB_usuarios);
+                val = habilitarUsuario(adl, val, DB_usuarios);
                 break;
         }
     }while(opcion_elegida!=2);
@@ -785,22 +785,24 @@ int crearUsuario(stCelda adl[], int val, char archivo[]){
 
 // Habilitar usuario en adl.
 
-void habilitarUsuarioAdl(stCelda adl[],int val,int id){
+int habilitarUsuarioAdl(stCelda adl[],int val,stUsuario usuario){
 
     int i=0;
 
-    while (( i < val ) && ( adl[i].usr.id != id )){
+    while (( i < val ) && ( adl[i].usr.id != usuario.id )){
         i++;
     }
-    if ( adl[i].usr.id == id ){
+    if ( adl[i].usr.id == usuario.id ){
         adl[i].usr.eliminado = 0;
+    }else{
+        val = agregarUsuario(adl, val, usuario);
     }
-
+    return val;
 }
 
 // Habilitar usuario en archivo.
 
-void habilitarUsuario(stCelda adl[], int val, char DB_usuario[]){
+int habilitarUsuario(stCelda adl[], int val, char DB_usuario[]){
 
     FILE* arch;
     stUsuario temp;
@@ -816,12 +818,12 @@ void habilitarUsuario(stCelda adl[], int val, char DB_usuario[]){
             fseek(arch, (id-1)*sizeof(stUsuario), SEEK_SET);
             fread(&temp, sizeof(stUsuario), 1, arch);
             if (temp.eliminado==1){
-            temp.eliminado = 0;
-            fseek(arch, (-1)*sizeof(stUsuario), SEEK_CUR);
-            fwrite(&temp, sizeof(stUsuario), 1,arch);
-            fclose(arch);
-            habilitarUsuarioAdl(adl,val,id);
-            mostrarAltaUsuario(temp.nombre);
+                temp.eliminado = 0;
+                fseek(arch, (-1)*sizeof(stUsuario), SEEK_CUR);
+                fwrite(&temp, sizeof(stUsuario), 1,arch);
+                fclose(arch);
+                val = habilitarUsuarioAdl(adl,val,temp);
+                mostrarAltaUsuario(temp.nombre);
             }else{
                 system("cls");
                 gotoxy(46,7);
@@ -837,6 +839,7 @@ void habilitarUsuario(stCelda adl[], int val, char DB_usuario[]){
             printf("Error en la apertura del archivo\n");
         }
     }
+    return val;
 }
 
 ///--------------------------------------------------------------------------------------------------------------------------------
@@ -861,7 +864,7 @@ void bajaUsuario(stCelda adl[], int val,char DB_usuarios[]){
     mostrarIngresarID();
     scanf("%i",&id);
     hidecursor(0);
-    if (id!=-1){
+    if (id>-1){
         while (( i < val) && ( adl[i].usr.id != id )){
             i++;
         }
@@ -894,13 +897,7 @@ void bajaUsuario(stCelda adl[], int val,char DB_usuarios[]){
 
 
 
-stUsuario filtroDeUsuarios(int filtrosAplicados[], int* filtroActivado){
-
-    stUsuario userTemp;
-    userTemp.genero = ' ';
-    strcpy(userTemp.pais,"");
-    userTemp.eliminado = 0;
-    userTemp.anioNacimiento = 0;
+stUsuario filtroDeUsuarios(stUsuario userTemp, int filtrosAplicados[], int* filtroActivado){
 
     int opc;
 
@@ -934,6 +931,17 @@ stUsuario filtroDeUsuarios(int filtrosAplicados[], int* filtroActivado){
                 siguiente();
                 break;
             case 5:
+
+                userTemp.genero = ' ';
+                strcpy(userTemp.pais,"");
+                userTemp.eliminado = 0;
+                userTemp.anioNacimiento = 0;
+
+                filtrosAplicados[0] = 0;
+                filtrosAplicados[1] = 0;
+                filtrosAplicados[2] = 0;
+                filtrosAplicados[3] = 0;
+
                 *filtroActivado = 0;
                 system("cls");
                 gotoxy(50,10);
@@ -957,6 +965,11 @@ void listarUsuarios(stCelda adl[], int val, char archivo[]){
     int filtroActivado = 0;
     int filtrosAplicados[4] = {0,0,0,0};
     stUsuario userFiltro;
+
+    userFiltro.genero = ' ';
+    strcpy(userFiltro.pais,"");
+    userFiltro.eliminado = 0;
+    userFiltro.anioNacimiento = 0;
     // fin variables filtro
 
     do{
@@ -970,7 +983,7 @@ void listarUsuarios(stCelda adl[], int val, char archivo[]){
                 system("cls");
                 break;
             case 1:
-                userFiltro = filtroDeUsuarios(filtrosAplicados,&filtroActivado);
+                userFiltro = filtroDeUsuarios(userFiltro, filtrosAplicados, &filtroActivado);
                 break;
         }
     }while((opcion<2)/*&&(cant!=-1)*/);
@@ -1242,15 +1255,7 @@ void menuAltaPeliculas(nodoArbol* arbol, char DB_peliculas[]){
 ///                                                    Listado de peliculas
 ///----------------------------------------------------------------------------------------------------------------------------------
 
-stPelicula filtroDePeliculas(int filtrosAplicados[], int* filtroActivado){
-
-    stPelicula peliculaTemp;
-    peliculaTemp.anio = 0;
-    strcpy(peliculaTemp.genero,"");
-    strcpy(peliculaTemp.director,"");
-    peliculaTemp.eliminado = 0;
-
-
+stPelicula filtroDePeliculas(stPelicula peliculaTemp, int filtrosAplicados[], int* filtroActivado){
 
     int opc;
 
@@ -1284,6 +1289,16 @@ stPelicula filtroDePeliculas(int filtrosAplicados[], int* filtroActivado){
                 siguiente();
                 break;
             case 5:
+                peliculaTemp.anio = 0;
+                strcpy(peliculaTemp.genero,"");
+                strcpy(peliculaTemp.director,"");
+                peliculaTemp.eliminado = 0;
+
+                filtrosAplicados[0] = 0;
+                filtrosAplicados[1] = 0;
+                filtrosAplicados[2] = 0;
+                filtrosAplicados[3] = 0;
+
                 *filtroActivado = 0;
                 system("cls");
                 gotoxy(50,10);
@@ -1308,6 +1323,11 @@ void listarPeliculas(nodoArbol* arbol, char DB_peliculas[]){
     int filtrosAplicados[4] ={0,0,0,0};
     stPelicula peliculaFiltro;
 
+    peliculaFiltro.anio = 0;
+    strcpy(peliculaFiltro.genero,"");
+    strcpy(peliculaFiltro.director,"");
+    peliculaFiltro.eliminado = 0;
+
     // fin variables filtro
 
     do{
@@ -1320,7 +1340,7 @@ void listarPeliculas(nodoArbol* arbol, char DB_peliculas[]){
                 modificarPelicula(DB_peliculas,arbol);
                 break;
             case 1:
-                peliculaFiltro = filtroDePeliculas(filtrosAplicados,&filtroActivado);
+                peliculaFiltro = filtroDePeliculas(peliculaFiltro, filtrosAplicados,&filtroActivado);
                 break;
         }
     }while(opcion<2);
