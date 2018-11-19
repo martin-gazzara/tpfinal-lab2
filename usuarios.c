@@ -475,19 +475,28 @@ void iniciarSesion(stCelda adl[], int val, nodoArbol* arbol, char DB_usuarios[],
 ///****************************************************************************************************************************************
 ///                                                 MENU USUARIO
 ///****************************************************************************************************************************************
+//Concatena 2 strings
+char* concat(const char* string1, const char* string2) {
+  char *output = malloc(strlen(string1) + strlen(string2) + 1);
+  strcpy(output, string1);
+  strcat(output, string2);
+  return output;
+}
 
+//Reproduce un trailer de una pelicula dada en ASCII
+void playTrailer(char* title) {
+    printf("Aguarde un momento... Cargando trailer...");
+    system(concat(concat("youtube-terminal '", title), " trailer'")); // youtube-terminal '{movie} trailer'
+    system("cls");
+}
 
+//Reproduce una película
 void reproducir(stPelicula pelicula,stCelda* user){
 
     if (calcularEdad(user->usr) > pelicula.pm){
         system("cls");
-        if(strcmp(pelicula.nombre, "Star Wars IV") == 0){
-            system("telnet towel.blinkenlights.nl");
-        }else{
-            printf("REPRODUCIENDO PELICULA...");
-        }
-        presionarContinuar();
-        siguiente();
+        playTrailer(pelicula.nombre);
+        hidecursor(0);
         user->listaPelis = agregarAlFinal(user->listaPelis,crearNodoLista(pelicula));
     }else{
         system("cls");
@@ -507,11 +516,11 @@ void menuUsuario(stCelda usuarios[], int val, int index, nodoArbol* arbol, char 
 
     while (i!=4){
         //recomendadas[0]=recomendarPelisGenero(usuarios[index], arbol);
-        //recomendadas[1]=recomendarPelisNueva(arbol);
+        recomendadas[1]=recomendarPelisNueva(arbol);
         //recomendadas[2]=recomendarPelisValoracion(arbol);
         i=mostrarMenuUsuario(usuarios[index].usr.nombre,recomendadas);
         switch (i){
-        //Ver una pelicula
+            //Ver una pelicula
             case 0:
                 peli = buscarPelicula(arbol);
                 reproducir(peli,&usuarios[index]);
@@ -521,7 +530,7 @@ void menuUsuario(stCelda usuarios[], int val, int index, nodoArbol* arbol, char 
                 system("cls");
                 printf("Ingrese opcion para mostrar el arbol: 1-Preorder 2-Inorder 3-Posorder\n"); //crear menu lindo///////////////////////////
                 scanf("%i",&opcionArbol);
-                listarPeliculasDisponibles(arbol, opcionArbol, usuarios[index].usr);           /// DEBERIA LLAMAR A ESTA PERO SE ROMPE
+                listarPeliculasDisponibles(arbol, opcionArbol, usuarios[index].usr);
                 break;
             //Ver historial
             case 2:
