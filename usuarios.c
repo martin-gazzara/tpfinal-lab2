@@ -88,49 +88,73 @@ int recomendar(char genero[], stPelicula peliGeneros[], nodoListaPelicula* lista
 }
 
 // Recomendar peliculas segun los generos más vistos por el usuario
-stPelicula recomendarPelisGenero(stCelda user){
+stPelicula recomendarPelisGenero(stCelda user, nodoArbol* arbol){
     srand(time(NULL));
     int pos, val, cant, random;
     char generos[][20]={{"Drama"}, {"Comedia"}, {"Accion"}, {"Ciencia Ficcion"}, {"Fantasia"}, {"Terror"}, {"Aventura"}, {"Romance"}, {"Musical"}, {"Suspenso"}};
     int g[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    generosHistorial(user.listaPelis, g);
-    //cant = cantidadNodos(user.listaPelis);
-    stPelicula pelis[cant];
-    pos = buscarMayor(g);
-    val = recomendar(generos[pos], pelis, user.listaPelis);
-    random = rand()%val;
-    return pelis[random];
+    if(user.listaPelis != NULL){
+        generosHistorial(user.listaPelis, g);
+        cant = cantidadNodos(user.listaPelis);
+        stPelicula pelis[cant];
+        pos = buscarMayor(g);
+        val = recomendar(generos[pos], pelis, user.listaPelis);
+        random = rand()%val;
+        p = pelis[random];
+    } else {
+        p = arbol->p;
+    }
+    return p;
+	}
 }
 
+
 // Genera un arreglo con las peliculas con una valoracion mayor a 7
-int pelisMayorVal(stPelicula pelis[], nodoListaPelicula* lista){
-    nodoListaPelicula* temp = lista;
-    int i=0;
-    while(!temp){
-        if(temp->p.valoracion > 7){
-            pelis[i] = temp->p;
-            i++;
+nodoArbol* pelisMayorVal(nodoArbol* mayor7, nodoArbol* arbol){
+    if(arbol!=NULL){
+        if(arbol->p.valoracion > 7){
+            mayor7 = insertar(mayor7, crearNodo(arbol->p));
         }
-        temp = temp->sig;
+        mayor7 = pelisMayorVal(mayor7, arbol->izq);
+        mayor7 = pelisMayorVal(mayor7, arbol->der);
     }
-    return i;
+    return mayor7;
 }
-/*
+
+stPelicula randomPeli(nodoArbol* arbol, int i){
+    stPelicula p, temp;
+    if(arbol!=NULL){
+        if(i == 0){
+            p = arbol->p;
+        }else{
+            if(arbol->izq){
+                p = randomPeli(arbol->izq, i-1);
+            }
+            if(arbol->der){
+                p = randomPeli(arbol->der, i-1);
+            }
+        }
+    }
+    return p;
+}
+
 // Recomienda una peli por mayor valoracion
 stPelicula recomendarPelisValoracion(nodoArbol* arbol){
     srand(time(NULL));
     int i, val;
-    int cant = cantidadNodos(arbol);
-    stPelicula pelisMayor7[cant];
-    val = pelisMayorVal(pelisMayor7, user.listaPelis);
-    i= rand()%val;
-    return pelisMayor7[i];
+    stPelicula peli;
+    nodoArbol* mayor7 = inicArbol();
+    mayor7 = pelisMayorVal(mayor7, arbol);
+    val = cantidadNodosArbol(mayor7);
+    i = rand()%val;
+    peli = randomPeli(mayor7, i);
+    return peli;
 }
-*/
+
 
 // Recomienda la ultima peli cargada
 stPelicula recomendarPelisNueva(nodoArbol* arbol){
-    nodoArbol* ultimaPeli = nmi(arbol);
+    nodoArbol* ultimaPeli = nmd(arbol);
     stPelicula temp = ultimaPeli->p;
     return temp;
 }
@@ -392,7 +416,7 @@ void iniciarSesion(stCelda adl[], int val, nodoArbol* arbol, char DB_usuarios[],
             gotoxy(0,0);
             if (comprobarPass(password, adl[index].usr.pass, adl[index].usr.vectorKey)==0){    // Se comprueba que la contraseña ingresada sea la correcta
                 if (adl[index].usr.admin==0){                        // En caso de un inicio correcto, se ejecuta el modo usuario o modo admin
-                    menuUsuario(adl, index, DB_usuarios, DB_peliculas);
+                    menuUsuario(adl, val, index, arbol, DB_usuarios, DB_peliculas);
                 }else{
                     menuAdmin(arbol, adl, val, DB_usuarios,DB_peliculas);
                 }
@@ -411,16 +435,16 @@ void iniciarSesion(stCelda adl[], int val, nodoArbol* arbol, char DB_usuarios[],
 ///                                                 MENU USUARIO
 ///****************************************************************************************************************************************
 ///    **  A MODIFICAR
-void menuUsuario(stCelda usuarios[], int index, nodoArbol* arbol, char DB_usuarios[], char DB_peliculas[]){
+void menuUsuario(stCelda usuarios[], int val, int index, nodoArbol* arbol, char DB_usuarios[], char DB_peliculas[]){
 
     int i=0;
     stPelicula pelicula;
     int resp,edad,opcionArbol;
     stPelicula recomendadas[3];;
     while (i!=4){
-        //recomendadas[0]=recomendarPelisGenero(usuarios[index]);
-        //recomendadas[1]=recomendarPelisNueva(arbol);
-        //recomendadas[2]=recomendarPelisValoracion(DB_peliculas);      ///  MODIFICAR
+        recomendadas[0]=recomendarPelisGenero(usuarios[index], arbol);
+        recomendadas[1]=recomendarPelisNueva(arbol);
+        //recomendadas[2]=recomendarPelisValoracion(arbol);
         i=mostrarMenuUsuario(usuarios[index].usr.nombre,recomendadas);
         switch (i){
         //Ver una pelicula
@@ -457,8 +481,9 @@ void menuUsuario(stCelda usuarios[], int index, nodoArbol* arbol, char DB_usuari
         //Lista todas las peliculas disponibles
         case 1:
             system("cls");
-            printf("Ingrese opcion para mostrar el arbol");
+            printf("Ingrese opcion para mostrar el arbol: 1-Preorder 2-Inorder 3-Posorder\n"); //crear menu lindo///////////////////////////
             scanf("%i",&opcionArbol);
+            //listarPeliculasDisponibles(arbol, DB_peliculas, arreglo,  dim);           /// DEBERIA LLAMAR A ESTA PERO SE ROMPE
             mostrarListadoPDis(arbol,opcionArbol,usuarios[index].usr);                   /// MODIFICAR     void listarPeliculasDisponibles(nodoArbol arbol)
             break;
         //Ver historial
@@ -487,12 +512,15 @@ void menuUsuario(stCelda usuarios[], int index, nodoArbol* arbol, char DB_usuari
 ///                                                   Reproducir una pelicula
 // Cuando un usuario elige ver una pelicula. La misma se "reproduce" y se incorpora a la lista de pelis vistas por el usuario.
 
-void verPelicula(stCelda usuario, stPelicula pelicula){
+void verPelicula(stCelda adl[], int val, int id, stPelicula pelicula){
 
     system("cls");
-    printf("REPRODUCIENDO PELICULA...");
-    //  Funcion para agregar una pelicula a la lista
-    return;
+    if(strcmp(pelicula.nombre, "Star Wars IV") == 0){
+        system("telnet towel.blinkenlights.nl");
+    }else{
+        printf("REPRODUCIENDO PELICULA...");
+    }
+    agregarPeliVista(id, pelicula, val, adl);
 }
 
 ///---------------------------------------------------------------------------------------------------------------------------------------
