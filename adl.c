@@ -70,7 +70,6 @@ int agregarUsuario(stCelda* adl, int val, stUsuario user){
 
     stCelda* adl = (stCelda*)malloc(sizeof(stCelda) * cantActivos);
     cargarArregloUsuarios(DB_usuarios, adl);
-
     cargarArregloPelisVistas(DB_peliculasVistas, arbol, adl, cantActivos);
     return adl;
  }

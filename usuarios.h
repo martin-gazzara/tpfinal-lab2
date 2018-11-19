@@ -15,3 +15,6 @@
 void bienvenida();
 
 #endif // USUARIOS_H
+
+
+stUsuario editarPerfil(stUsuario user);

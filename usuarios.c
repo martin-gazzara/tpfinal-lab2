@@ -15,7 +15,47 @@ void TOOL_MOSTRAR_ADL(stCelda adl[], int val,char place[]){
 
 }
 
+void persistirUsuario(stUsuario usuario,char DB_usuarios[]){
 
+    FILE* arch = fopen(DB_usuarios, "r+b");
+
+    fseek(arch,sizeof(stUsuario)*(usuario.id - 1),SEEK_SET);
+    fwrite(&usuario,sizeof(stUsuario),1,arch);
+    fclose(arch);
+}
+
+void guardarHistorial(FILE* archVistas, int idUsuario, nodoListaPelicula* lista,int* i){
+
+    stPelisVistas registro;
+
+    while(lista){
+
+        registro.idAutoincremental = *i;
+        registro.idPelicula = lista->p.id;
+        registro.idUsuario = idUsuario;
+
+        fwrite(&registro,sizeof(stPelisVistas),1,archVistas);
+
+        lista = lista->sig;
+        *i+=1;
+
+    }
+
+}
+
+void persistirPelisVistas(char DB_pelisVistas[],char DB_peliculas,stCelda adl[],int val){
+
+    int i = 1,id = 0;
+    FILE* archVistas = fopen(DB_pelisVistas,"wb");
+
+    while( i < val ){
+        guardarHistorial(archVistas, adl[i].usr.id, adl[i].listaPelis,&i);
+        i++;
+    }
+
+    fclose(archVistas);
+
+}
 
 ///***************************************************************************************************************************************
 /// ****************************                              RECOMENDADAS                                    ****************************
@@ -392,6 +432,7 @@ void bienvenida(){
             break;
         }
     }
+    persistirPelisVistas(nombreDBPeliculasVistas,nombreDBPeliculas,adl,val);
     cerrarPrograma();
 }
 
@@ -434,73 +475,70 @@ void iniciarSesion(stCelda adl[], int val, nodoArbol* arbol, char DB_usuarios[],
 ///****************************************************************************************************************************************
 ///                                                 MENU USUARIO
 ///****************************************************************************************************************************************
-///    **  A MODIFICAR
+
+
+void reproducir(stPelicula pelicula,stCelda* user){
+
+    if (calcularEdad(user->usr) > pelicula.pm){
+        system("cls");
+        if(strcmp(pelicula.nombre, "Star Wars IV") == 0){
+            system("telnet towel.blinkenlights.nl");
+        }else{
+            printf("REPRODUCIENDO PELICULA...");
+        }
+        presionarContinuar();
+        siguiente();
+        user->listaPelis = agregarAlFinal(user->listaPelis,crearNodoLista(pelicula));
+    }else{
+        system("cls");
+        printf("La pelicula no está disponible para ti.");
+        presionarContinuar();
+        siguiente();
+    }
+}
+
+
 void menuUsuario(stCelda usuarios[], int val, int index, nodoArbol* arbol, char DB_usuarios[], char DB_peliculas[]){
 
     int i=0;
-    stPelicula pelicula;
     int resp,edad,opcionArbol;
-    stPelicula recomendadas[3];;
+    stPelicula peli;
+    stPelicula recomendadas[3];
+
     while (i!=4){
-        recomendadas[0]=recomendarPelisGenero(usuarios[index], arbol);
-        recomendadas[1]=recomendarPelisNueva(arbol);
+        //recomendadas[0]=recomendarPelisGenero(usuarios[index], arbol);
+        //recomendadas[1]=recomendarPelisNueva(arbol);
         //recomendadas[2]=recomendarPelisValoracion(arbol);
         i=mostrarMenuUsuario(usuarios[index].usr.nombre,recomendadas);
         switch (i){
         //Ver una pelicula
-        case 0:
-            do{
-               // pelicula = buscarPelicula(DB_peliculas);              /// stPelicula = buscarPelicula(nodoArbol arbol)   MODIFICAR
-                if (pelicula.id==0){
-                     system("cls");
-                        printf("La pelicula no esta disponible o no existe.");
-                        presionarContinuar();
-                        siguiente();
-                }else if(pelicula.id>0){
-                    system("cls");
-                        mostrarPelicula(pelicula);
-                        resp=mostrarVerPelicula();
-                        if(resp==0){
-                            edad=calcularEdad(usuarios[index].usr);
-                            if(edad>=pelicula.pm){
-                                verPelicula(usuarios[index],pelicula);          ///   verPelicula()  .. Puede ser una nueva funcion que irá solo en grafica
-                                system("cls");
-                                printf("Pelicula vista!!");
-                                presionarContinuar();
-                                siguiente();
-                            }else{
-                                system("cls");
-                                printf("La pelicula que deseas ver no es apta para tu edad.");
-                                presionarContinuar();
-                                siguiente();
-                            }
-                        }
-                }
-            }while(pelicula.id!=-1);
-            break;
-        //Lista todas las peliculas disponibles
-        case 1:
-            system("cls");
-            printf("Ingrese opcion para mostrar el arbol: 1-Preorder 2-Inorder 3-Posorder\n"); //crear menu lindo///////////////////////////
-            scanf("%i",&opcionArbol);
-            listarPeliculasDisponibles(arbol, opcionArbol, usuarios[index].usr);           /// DEBERIA LLAMAR A ESTA PERO SE ROMPE
-            break;
-        //Ver historial
-        case 2:
-            system("cls");
-            mostrarHistorial(usuarios[index]);
-            break;
-        //Editar perfil
-        case 3:
-            //usuarios[index].usr = editarPerfil(usuarios[index].usr);
-            break;
-        //Cerrar sesion
-        case 4:
-            system("cls");
-            break;
+            case 0:
+                peli = buscarPelicula(arbol);
+                reproducir(peli,&usuarios[index]);
+                break;
+            //Lista todas las peliculas disponibles
+            case 1:
+                system("cls");
+                printf("Ingrese opcion para mostrar el arbol: 1-Preorder 2-Inorder 3-Posorder\n"); //crear menu lindo///////////////////////////
+                scanf("%i",&opcionArbol);
+                listarPeliculasDisponibles(arbol, opcionArbol, usuarios[index].usr);           /// DEBERIA LLAMAR A ESTA PERO SE ROMPE
+                break;
+            //Ver historial
+            case 2:
+                system("cls");
+                mostrarHistorial(usuarios[index]);
+                break;
+            //Editar perfil
+            case 3:
+                usuarios[index].usr = editarPerfil(usuarios[index].usr);
+                break;
+            //Cerrar sesion
+            case 4:
+                persistirUsuario(usuarios[index].usr,DB_usuarios);
+                system("cls");
+                break;
         }
     }
-    return;
 }
 
 ///***************************************************************************************************************************************
@@ -514,11 +552,7 @@ void menuUsuario(stCelda usuarios[], int val, int index, nodoArbol* arbol, char 
 void verPelicula(stCelda adl[], int val, int id, stPelicula pelicula){
 
     system("cls");
-    if(strcmp(pelicula.nombre, "Star Wars IV") == 0){
-        system("telnet towel.blinkenlights.nl");
-    }else{
-        printf("REPRODUCIENDO PELICULA...");
-    }
+
     agregarPeliVista(id, pelicula, val, adl);
 }
 
@@ -1267,7 +1301,7 @@ void menuAltaPeliculas(nodoArbol* arbol, char DB_peliculas[]){
         opcion_elegida=mostrarDarAltaPeliculas();
         switch(opcion_elegida){
             case 0:
-                ingresarPeliculas(DB_peliculas, arbol);
+                ingresarPeliculas(DB_peliculas,arbol);
                 break;
             case 1:
                 habilitarPelicula(arbol, DB_peliculas);
