@@ -62,45 +62,79 @@ void mostrarPeliAdmin(stPelicula peli){
 
 ///--------------------------------------------------------------------------------------------------------------------------Mostrar pre-order
 
-void preorder(nodoArbol* arbol, stUsuario user){
+int evaluarPeliUsuario(int filtrosAplicados[], stPelicula peliculaFiltro, stPelicula temp){
+
+    int ok = 0;
+
+    if(
+        ((filtrosAplicados[0] && (strcmp(peliculaFiltro.director,temp.director) == 0))||(!filtrosAplicados[0])) &&
+        ((filtrosAplicados[1] && (peliculaFiltro.anio == temp.anio))||(!filtrosAplicados[1])) &&
+        ((filtrosAplicados[2] && (strcmp(peliculaFiltro.genero,temp.genero)== 0))||(!filtrosAplicados[2])) &&
+        ((filtrosAplicados[3] && (strcmp(peliculaFiltro.lenguaje,temp.lenguaje)== 0))||(!filtrosAplicados[3])) &&
+        ((filtrosAplicados[4] && (strcmp(peliculaFiltro.pais,temp.pais)== 0))||(!filtrosAplicados[4])) &&
+       ((filtrosAplicados[5] && (peliculaFiltro.pm == temp.pm))||(!filtrosAplicados[5])) &&
+       ((filtrosAplicados[6] && (peliculaFiltro.subtitulo == temp.subtitulo))||(!filtrosAplicados[6]))
+    ){
+        ok = 1;
+    }else{
+        ok = 0;
+    }
+    return ok;
+}
+
+void preorder(nodoArbol* arbol, stPelicula peliDisFiltro, int filtrosAplicados[], int filtroActivado){
+
+    int mostrar;
 
     if (arbol){
-        if(user.admin == 1){
-            mostrarPeliAdmin(arbol->p);
+        if (filtroActivado){
+            mostrar = evaluarPeliUsuario(filtrosAplicados, peliDisFiltro, arbol->p);
         }else{
+            mostrar = 1;
+        }
+        if (mostrar){
             mostrarPeliDisp(arbol->p);
         }
-        //mostrarPeliDisp(arbol->p);
-        preorder(arbol->izq, user);
-        preorder(arbol->der, user);
+        preorder(arbol->izq, peliDisFiltro,filtrosAplicados,filtroActivado);
+        preorder(arbol->der, peliDisFiltro,filtrosAplicados,filtroActivado);
     }
 }
 
 ///---------------------------------------------------------------------------------------------------------------------------Mostrar in-order
 
-void inorder(nodoArbol* arbol, stUsuario user){
+void inorder(nodoArbol* arbol, stPelicula peliDisFiltro, int filtrosAplicados[], int filtroActivado){
+
+    int mostrar;
 
     if (arbol){
-        inorder(arbol->izq, user);
-        if(user.admin == 1){
-            mostrarPeliAdmin(arbol->p);
+        inorder(arbol->izq, peliDisFiltro,filtrosAplicados,filtroActivado);
+        if (filtroActivado){
+            mostrar = evaluarPeliUsuario(filtrosAplicados, peliDisFiltro, arbol->p);
         }else{
+            mostrar = 1;
+        }
+        if (mostrar){
             mostrarPeliDisp(arbol->p);
         }
-        inorder(arbol->der, user);
+        inorder(arbol->der, peliDisFiltro,filtrosAplicados,filtroActivado);
     }
 }
 
 ///-------------------------------------------------------------------------------------------------------------------------Mostrar post-order
 
-void postorder(nodoArbol* arbol, stUsuario user){
+void postorder(nodoArbol* arbol, stPelicula peliDisFiltro, int filtrosAplicados[], int filtroActivado){
+
+    int mostrar;
 
     if (arbol){
-        postorder(arbol->izq, user);
-        postorder(arbol->der, user);
-        if(user.admin == 1){
-            mostrarPeliAdmin(arbol->p);
+        postorder(arbol->izq, peliDisFiltro,filtrosAplicados,filtroActivado);
+        postorder(arbol->der, peliDisFiltro,filtrosAplicados,filtroActivado);
+        if (filtroActivado){
+            mostrar = evaluarPeliUsuario(filtrosAplicados, peliDisFiltro, arbol->p);
         }else{
+            mostrar = 1;
+        }
+        if (mostrar){
             mostrarPeliDisp(arbol->p);
         }
     }

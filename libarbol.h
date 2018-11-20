@@ -15,13 +15,13 @@ nodoArbol* crearNodo(stPelicula p);
 nodoArbol* insertar(nodoArbol* arbol, nodoArbol* nuevo_nodo);
 
 ///--------------------------------------------------------------------------------------------------------------------------Mostrar pre-order
-void preorder(nodoArbol* arbol, stUsuario user);
+void preorder(nodoArbol* arbol, stPelicula peliDisFiltro, int filtrosAplicados[], int filtroActivado);
 
 ///---------------------------------------------------------------------------------------------------------------------------Mostrar in-order
-void inorder(nodoArbol* arbol, stUsuario user);
+void inorder(nodoArbol* arbol, stPelicula peliDisFiltro, int filtrosAplicados[], int filtroActivado);
 
 ///-------------------------------------------------------------------------------------------------------------------------Mostrar post-order
-void postorder(nodoArbol* arbol, stUsuario user);
+void postorder(nodoArbol* arbol, stPelicula peliDisFiltro, int filtrosAplicados[], int filtroActivado);
 
 ///--------------------------------------------------------------------------------------------------------------------------------Buscar nodo
 nodoArbol* buscar(nodoArbol* arbol, int id);

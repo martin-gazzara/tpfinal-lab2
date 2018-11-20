@@ -1208,3 +1208,14 @@ int mostrarFiltroDeUsuarios(){
     eleccion=elegirOpcionV("borde",opciones,numOpc);
     return eleccion;
 }
+
+int mostrarFiltroPeliculasDisp(){
+
+    char opciones[][21]={"      Director      ","        Anio        ","       Genero       ","      Lenguaje      ","        Pais        ","         PM         ","     Subtitulado    ","   Aplicar filtros  ","   Quitar filtros   ","        Salir       "};
+    int eleccion,numOpc=9;
+    gotoxy(1,1);
+    printf("Filtros a aplicar");
+    eleccion=elegirOpcionV("borde",opciones,numOpc);
+    return eleccion;
+
+}
