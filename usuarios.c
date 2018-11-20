@@ -90,7 +90,7 @@ void generosVistos(int g[], char gen[]){
 // Funcion que se fija que generos de peliculas ve el usuario
 void generosHistorial(nodoListaPelicula* lista, int generos[]){
     nodoListaPelicula* temp = lista;
-    while(!temp){
+    while(temp!=NULL){
         generosVistos(generos, temp->p.genero);
         temp = temp->sig;
     }
@@ -114,83 +114,68 @@ int buscarMayor(int g[]){
 }
 
 // Funcion que retorna la cantidad de peliculas del genero mas visto
-int recomendar(char genero[], stPelicula peliGeneros[], nodoListaPelicula* lista){
-    nodoListaPelicula* temp = lista;
+int recomendar(char genero[], stPelicula peliGeneros[], FILE* arch){
+    stPelicula temp;
     int i=0;
-    while(!temp){
-        if(strcmp(temp->p.genero, genero) == 0){
-            peliGeneros[i] = temp->p;
+    rewind(arch);
+    while(fread(&temp, sizeof(stPelicula), 1, arch)>0){
+        if(strcmp(temp.genero,genero) == 0){
+            peliGeneros[i] = temp;
             i++;
         }
-        temp = temp->sig;
     }
     return i;
 }
 
 // Recomendar peliculas segun los generos más vistos por el usuario
-stPelicula recomendarPelisGenero(stCelda user, nodoArbol* arbol){
+stPelicula recomendarPelisGenero(stCelda user, char DB_peliculas[]){
     srand(time(NULL));
     stPelicula p;
+    FILE* arch = fopen(DB_peliculas, "rb");
     int pos, val, cant, random;
     char generos[][20]={{"Drama"}, {"Comedia"}, {"Accion"}, {"Ciencia Ficcion"}, {"Fantasia"}, {"Terror"}, {"Aventura"}, {"Romance"}, {"Musical"}, {"Suspenso"}};
     int g[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    if(user.listaPelis != NULL){
+    if(user.listaPelis == NULL){
+        fread(&p,sizeof(stPelicula), 1, arch);
+    }else{
         generosHistorial(user.listaPelis, g);
-        cant = cantidadNodos(user.listaPelis);
+        cant = cantidadRegistros(arch,sizeof(stPelicula));
         stPelicula pelis[cant];
         pos = buscarMayor(g);
-        val = recomendar(generos[pos], pelis, user.listaPelis);
+        val = recomendar(generos[pos], pelis, arch);
         random = rand()%val;
+        fclose(arch);
         p = pelis[random];
-    } else {
-        p = arbol->p;
     }
     return p;
 }
 
 
 // Genera un arreglo con las peliculas con una valoracion mayor a 7
-nodoArbol* pelisMayorVal(nodoArbol* mayor7, nodoArbol* arbol){
-    if(arbol!=NULL){
-        if(arbol->p.valoracion > 7){
-            mayor7 = insertar(mayor7, crearNodo(arbol->p));
-        }
-        mayor7 = pelisMayorVal(mayor7, arbol->izq);
-        mayor7 = pelisMayorVal(mayor7, arbol->der);
-    }
-    return mayor7;
-}
-
-stPelicula randomPeli(nodoArbol* arbol, int i){
-    stPelicula p, temp;
-    if(arbol!=NULL){
-        if(i == 0){
-            p = arbol->p;
-        }else{
-            if(arbol->izq){
-                p = randomPeli(arbol->izq, i-1);
-            }
-            if(arbol->der){
-                p = randomPeli(arbol->der, i-1);
-            }
+int pelisMayorVal(stPelicula pelis[], FILE* arch){
+    stPelicula temp;
+    int i=0;
+    while(fread(&temp, sizeof(stPelicula), 1, arch)>0){
+        if(temp.valoracion > 7){
+            pelis[i] = temp;
+            i++;
         }
     }
-    return p;
+    return i;
 }
 
-// Recomienda una peli por mayor valoracion
-stPelicula recomendarPelisValoracion(nodoArbol* arbol){
+stPelicula recomendarPelisValoracion(char archivoPeli[]){
+    FILE* arch;
     srand(time(NULL));
+    arch = fopen(archivoPeli, "rb");
     int i, val;
-    stPelicula peli;
-    nodoArbol* mayor7 = inicArbol();
-    mayor7 = pelisMayorVal(mayor7, arbol);
-    val = cantidadNodosArbol(mayor7);
-    i = rand()%val;
-    peli = randomPeli(mayor7, i);
-    return peli;
+    int cant =cantidadRegistros(arch, sizeof(stPelicula));
+    stPelicula pelisMayor7[cant];
+    val = pelisMayorVal(pelisMayor7, arch);
+    i= rand()%val;
+    fclose(arch);
+    return pelisMayor7[i];
 }
-
 
 // Recomienda la ultima peli cargada
 stPelicula recomendarPelisNueva(nodoArbol* arbol){
@@ -515,9 +500,9 @@ void menuUsuario(stCelda usuarios[], int val, int index, nodoArbol* arbol, char 
     stPelicula recomendadas[3];
 
     while (i!=4){
-        //recomendadas[0]=recomendarPelisGenero(usuarios[index], arbol);
+        recomendadas[0]=recomendarPelisGenero(usuarios[index], DB_peliculas);
         recomendadas[1]=recomendarPelisNueva(arbol);
-        //recomendadas[2]=recomendarPelisValoracion(arbol);
+        recomendadas[2]=recomendarPelisValoracion(DB_peliculas);
         i=mostrarMenuUsuario(usuarios[index].usr.nombre,recomendadas);
         switch (i){
             //Ver una pelicula
