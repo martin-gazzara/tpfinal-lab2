@@ -1012,7 +1012,7 @@ void mostrarPelicula(stPelicula peli){
     printf("Valoracion: %d puntos\n", peli.valoracion);
     printf("------------------------------------------\n");
 }
-
+/*
 //Encuentra el menor de los nombres de pel�culas.
 int encontrarMenor(stPelicula arr[], int cant, int posIni){
     int menor = posIni;
@@ -1071,7 +1071,7 @@ int ordenarPeliculas(stPelicula arregloPeliculas[],int dim){
             break;
     }
     return num;
-}
+}*/
 
 /*
 ////SOLO ESTA FUNCION SE VA A LLAMAR DESDE ALGUN MENU, EL RESTO SE LLAMAN INTERNAMENTE/

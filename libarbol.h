@@ -40,4 +40,11 @@ nodoArbol* nmi(nodoArbol* arbol);
 
 ///----------------------------------------------------------------------------------------------------------------------------Cantidad Nodos
 int cantidadNodosArbol(nodoArbol* arbol);
+
+///------------------------------------------------------------------------------------------------------------------------------Buscar por nombre
+nodoArbol * buscarEnpreorderNombre(nodoArbol * arbol, char nombre[]);
+
+///------------------------------------------------------------------------------------------------------------------------------Buscar por genero
+nodoArbol* buscarEnpreorderGenero(nodoArbol * arbol, char genero[]);
+
 #endif // LIBARBOL_H
