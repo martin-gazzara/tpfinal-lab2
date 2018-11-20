@@ -398,11 +398,11 @@ void bienvenida(){
 
 
     val = usuariosActivos(nombreDBUsuarios);
-        if (val>0){
-            adl = pasarDeArchivoPelisVistasToADL(nombreDBUsuarios, nombreDBPeliculasVistas, val, arbol);
-        }else{
-            adl = (stCelda*)malloc(0);
-        }
+    if (val>0){
+        adl = pasarDeArchivoPelisVistasToADL(nombreDBUsuarios, nombreDBPeliculasVistas, val, arbol);
+    }else{
+        adl = (stCelda*)malloc(0);
+    }
     mostrarBienvenida();
     int opcion=0;
     while(opcion!=2){
@@ -520,7 +520,7 @@ void menuUsuario(stCelda usuarios[], int val, int index, nodoArbol* arbol, char 
             //Ver historial
             case 2:
                 system("cls");
-                mostrarHistorial(usuarios[index]);
+                mostrarHistorial(&usuarios[index]);
                 break;
             //Editar perfil
             case 3:
@@ -564,20 +564,23 @@ void generarHistorial(nodoListaPelicula* historial){
 
 // Mostrar el historial
 
-void mostrarHistorial(stCelda usuario){
+void mostrarHistorial(stCelda* usuario){
 
     int i;
 
-    if (!usuario.listaPelis){
+    if (!usuario->listaPelis){
         system("cls");
             printf("No hay historial disponible. Presione una tecla para continuar...\n");
             siguiente();
     }else{
         gotoxy(0,3);                ///   Mover a una posicion adecuada, para empezar a imprimir cada pelicula
-        generarHistorial(usuario.listaPelis);
+        generarHistorial(usuario->listaPelis);
         i=mostrarMenuHistorial();
         if (i==0){
-            //borrar Historial               /// Debería retornar NULL ??
+             usuario->listaPelis = borrarLista(usuario->listaPelis);
+             system("cls");
+             printf("Historial borrado...");
+             siguiente();
         }
     }
 }
