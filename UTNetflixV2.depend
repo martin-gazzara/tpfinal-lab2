@@ -30,10 +30,10 @@
 
 1542564213 c:\users\usuario\desktop\tp final\tpfinal-lab2\structs.h
 
-1542681426 source:c:\users\usuario\desktop\tp final\tpfinal-lab2\grafica.c
+1542745977 source:c:\users\usuario\desktop\tp final\tpfinal-lab2\grafica.c
 	"grafica.h"
 
-1542664921 c:\users\usuario\desktop\tp final\tpfinal-lab2\grafica.h
+1542743971 c:\users\usuario\desktop\tp final\tpfinal-lab2\grafica.h
 	<stdlib.h>
 	<stdio.h>
 	<windows.h>
@@ -84,10 +84,10 @@
 	"libarbol.h"
 	"structs.h"
 
-1542740292 source:c:\users\usuario\desktop\tp final\tpfinal-lab2\pelicula.c
+1542744238 source:c:\users\usuario\desktop\tp final\tpfinal-lab2\pelicula.c
 	"pelicula.h"
 
-1542741942 source:c:\users\usuario\desktop\tp final\tpfinal-lab2\usuarios.c
+1542746065 source:c:\users\usuario\desktop\tp final\tpfinal-lab2\usuarios.c
 	"usuarios.h"
 
 1542665933 source:c:\users\rightonhana\desktop\utnetflixv2\adl.c

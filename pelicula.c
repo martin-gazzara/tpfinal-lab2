@@ -1176,7 +1176,7 @@ void listarPeliculasDisponibles(nodoArbol* arbol, int opc, stUsuario user){
     do{
         system("cls");
         gotoxy(0,3);
-        mostrarListadoPDis(arbol, peliDisFiltro, filtrosAplicados, filtroActivado, opc);
+        mostrarListadoPDis(arbol, peliDisFiltro, filtrosAplicados, filtroActivado, opc+1);
         opcion=mostrarMenuListadoDisp();
         switch(opcion){
             case 0:
@@ -1187,7 +1187,7 @@ void listarPeliculasDisponibles(nodoArbol* arbol, int opc, stUsuario user){
                     presionarContinuar();
                     siguiente();
                 }else if(resultBusqueda.id == -1){
-                    printf("La pelicula no existe");
+                    gotoxy(40,10);printf("La pelicula no existe");
                     presionarContinuar();
                     siguiente();
                 }

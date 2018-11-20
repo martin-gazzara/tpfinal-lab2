@@ -609,7 +609,12 @@ int mostrarMenuHistorial(){
     int numOpc=2;
     int eleccion;
     gotoxy(0,0);printf("MENU");
-    gotoxy(1,2);lineaHorizontalDoble();
+    gotoxy(1,1);lineaHorizontalDoble();
+    gotoxy(2,2);printf("ID");
+    gotoxy(25,2);printf("NOMBRE");
+    gotoxy(55,2);printf("ANIO");
+    gotoxy(76,2);printf("GENERO");
+    gotoxy(100,2);printf("DIRECTOR");
     eleccion=elegirOpcionH("arriba",opciones,numOpc);
     return eleccion;
 }
@@ -670,6 +675,7 @@ int mostrarMenuListadoDisp(){
     int numOpc=3;
     int eleccion;
     gotoxy(0,0);printf(" MENU ");
+    gotoxy(1,1);lineaHorizontalDoble();
     eleccion=elegirOpcionH("arriba",opciones,numOpc);
     return eleccion;
 }
@@ -827,7 +833,7 @@ void presionarNum(){
 }
 
 void presionarContinuar(){
-    gotoxy(69,23);
+    gotoxy(69,24);
     printf("Presione una tecla para continuar");
 }
 
@@ -1262,4 +1268,13 @@ int mostrarFiltroPeliculasDisp(){
     eleccion=elegirOpcionV("borde",opciones,numOpc);
     return eleccion;
 
+}
+
+int mostrarMenuOpcionArbol(){
+
+    char opciones[][21]={"      Preorder      ","       Inorder      ","      Postorder     ","        Salir       "};
+    int numOpc=4;
+    int eleccion;
+    eleccion=elegirOpcionV("centrado",opciones,numOpc);
+    return eleccion;
 }

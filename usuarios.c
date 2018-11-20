@@ -433,12 +433,12 @@ void iniciarSesion(stCelda adl[], int val, nodoArbol* arbol, char DB_usuarios[],
     int esc, index;
     mostrarIniciarSesion();    //   Grafica
     esc=tomarDatos(nombreUsuario,password);    // Se adquieren los datos para el inicio de sesion
-    system("cls");
+    //system("cls");
     if (esc!=27){
         gotoxy(0,0);
         index=buscarUsuarioPorNombre(adl, val, nombreUsuario);   //  Busqueda del usuario, devuelve el usuario en cuestion
         if ((index > -1) && (adl[index].usr.eliminado==0)){                                   // Si id==0, el usuario no existe
-            system("cls");
+            //system("cls");
             gotoxy(0,0);
             if (comprobarPass(password, adl[index].usr.pass, adl[index].usr.vectorKey)==0){    // Se comprueba que la contraseña ingresada sea la correcta
                 if (adl[index].usr.admin==0){                        // En caso de un inicio correcto, se ejecuta el modo usuario o modo admin
@@ -447,11 +447,13 @@ void iniciarSesion(stCelda adl[], int val, nodoArbol* arbol, char DB_usuarios[],
                     menuAdmin(arbol, adl, val, DB_usuarios,DB_peliculas);
                 }
             }else{
-                printf("Password incorrecta\n");  /// borrar
+                gotoxy(38,11);printf("Password incorrecta\n");  /// borrar
+                presionarContinuar();
                 siguiente();
             }
         }else{
-            printf("Usuario no encontrado");   /// borrar
+            gotoxy(37,11);printf("Usuario no encontrado");   /// borrar
+            presionarContinuar();
             siguiente();
         }
     }
@@ -485,7 +487,7 @@ void reproducir(stPelicula pelicula,stCelda* user){
         user->listaPelis = agregarAlFinal(user->listaPelis,crearNodoLista(pelicula));
     }else{
         system("cls");
-        printf("La pelicula no está disponible para ti.");
+        gotoxy(40,10);printf("La pelicula no esta disponible o no existe.");
         presionarContinuar();
         siguiente();
     }
@@ -513,9 +515,12 @@ void menuUsuario(stCelda usuarios[], int val, int index, nodoArbol* arbol, char 
             //Lista todas las peliculas disponibles
             case 1:
                 system("cls");
-                printf("Ingrese opcion para mostrar el arbol: 1-Preorder 2-Inorder 3-Posorder\n"); //crear menu lindo///////////////////////////
-                scanf("%i",&opcionArbol);
-                listarPeliculasDisponibles(arbol, opcionArbol, usuarios[index].usr);
+                //printf("Ingrese opcion para mostrar el arbol: 1-Preorder 2-Inorder 3-Posorder\n"); //crear menu lindo///////////////////////////
+                opcionArbol = mostrarMenuOpcionArbol();
+                //scanf("%i",&opcionArbol);
+                if(opcionArbol < 3){
+                    listarPeliculasDisponibles(arbol, opcionArbol, usuarios[index].usr);
+                }
                 break;
             //Ver historial
             case 2:
@@ -556,11 +561,15 @@ void verPelicula(stCelda adl[], int val, int id, stPelicula pelicula){
 
 void generarHistorial(nodoListaPelicula* historial){
 
-    if (historial){
-        if (historial->p.eliminado == 0){
-            printf("%i  %s %i %s  %s \n", historial->p.id, historial->p.nombre, historial->p.anio, historial->p.genero, historial->p.director);
-        }
-        generarHistorial(historial->sig);
+    int i = 3;
+    while (historial){
+        gotoxy(2,i);printf("%i",historial->p.id);
+        gotoxy(10,i);printf("%s",historial->p.nombre);
+        gotoxy(55,i);printf("%i",historial->p.anio);
+        gotoxy(76,i);printf("%s",historial->p.genero);
+        gotoxy(98,i);printf("%s",historial->p.director);
+        i++;
+        historial = historial->sig;
     }
 }
 
@@ -942,9 +951,10 @@ void bajaUsuario(stCelda adl[], int val,char DB_usuarios[]){
         }else{
             printf("No se ha encontrado el usuario.");
         }
+        presionarContinuar();
+        siguiente();
     }
-    presionarContinuar();
-    siguiente();
+
 }
 
 ///----------------------------------------------------------------------------------------------------------------------------------
