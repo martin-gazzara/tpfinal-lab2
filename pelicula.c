@@ -757,7 +757,7 @@ int filtroPeliculas(char DB_peliculas[],stPelicula arreglo[]){
 ///***************************************************************************************************************************************
 ///*******************************                     LISTAR PELICULAS PARA ADMIN                         *******************************
 ///***************************************************************************************************************************************
-
+/*
 //Lista las peliculas
 void mostrarListadoP(nodoArbol* arbol, int opc, stUsuario user){
     int i=0;
@@ -779,7 +779,7 @@ void mostrarListadoP(nodoArbol* arbol, int opc, stUsuario user){
     }
 }
 
-
+*/
 
 ///***************************************************************************************************************************************
 ///*******************************                       FILTRO PARA USUARIOS                              *******************************
@@ -826,7 +826,81 @@ nodoArbol* aplicarFiltrosDisp(stPelicula criterio, int campFil[], nodoArbol* pel
     return peliculasFiltradas;
 }*/
 
-int filtroPeliculasDisp(nodoArbol* arbol, nodoArbol* arbolFiltrado ){
+
+
+stPelicula filtroPeliculasDisp(stPelicula peliTemp, int filtrosAplicados[],int* filtroActivado ){
+
+    int opc;
+    do{
+        system("cls");
+        gotoxy(21,7);printf(": %s",peliTemp.director);
+        gotoxy(21,8);printf(": %i",peliTemp.anio);
+        gotoxy(21,9);printf(": %s",peliTemp.genero);
+        gotoxy(21,10);printf(": %s",peliTemp.lenguaje);
+        gotoxy(21,11);printf(": %s",peliTemp.pais);
+        gotoxy(21,12);printf(": %i",peliTemp.pm);
+        gotoxy(21,13);printf(": %i",peliTemp.subtitulo);
+        opc = mostrarFiltroPeliculasDisp();
+        system("cls");
+        switch (opc){
+            case 0:
+                completarCampoString(&peliTemp.director,&filtrosAplicados[0]);
+                break;
+            case 1:
+                completarCampoInt(&peliTemp.anio,&filtrosAplicados[1]);
+                break;
+            case 2:
+                completarCampoString(&peliTemp.genero,&filtrosAplicados[2]);
+                break;
+            case 3:
+                completarCampoString(&peliTemp.lenguaje,&filtrosAplicados[3]);
+                break;
+            case 4:
+                completarCampoString(&peliTemp.pais,&filtrosAplicados[4]);
+                break;
+            case 5:
+                completarCampoInt(&peliTemp.pm,&filtrosAplicados[5]);
+                break;
+            case 6:
+                completarCampoBin(&peliTemp.subtitulo,&filtrosAplicados[6]);
+                break;
+            case 7:
+                *filtroActivado = 1;
+                system("cls");
+                gotoxy(50,10);
+                printf("Filtros activados!");
+                presionarContinuar();
+                siguiente();
+                break;
+            case 8:
+                strcpy(peliTemp.director,"");
+                peliTemp.anio = 0;
+                strcpy(peliTemp.genero,"");
+                strcpy(peliTemp.lenguaje,"");
+                strcpy(peliTemp.pais,"");
+                peliTemp.pm = 0;
+                peliTemp.subtitulo = 0;
+
+                filtrosAplicados[0] = 0;
+                filtrosAplicados[1] = 0;
+                filtrosAplicados[2] = 0;
+                filtrosAplicados[3] = 0;
+                filtrosAplicados[4] = 0;
+                filtrosAplicados[5] = 0;
+                filtrosAplicados[6] = 0;
+
+                *filtroActivado = 0;
+                system("cls");
+                gotoxy(50,10);
+                printf("Filtros desactivados!");
+                presionarContinuar();
+                siguiente();
+                break;
+        }
+    }while ( opc < 7);
+    return peliTemp;
+}
+    /*
     stPelicula aux;
     vaciar(&aux);
     int resp=2;
@@ -891,18 +965,17 @@ int filtroPeliculasDisp(nodoArbol* arbol, nodoArbol* arbolFiltrado ){
             /*default:
                 cont=dim;
                 break;*/
-        }
+        /*}
         system("cls");
-    }
-    return cont;
-}
+    }*/
+
 
 ///***************************************************************************************************************************************
 ///*******************************                   LISTAR PELICULAS PARA USUARIOS                        *******************************
 ///***************************************************************************************************************************************
 
 //Lista las peliculas disponibles al usuario
-void mostrarListadoPDis(nodoArbol* arbol, int opc, stUsuario user){
+void mostrarListadoPDis(nodoArbol* arbol, stPelicula peliDisFiltro, int filtrosAplicados[], int filtroActivado, int opc){
     int i=0;
     gotoxy(1,4);printf("ID");
     gotoxy(22,4);printf("NOMBRE");
@@ -912,11 +985,11 @@ void mostrarListadoPDis(nodoArbol* arbol, int opc, stUsuario user){
     gotoxy(87,4);printf("LENGUAJE");
     printf("\n");
     switch(opc){
-        case 1: preorder(arbol, user);
+        case 1: preorder(arbol, peliDisFiltro, filtrosAplicados, filtroActivado);
             break;
-        case 2: inorder(arbol, user);
+        case 2: inorder(arbol, peliDisFiltro, filtrosAplicados, filtroActivado);
             break;
-        case 3: postorder(arbol, user);
+        case 3: postorder(arbol, peliDisFiltro, filtrosAplicados, filtroActivado);
             break;
     }
 }
@@ -1086,10 +1159,24 @@ void listarPeliculasDisponibles(nodoArbol* arbol, int opc, stUsuario user){
     system("cls");
     int dimFiltro,numOpc=3,opcion;
     stPelicula resultBusqueda;
-    nodoArbol* arbolFiltrado = inicArbol();
+
+    int filtroActivado = 0;
+    int filtrosAplicados[7] = {0,0,0,0,0,0,0};
+    stPelicula peliDisFiltro;
+
+    strcpy(peliDisFiltro.director,"");
+    peliDisFiltro.anio = 0;
+    strcpy(peliDisFiltro.genero,"");
+    strcpy(peliDisFiltro.lenguaje,"");
+    strcpy(peliDisFiltro.pais,"");
+    peliDisFiltro.pm = 0;
+    peliDisFiltro.subtitulo = 0;
+
+
     do{
+        system("cls");
         gotoxy(0,3);
-        mostrarListadoPDis(arbol, opc, user);
+        mostrarListadoPDis(arbol, peliDisFiltro, filtrosAplicados, filtroActivado, opc);
         opcion=mostrarMenuListadoDisp();
         switch(opcion){
             case 0:
@@ -1108,8 +1195,7 @@ void listarPeliculasDisponibles(nodoArbol* arbol, int opc, stUsuario user){
                 system("cls");
                 break;
             case 1:
-                arbolFiltrado = filtroPeliculasDisp(arbol,arbolFiltrado);
-                mostrarListadoPDis(arbolFiltrado, 1, user);
+                peliDisFiltro = filtroPeliculasDisp(peliDisFiltro,filtrosAplicados, &filtroActivado);
                 break;
         }
 
