@@ -167,10 +167,52 @@ void siguiente(){
 }
 
 void mostrarBienvenida(){
-    gotoxy(36,10);
+    gotoxy(23,10);
     hidecursor(0);
-    printf("Bienvenido a UTNetflix");             /// Si tenemos tiempo, podriamos averiguar la posibilidad de emitir sonidos, incluso algun
-    pausa();                                      /// audio, y poner con ASCII alguna imagen bonita, ASCII ART le dicen?
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),12);
+    printf("*************************************************************************\n");
+    gotoxy(23,11);
+    printf("*");
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),8);
+    printf("     _   _   _____   __   _   ___   _____   ___   _     _   _    _     ");
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),12);
+    printf("*\n");
+    gotoxy(23,12);
+    printf("*");
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),8);
+    printf("    | | | | |_   _| |   \\| | |  _| |_   _| |  _| | |   | | | |  | |    ");
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),12);
+    printf("*\n");
+    gotoxy(23,13);
+    printf("*");
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),8);
+    printf("    | | | |   | |   | |\\ \\ | | |_    | |   | |_  | |   | |  \\ \\/ /     ");
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),12);
+    printf("*\n");
+    gotoxy(23,14);
+    printf("*");
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),8);
+    printf("    | | | |   | |   | | \\  | |  _|   | |   |  _| | |   | |   |  |      ");
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),12);
+    printf("*\n");
+    gotoxy(23,15);
+    printf("*");
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),8);
+    printf("    | |_| |   | |   | |  \\ | | |_    | |   | |   | |_  | |  / /\\ \\     ");
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),12);
+    printf("*\n");
+    gotoxy(23,16);
+    printf("*");
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),8);
+    printf("    |_____|   |_|   |_|  |_| |___|   |_|   |_|   |___| |_| |_|  |_|    ");
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),12);
+    printf("*\n");
+    gotoxy(23,17);
+    printf("*                                                                       *\n");
+    gotoxy(23,18);
+    printf("*************************************************************************");
+    pausa();
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),8);
 }
 
 int menuPrincipal(){
