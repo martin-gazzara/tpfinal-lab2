@@ -51,7 +51,9 @@ void cargarArregloPelisVistas(char DB_peliculasVistas[], nodoArbol* arbol, stCel
     int index = 0;
     while(fread(&p, sizeof(stPelisVistas), 1, arch)>0){
         peli= buscar(arbol, p.idPelicula);
-        agregarPeliVista(p.idUsuario, peli->p, cantActivos, adl);
+        if (peli){
+            agregarPeliVista(p.idUsuario, peli->p, cantActivos, adl);
+        }
     }
     fclose(arch);
 }

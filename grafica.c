@@ -166,51 +166,44 @@ void siguiente(){
     aux=getch();
 }
 
-void mostrarBienvenida(){
-    gotoxy(23,10);
-    hidecursor(0);
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),12);
-    printf("*************************************************************************\n");
-    gotoxy(23,11);
-    printf("*");
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),8);
+void recuadro(){
+
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),68);
+    for(int i=10; i < 19;i++){
+        gotoxy(23,i);
+        for(int j=0; j< 73; j++){
+            printf("*");
+        }
+    }
+}
+
+void cartel(){
+
+    gotoxy(25,11);
+
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),79);
     printf("     _   _   _____   __   _   ___   _____   ___   _     _   _    _     ");
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),12);
-    printf("*\n");
-    gotoxy(23,12);
-    printf("*");
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),8);
+    gotoxy(25,12);
     printf("    | | | | |_   _| |   \\| | |  _| |_   _| |  _| | |   | | | |  | |    ");
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),12);
-    printf("*\n");
-    gotoxy(23,13);
-    printf("*");
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),8);
+    gotoxy(25,13);
     printf("    | | | |   | |   | |\\ \\ | | |_    | |   | |_  | |   | |  \\ \\/ /     ");
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),12);
-    printf("*\n");
-    gotoxy(23,14);
-    printf("*");
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),8);
+    gotoxy(25,14);
     printf("    | | | |   | |   | | \\  | |  _|   | |   |  _| | |   | |   |  |      ");
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),12);
-    printf("*\n");
-    gotoxy(23,15);
-    printf("*");
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),8);
+    gotoxy(25,15);
     printf("    | |_| |   | |   | |  \\ | | |_    | |   | |   | |_  | |  / /\\ \\     ");
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),12);
-    printf("*\n");
-    gotoxy(23,16);
-    printf("*");
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),8);
+    gotoxy(25,16);
     printf("    |_____|   |_|   |_|  |_| |___|   |_|   |_|   |___| |_| |_|  |_|    ");
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),12);
-    printf("*\n");
-    gotoxy(23,17);
-    printf("*                                                                       *\n");
-    gotoxy(23,18);
-    printf("*************************************************************************");
+
+}
+
+void mostrarBienvenida(){
+
+    hidecursor(0);
+
+    recuadro();
+    cartel();
+    pausa();
     pausa();
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),8);
 }
@@ -609,7 +602,12 @@ int mostrarMenuHistorial(){
     int numOpc=2;
     int eleccion;
     gotoxy(0,0);printf("MENU");
-    gotoxy(1,2);lineaHorizontalDoble();
+    gotoxy(1,1);lineaHorizontalDoble();
+    gotoxy(2,2);printf("ID");
+    gotoxy(25,2);printf("NOMBRE");
+    gotoxy(55,2);printf("ANIO");
+    gotoxy(76,2);printf("GENERO");
+    gotoxy(100,2);printf("DIRECTOR");
     eleccion=elegirOpcionH("arriba",opciones,numOpc);
     return eleccion;
 }
@@ -670,6 +668,7 @@ int mostrarMenuListadoDisp(){
     int numOpc=3;
     int eleccion;
     gotoxy(0,0);printf(" MENU ");
+    gotoxy(1,1);lineaHorizontalDoble();
     eleccion=elegirOpcionH("arriba",opciones,numOpc);
     return eleccion;
 }
@@ -827,7 +826,7 @@ void presionarNum(){
 }
 
 void presionarContinuar(){
-    gotoxy(69,23);
+    gotoxy(69,24);
     printf("Presione una tecla para continuar");
 }
 
@@ -1262,4 +1261,13 @@ int mostrarFiltroPeliculasDisp(){
     eleccion=elegirOpcionV("borde",opciones,numOpc);
     return eleccion;
 
+}
+
+int mostrarMenuOpcionArbol(){
+
+    char opciones[][21]={"      Preorder      ","       Inorder      ","      Postorder     ","        Salir       "};
+    int numOpc=4;
+    int eleccion;
+    eleccion=elegirOpcionV("centrado",opciones,numOpc);
+    return eleccion;
 }

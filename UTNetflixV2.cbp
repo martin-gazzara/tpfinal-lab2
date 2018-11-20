@@ -47,6 +47,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="grafica.h" />
+		<Unit filename="intro.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="intro.h" />
 		<Unit filename="libarbol.c">
 			<Option compilerVar="CC" />
 		</Unit>

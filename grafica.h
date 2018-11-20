@@ -109,5 +109,6 @@ int mostrarFiltroDePeliculas();
 int evaluarUsuario(int filtrosAplicados[], stUsuario userFiltro, stUsuario temp);
 void mostrarListadoUsuarios(char archivo[],int filtroActivado, int filtrosAplicados[], stUsuario userFiltro);
 int mostrarFiltroDeUsuarios();
+int mostrarMenuOpcionArbol();
 
 #endif // GRAFICA_H

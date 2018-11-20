@@ -271,8 +271,17 @@ int cantidadNodosArbol(nodoArbol*arbol){
 
 
 //Pasa las películas de un archivo a un arreglo.
-void pasarArreglo(FILE* arch, stPelicula arregloPeliculas[],int cant) {
-    fread(arregloPeliculas, sizeof(stPelicula), cant, arch);
+int pasarArreglo(FILE* arch, stPelicula arregloPeliculas[],int cant) {
+    int i = 0;
+    stPelicula p;
+
+    while(fread(&p, sizeof(stPelicula), 1, arch)>0){
+        if (p.eliminado == 0){
+            arregloPeliculas[i] = p;
+            i++;
+        }
+    };
+    return i;
 }
 
 nodoArbol* leerMitad(nodoArbol* arbol, stPelicula arregloTemporal[] ,int desde, int hasta){
@@ -311,13 +320,13 @@ nodoArbol* generarArbol(char DB_peliculas[]){
     arch = fopen(DB_peliculas,"rb");
     nodoArbol* arbol = inicArbol();
     int cantPeliculas =  cantidadRegistros(arch,sizeof(stPelicula));
-
     stPelicula arregloTemporal[cantPeliculas];
-    pasarArreglo(arch,arregloTemporal,cantPeliculas);
-
+    cantPeliculas = pasarArreglo(arch,arregloTemporal,cantPeliculas);
     fclose(arch);
 
-    arbol = leerMitad(arbol,arregloTemporal,0,cantPeliculas-1);
+
+    arbol = leerMitad(arbol,arregloTemporal,-1,cantPeliculas-1);
+
     return arbol;
 }
 
