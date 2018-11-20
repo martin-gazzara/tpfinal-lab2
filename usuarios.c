@@ -396,8 +396,8 @@ void bienvenida(){
     stCelda* adl = NULL;
     int val;
 
-
     val = usuariosActivos(nombreDBUsuarios);
+
     if (val>0){
         adl = pasarDeArchivoPelisVistasToADL(nombreDBUsuarios, nombreDBPeliculasVistas, val, arbol);
     }else{
@@ -557,7 +557,9 @@ void verPelicula(stCelda adl[], int val, int id, stPelicula pelicula){
 void generarHistorial(nodoListaPelicula* historial){
 
     if (historial){
-        printf("%i  %s %i %s  %s \n", historial->p.id, historial->p.nombre, historial->p.anio, historial->p.genero, historial->p.director);
+        if (historial->p.eliminado == 0){
+            printf("%i  %s %i %s  %s \n", historial->p.id, historial->p.nombre, historial->p.anio, historial->p.genero, historial->p.director);
+        }
         generarHistorial(historial->sig);
     }
 }
