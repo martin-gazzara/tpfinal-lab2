@@ -566,6 +566,8 @@ int mostrarMenuHistorial(){
     char opciones[][21]={"  Borrar historial  ","        Salir       "};
     int numOpc=2;
     int eleccion;
+    gotoxy(0,0);printf("MENU");
+    gotoxy(1,2);lineaHorizontalDoble();
     eleccion=elegirOpcionH("arriba",opciones,numOpc);
     return eleccion;
 }

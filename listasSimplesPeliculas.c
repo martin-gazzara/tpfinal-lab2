@@ -136,3 +136,14 @@ nodoListaPelicula *borrarNodoPorIdPelicula(nodoListaPelicula *lista,int dato){
     return lista;
 }
 
+nodoListaPelicula* borrarLista(nodoListaPelicula* lista){
+
+
+    if (lista){
+        lista = borrarLista(lista->sig);
+    }else{
+        free(lista);
+        lista = NULL;
+    }
+    return lista;
+}
