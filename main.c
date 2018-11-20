@@ -5,7 +5,7 @@
 
 int main(){
     Sleep(1000);
-    //intro();
+    intro();
     system("cls");
     bienvenida();
     return 0;

@@ -14,4 +14,4 @@ nodoListaPelicula* buscarNodoPorId(nodoListaPelicula *lista,int id);
 void mostrarNodoLista(stPelicula pelicula);
 void recorrerYmostrar(nodoListaPelicula *lista);
 nodoListaPelicula* borrarNodoPorIdPelicula(nodoListaPelicula *lista,int dato);
-int cantidadNodos(nodoListaPelicula* lista);
+

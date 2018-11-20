@@ -136,10 +136,3 @@ nodoListaPelicula *borrarNodoPorIdPelicula(nodoListaPelicula *lista,int dato){
     return lista;
 }
 
-int cantidadNodos(nodoListaPelicula* lista){
-    int i = 0;
-    if(lista){
-        i = 1 + cantidadNodos(lista->sig);
-    }
-    return i;
-}
