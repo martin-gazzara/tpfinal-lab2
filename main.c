@@ -6,10 +6,9 @@
 
 int main(){
 
-    /*Sleep(1000);
+    Sleep(1000);
     intro();
-    system("cls");*/
+    system("cls");
     bienvenida();
-    //slade_1();
     return 0;
 }

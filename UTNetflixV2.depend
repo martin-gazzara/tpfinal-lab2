@@ -30,7 +30,7 @@
 
 1542564213 c:\users\usuario\desktop\tp final\tpfinal-lab2\structs.h
 
-1542745977 source:c:\users\usuario\desktop\tp final\tpfinal-lab2\grafica.c
+1542749495 source:c:\users\usuario\desktop\tp final\tpfinal-lab2\grafica.c
 	"grafica.h"
 
 1542743971 c:\users\usuario\desktop\tp final\tpfinal-lab2\grafica.h
@@ -43,7 +43,7 @@
 
 1542357324 c:\users\usuario\desktop\tp final\tpfinal-lab2\gotoxy.h
 
-1542740441 source:c:\users\usuario\desktop\tp final\tpfinal-lab2\main.c
+1542752683 source:c:\users\usuario\desktop\tp final\tpfinal-lab2\main.c
 	<stdio.h>
 	<stdlib.h>
 	"usuarios.h"
@@ -84,7 +84,7 @@
 	"libarbol.h"
 	"structs.h"
 
-1542744238 source:c:\users\usuario\desktop\tp final\tpfinal-lab2\pelicula.c
+1542746170 source:c:\users\usuario\desktop\tp final\tpfinal-lab2\pelicula.c
 	"pelicula.h"
 
 1542746065 source:c:\users\usuario\desktop\tp final\tpfinal-lab2\usuarios.c

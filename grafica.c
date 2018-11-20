@@ -166,51 +166,44 @@ void siguiente(){
     aux=getch();
 }
 
-void mostrarBienvenida(){
-    gotoxy(23,10);
-    hidecursor(0);
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),12);
-    printf("*************************************************************************\n");
-    gotoxy(23,11);
-    printf("*");
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),8);
+void recuadro(){
+
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),68);
+    for(int i=10; i < 19;i++){
+        gotoxy(23,i);
+        for(int j=0; j< 73; j++){
+            printf("*");
+        }
+    }
+}
+
+void cartel(){
+
+    gotoxy(25,11);
+
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),79);
     printf("     _   _   _____   __   _   ___   _____   ___   _     _   _    _     ");
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),12);
-    printf("*\n");
-    gotoxy(23,12);
-    printf("*");
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),8);
+    gotoxy(25,12);
     printf("    | | | | |_   _| |   \\| | |  _| |_   _| |  _| | |   | | | |  | |    ");
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),12);
-    printf("*\n");
-    gotoxy(23,13);
-    printf("*");
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),8);
+    gotoxy(25,13);
     printf("    | | | |   | |   | |\\ \\ | | |_    | |   | |_  | |   | |  \\ \\/ /     ");
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),12);
-    printf("*\n");
-    gotoxy(23,14);
-    printf("*");
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),8);
+    gotoxy(25,14);
     printf("    | | | |   | |   | | \\  | |  _|   | |   |  _| | |   | |   |  |      ");
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),12);
-    printf("*\n");
-    gotoxy(23,15);
-    printf("*");
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),8);
+    gotoxy(25,15);
     printf("    | |_| |   | |   | |  \\ | | |_    | |   | |   | |_  | |  / /\\ \\     ");
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),12);
-    printf("*\n");
-    gotoxy(23,16);
-    printf("*");
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),8);
+    gotoxy(25,16);
     printf("    |_____|   |_|   |_|  |_| |___|   |_|   |_|   |___| |_| |_|  |_|    ");
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),12);
-    printf("*\n");
-    gotoxy(23,17);
-    printf("*                                                                       *\n");
-    gotoxy(23,18);
-    printf("*************************************************************************");
+
+}
+
+void mostrarBienvenida(){
+
+    hidecursor(0);
+
+    recuadro();
+    cartel();
+    pausa();
     pausa();
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),8);
 }
