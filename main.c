@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include "usuarios.h"
 #include "grafica.h"
-#include "intro.h"
 
 int main(){
 
