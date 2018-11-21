@@ -1,5 +1,78 @@
 #include "grafica.h"
 
+void slade(){
+
+gotoxy(1,1);printf("                                   +ooooooooooooooo/ MMMMMoooooooooo`                               \n");
+gotoxy(1,2);printf("                                   hdmmNMMMmooooohMm hhhdMMMMNNmmddd.                               \n");
+gotoxy(1,3);printf("                                   ```.:yhmd+-   oMm    .Ny+:-..````                                \n");
+gotoxy(1,4);printf("                                       -mMMMMo   oMNssssy+                                          \n");
+gotoxy(1,5);printf("                                        `/MMMo   oMMMMMMM.                                          \n");
+gotoxy(1,6);printf("                                          NMMo-::yMMMMMMM.                                          \n");
+gotoxy(1,7);printf("                                          hmm+NMMMMMMMMMM.                                          \n");
+gotoxy(1,8);printf("                                              NMMMMMMMMMM.                                          \n");
+gotoxy(1,9);printf("                                              NMMMNmmmmmN+:::::`                                    \n");
+gotoxy(1,10);printf("                                              NMMM/`````oMMMMMM:                                    \n");
+gotoxy(1,11);printf("                                              NMMM/     oMMMMMM:                                    \n");
+gotoxy(1,12);printf("                                              NMMM/     oMMMMMM:                                    \n");
+gotoxy(1,13);printf("                                              NMMM/     oMMMMMM:                                    \n");
+gotoxy(1,14);printf("                                              NMMMs/////s+/////.                                    \n");
+gotoxy(1,15);printf("                                              NMMMMMMMMMM.                                          \n");
+gotoxy(1,16);printf("                                      :ooooooo+++++++oMMM.                                          \n");
+gotoxy(1,17);printf("                                      sMMMMMMM.      .MMM.                                          \n");
+gotoxy(1,18);printf("                                      sMMMMMMM.      .MMM.                                          \n");
+gotoxy(1,19);printf("                                      .-------dmmmmmmmMMM.                                          \n");
+gotoxy(1,20);printf("                                              NMMMMMMMMMM.                                          \n");
+gotoxy(1,21);printf("                                              NMMM+++MMMMhyy`                                       \n");
+gotoxy(1,22);printf("                                              NMMM   MMMMMMM.                                       \n");
+gotoxy(1,23);printf("                                              NMMM   MMMMMMM.                                       \n");
+gotoxy(1,24);printf("                                              NMMM   MMMMMMM/                                       \n");
+gotoxy(1,25);printf("                                           `-sMMMM:::NNNNNNNh:                                      \n");
+gotoxy(1,26);printf("                                   +osss/+oshhhhhhhNMMMMMMMNmmdhysoo`                               \n");
+gotoxy(1,27);printf("                                   hdddd.----------ddddddddddddddddd.                               \n");
+gotoxy(1,28);printf("                                    ````/hhhhhhhhhho````````````````                                \n");
+}
+
+void intro_animation(){
+
+    Sleep(600);
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),0);
+    Sleep(100);
+    slade();
+
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),8);
+    Sleep(100);
+    slade();
+
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),7);
+    Sleep(100);
+    slade();
+
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),14);
+    Sleep(100);
+    slade();
+
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),15);
+    Sleep(1000);
+    slade();
+
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),14);
+    Sleep(100);
+    slade();
+
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),7);
+    Sleep(100);
+    slade();
+
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),8);
+    Sleep(200);
+    slade();
+
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),0);
+    Sleep(200);
+    slade();
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),8);
+}
+
 void intro(){
     hidecursor(0);
     Sleep(t2);

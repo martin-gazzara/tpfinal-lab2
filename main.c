@@ -7,6 +7,9 @@
 int main(){
 
     Sleep(1000);
+    hidecursor(0);
+    intro_animation();
+    system("cls");
     intro();
     system("cls");
     bienvenida();
