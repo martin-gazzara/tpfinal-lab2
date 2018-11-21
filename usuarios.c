@@ -399,7 +399,7 @@ void bienvenida(){
 
     val = usuariosActivos(nombreDBUsuarios);
     if (val>0){
-        adl = pasarDeArchivoPelisVistasToADL(nombreDBUsuarios, nombreDBPeliculasVistas, val, arbol);
+        adl = pasarDeArchivoToADL(nombreDBUsuarios, nombreDBPeliculasVistas, val, arbol);
     }else{
         adl = (stCelda*)malloc(0);
     }

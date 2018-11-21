@@ -92,13 +92,13 @@
 1542665933 source:c:\users\rightonhana\desktop\utnetflixv2\adl.c
 	"adl.h"
 
-1542635901 c:\users\rightonhana\desktop\utnetflixv2\adl.h
+1542761575 c:\users\rightonhana\desktop\utnetflixv2\adl.h
 	<stdlib.h>
 	<stdio.h>
 	"listasSimplesPeliculas.h"
 	"structs.h"
 
-1542676460 c:\users\rightonhana\desktop\utnetflixv2\listassimplespeliculas.h
+1542681440 c:\users\rightonhana\desktop\utnetflixv2\listassimplespeliculas.h
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -126,7 +126,7 @@
 	<stdlib.h>
 	<windows.h>
 
-1542676208 source:c:\users\rightonhana\desktop\utnetflixv2\main.c
+1542681440 source:c:\users\rightonhana\desktop\utnetflixv2\main.c
 	<stdio.h>
 	<stdlib.h>
 	"usuarios.h"
@@ -155,7 +155,7 @@
 	"libarbol.h"
 	"structs.h"
 
-1542676328 c:\users\rightonhana\desktop\utnetflixv2\libarbol.h
+1542681440 c:\users\rightonhana\desktop\utnetflixv2\libarbol.h
 	<stdlib.h>
 	<stdio.h>
 	"structs.h"
@@ -164,16 +164,16 @@
 	"matrices_int.h"
 	<time.h>
 
-1542680603 source:c:\users\rightonhana\desktop\utnetflixv2\grafica.c
+1542681440 source:c:\users\rightonhana\desktop\utnetflixv2\grafica.c
 	"grafica.h"
 
 1542676016 source:c:\users\rightonhana\desktop\utnetflixv2\libarbol.c
 	"libarbol.h"
 
-1542676452 source:c:\users\rightonhana\desktop\utnetflixv2\listassimplespeliculas.c
+1542681440 source:c:\users\rightonhana\desktop\utnetflixv2\listassimplespeliculas.c
 	"listasSimplesPeliculas.h"
 
-1542676405 source:c:\users\rightonhana\desktop\utnetflixv2\pelicula.c
+1542681440 source:c:\users\rightonhana\desktop\utnetflixv2\pelicula.c
 	"pelicula.h"
 
 1542676186 source:c:\users\rightonhana\desktop\utnetflixv2\usuarios.c
