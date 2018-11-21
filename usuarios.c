@@ -433,12 +433,12 @@ void iniciarSesion(stCelda adl[], int val, nodoArbol* arbol, char DB_usuarios[],
     int esc, index;
     mostrarIniciarSesion();    //   Grafica
     esc=tomarDatos(nombreUsuario,password);    // Se adquieren los datos para el inicio de sesion
-    //system("cls");
+
     if (esc!=27){
         gotoxy(0,0);
         index=buscarUsuarioPorNombre(adl, val, nombreUsuario);   //  Busqueda del usuario, devuelve el usuario en cuestion
         if ((index > -1) && (adl[index].usr.eliminado==0)){                                   // Si id==0, el usuario no existe
-            //system("cls");
+
             gotoxy(0,0);
             if (comprobarPass(password, adl[index].usr.pass, adl[index].usr.vectorKey)==0){    // Se comprueba que la contraseña ingresada sea la correcta
                 if (adl[index].usr.admin==0){                        // En caso de un inicio correcto, se ejecuta el modo usuario o modo admin
@@ -472,7 +472,7 @@ char* concat(const char* string1, const char* string2) {
 
 //Reproduce un trailer de una pelicula dada en ASCII
 void playTrailer(char* title) {
-    printf("Aguarde un momento... Cargando trailer...");
+    gotoxy(20,10);printf("Aguarde un momento... Cargando trailer...");
     system(concat(concat("youtube-terminal '", title), " trailer'")); // youtube-terminal '{movie} trailer'
     system("cls");
 }

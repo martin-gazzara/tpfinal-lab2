@@ -19,7 +19,7 @@
 	<stdlib.h>
 	<windows.h>
 
-1542741276 source:c:\users\usuario\desktop\tp final\tpfinal-lab2\adl.c
+1542752898 source:c:\users\usuario\desktop\tp final\tpfinal-lab2\adl.c
 	"adl.h"
 
 1542630087 c:\users\usuario\desktop\tp final\tpfinal-lab2\adl.h
@@ -30,10 +30,10 @@
 
 1542564213 c:\users\usuario\desktop\tp final\tpfinal-lab2\structs.h
 
-1542749495 source:c:\users\usuario\desktop\tp final\tpfinal-lab2\grafica.c
+1542757816 source:c:\users\usuario\desktop\tp final\tpfinal-lab2\grafica.c
 	"grafica.h"
 
-1542743971 c:\users\usuario\desktop\tp final\tpfinal-lab2\grafica.h
+1542752898 c:\users\usuario\desktop\tp final\tpfinal-lab2\grafica.h
 	<stdlib.h>
 	<stdio.h>
 	<windows.h>
@@ -43,7 +43,7 @@
 
 1542357324 c:\users\usuario\desktop\tp final\tpfinal-lab2\gotoxy.h
 
-1542752683 source:c:\users\usuario\desktop\tp final\tpfinal-lab2\main.c
+1542757853 source:c:\users\usuario\desktop\tp final\tpfinal-lab2\main.c
 	<stdio.h>
 	<stdlib.h>
 	"usuarios.h"
@@ -62,7 +62,7 @@
 	"matrices_int.h"
 	<time.h>
 
-1542740845 source:c:\users\usuario\desktop\tp final\tpfinal-lab2\libarbol.c
+1542752898 source:c:\users\usuario\desktop\tp final\tpfinal-lab2\libarbol.c
 	"libarbol.h"
 
 1542677753 c:\users\usuario\desktop\tp final\tpfinal-lab2\libarbol.h
@@ -84,10 +84,10 @@
 	"libarbol.h"
 	"structs.h"
 
-1542746170 source:c:\users\usuario\desktop\tp final\tpfinal-lab2\pelicula.c
+1542752898 source:c:\users\usuario\desktop\tp final\tpfinal-lab2\pelicula.c
 	"pelicula.h"
 
-1542746065 source:c:\users\usuario\desktop\tp final\tpfinal-lab2\usuarios.c
+1542757982 source:c:\users\usuario\desktop\tp final\tpfinal-lab2\usuarios.c
 	"usuarios.h"
 
 1542665933 source:c:\users\rightonhana\desktop\utnetflixv2\adl.c
@@ -180,10 +180,12 @@
 1542676186 source:c:\users\rightonhana\desktop\utnetflixv2\usuarios.c
 	"usuarios.h"
 
-1542682705 c:\users\usuario\desktop\tp final\tpfinal-lab2\intro.h
+1542755989 c:\users\usuario\desktop\tp final\tpfinal-lab2\intro.h
 	<stdio.h>
 	<stdlib.h>
+	<ctype.h>
+	<windows.h>
 
-1542736829 source:c:\users\usuario\desktop\tp final\tpfinal-lab2\intro.c
+1542756207 source:c:\users\usuario\desktop\tp final\tpfinal-lab2\intro.c
 	"intro.h"
 
